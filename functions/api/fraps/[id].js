@@ -62,7 +62,7 @@ export async function onRequestGet(context) {
   });
 }
 
-// PUT /api/fraps/[id] - Update FRAP
+// PUT /api/fraps/[id] - Update FRAP (Solo administradores pueden editar)
 export async function onRequestPut(context) {
   const { request, env, params } = context;
   const frapId = params.id;
@@ -71,6 +71,14 @@ export async function onRequestPut(context) {
   if (!user) {
     return new Response(JSON.stringify({ detail: "No autorizado" }), {
       status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+  
+  // Solo administradores pueden editar FRAPs
+  if (user.role !== 'admin') {
+    return new Response(JSON.stringify({ detail: "Solo los administradores pueden editar FRAPs" }), {
+      status: 403,
       headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -85,13 +93,6 @@ export async function onRequestPut(context) {
   }
   
   const row = results[0];
-  
-  if (user.role !== 'admin' && row.created_by !== user.id) {
-    return new Response(JSON.stringify({ detail: "Sin acceso a este FRAP" }), {
-      status: 403,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
   
   const frapData = await request.json();
   const now = new Date().toISOString();
