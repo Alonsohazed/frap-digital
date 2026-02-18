@@ -253,10 +253,6 @@ export default function FRAPFormPage() {
       } else {
         toast.error("Error al cargar el FRAP");
         navigate("/");
-      } else {
-        toast.error("Error al cargar el FRAP");
-        navigate("/");
-      }
     } catch (error) {
       toast.error("Error al cargar el FRAP");
       navigate("/");
