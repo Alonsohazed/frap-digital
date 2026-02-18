@@ -224,12 +224,22 @@ export default function FRAPFormPage() {
   const { user, getAuthHeaders, API } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  
+  // Solo admin puede editar FRAPs existentes
+  const canEdit = user?.role === 'admin';
 
   useEffect(() => {
+    // Si está editando y no es admin, redirigir
+    if (isEditing && !canEdit) {
+      toast.error("Solo los administradores pueden editar FRAPs");
+      navigate("/");
+      return;
+    }
+    
     if (isEditing) {
       fetchFrap();
     }
-  }, [id]);
+  }, [id, canEdit]);
 
   const fetchFrap = async () => {
     setLoading(true);
@@ -240,6 +250,9 @@ export default function FRAPFormPage() {
       if (response.ok) {
         const data = await response.json();
         setFormData({ ...INITIAL_FORM_STATE, ...data });
+      } else {
+        toast.error("Error al cargar el FRAP");
+        navigate("/");
       } else {
         toast.error("Error al cargar el FRAP");
         navigate("/");
