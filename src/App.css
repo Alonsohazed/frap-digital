@@ -1,0 +1,156 @@
+/* App specific styles */
+
+/* Header gradient effect */
+.header-gradient {
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+}
+
+/* Card hover effect */
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form wizard step indicator */
+.step-indicator {
+    @apply flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold transition-colors duration-200;
+}
+
+.step-indicator.active {
+    @apply bg-primary text-primary-foreground;
+}
+
+.step-indicator.completed {
+    @apply bg-green-500 text-white;
+}
+
+.step-indicator.pending {
+    @apply bg-muted text-muted-foreground;
+}
+
+/* Loading spinner */
+.spinner {
+    @apply animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full;
+}
+
+/* Toast notifications */
+.toast-success {
+    @apply bg-green-500 text-white;
+}
+
+.toast-error {
+    @apply bg-red-500 text-white;
+}
+
+/* Mobile form improvements */
+@media (max-width: 768px) {
+    .form-grid {
+        @apply grid-cols-1;
+    }
+    
+    .signature-canvas {
+        height: 150px;
+    }
+}
+
+/* Rescate Ensenada brand colors */
+.brand-primary {
+    @apply text-blue-600 dark:text-blue-400;
+}
+
+.brand-bg {
+    @apply bg-blue-600 dark:bg-blue-500;
+}
+
+/* FRAP form specific */
+.frap-header {
+    @apply bg-slate-900 text-white py-4 px-6 rounded-t-lg;
+}
+
+.frap-section {
+    @apply border rounded-lg mb-4 overflow-hidden;
+}
+
+.frap-section-header {
+    @apply bg-slate-100 dark:bg-slate-800 px-4 py-2 font-bold text-sm uppercase tracking-wider;
+}
+
+.frap-section-content {
+    @apply p-4;
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+    @apply flex flex-wrap gap-3;
+}
+
+.checkbox-item {
+    @apply flex items-center gap-2;
+}
+
+/* Radio group styling */
+.radio-group {
+    @apply flex flex-wrap gap-4;
+}
+
+.radio-item {
+    @apply flex items-center gap-2;
+}
+
+/* Vitals table */
+.vitals-table {
+    @apply w-full border-collapse;
+}
+
+.vitals-table th {
+    @apply bg-slate-100 dark:bg-slate-800 px-3 py-2 text-left text-xs font-bold uppercase;
+}
+
+.vitals-table td {
+    @apply border px-3 py-2;
+}
+
+.vitals-table input {
+    @apply w-full bg-transparent border-0 focus:ring-0 text-sm;
+}
+
+/* Dark mode toggle */
+.dark-mode-toggle {
+    @apply p-2 rounded-lg hover:bg-muted transition-colors duration-200;
+}
+
+/* Navigation active state */
+.nav-link.active {
+    @apply bg-primary/10 text-primary font-medium;
+}
+
+/* Empty state */
+.empty-state {
+    @apply flex flex-col items-center justify-center py-12 text-center;
+}
+
+.empty-state-icon {
+    @apply w-16 h-16 text-muted-foreground mb-4;
+}
+
+/* Search input */
+.search-input {
+    @apply pl-10 pr-4 py-2 w-full max-w-md;
+}
+
+/* Status dot */
+.status-dot {
+    @apply w-2 h-2 rounded-full inline-block mr-2;
+}
+
+.status-dot.active {
+    @apply bg-green-500;
+}
+
+.status-dot.inactive {
+    @apply bg-gray-400;
+}

@@ -1,0 +1,11 @@
+name = "frap-digital"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "frap-database"
+database_id = "3b7945e6-dda5-4f5a-96c5-48ba26da775b"
+
+[vars]
+JWT_SECRET = "FRAP_SECRET_2026_ALEXIS_ENSENADA"
