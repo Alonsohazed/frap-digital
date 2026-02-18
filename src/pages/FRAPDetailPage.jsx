@@ -21,15 +21,21 @@ import {
   Heart,
   Stethoscope,
   ClipboardList,
+  Loader2,
 } from "lucide-react";
+import { generateFRAPPDF } from "../utils/generatePDF";
 
 export default function FRAPDetailPage() {
   const { id } = useParams();
   const [frap, setFrap] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [generatingPDF, setGeneratingPDF] = useState(false);
   const { user, getAuthHeaders, API } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  
+  // Solo admin puede editar
+  const canEdit = user?.role === 'admin';
 
   useEffect(() => {
     fetchFrap();
@@ -56,7 +62,16 @@ export default function FRAPDetailPage() {
   };
 
     const handleDownloadPDF = async () => {
-    toast.info("La generación de PDF estará disponible próximamente");
+    setGeneratingPDF(true);
+    try {
+      await generateFRAPPDF(frap);
+      toast.success("PDF generado correctamente");
+    } catch (error) {
+      console.error("Error generando PDF:", error);
+      toast.error("Error al generar el PDF");
+    } finally {
+      setGeneratingPDF(false);
+    }
   };
 
   const getPriorityBadge = (priority) => {
@@ -145,21 +160,28 @@ export default function FRAPDetailPage() {
             >
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => navigate(`/frap/${id}/editar`)}
-              data-testid="edit-frap-btn"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Editar
-            </Button>
+            {canEdit && (
+              <Button
+                variant="outline"
+                onClick={() => navigate(`/frap/${id}/editar`)}
+                data-testid="edit-frap-btn"
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Editar
+              </Button>
+            )}
             <Button
               onClick={handleDownloadPDF}
               className="bg-blue-600 hover:bg-blue-700"
               data-testid="download-pdf-btn"
+              disabled={generatingPDF}
             >
-              <FileDown className="w-4 h-4 mr-2" />
-              PDF
+              {generatingPDF ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <FileDown className="w-4 h-4 mr-2" />
+              )}
+              {generatingPDF ? "Generando..." : "PDF"}
             </Button>
           </div>
         </div>
