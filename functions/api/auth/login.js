@@ -14,21 +14,21 @@ const FIXED_USERS = {
     id: "user-op-001",
     username: "operador1",
     password_hash: "$2a$10$LgSYjTzPj0QYPwFBPjPl6.Yz1A.nYBX1DQWZ8qPvjKQpVKjNJvCXG", // rescate1
-    nombre: "Juan Pérez",
+    nombre: "Unidad 34",
     role: "operador"
   },
   operador2: {
     id: "user-op-002",
     username: "operador2",
     password_hash: "$2a$10$6pL9TQVMgBnK1A5Y8HvZ4.vKQWPPxV2qP4pQjVX5KQVL5pXqPvCXG", // rescate2
-    nombre: "María García",
+    nombre: "Unidad 35",
     role: "operador"
   },
   operador3: {
     id: "user-op-003",
     username: "operador3",
     password_hash: "$2a$10$8pL9TQVMgBnK1A5Y8HvZ4.vKQWPPxV2qP4pQjVX5KQVL5pXqPvCXG", // rescate3
-    nombre: "Carlos López",
+    nombre: "Unidad 36",
     role: "operador"
   }
 };
