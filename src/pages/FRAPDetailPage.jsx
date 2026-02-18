@@ -55,14 +55,7 @@ export default function FRAPDetailPage() {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    toast.info("La generación de PDF estará disponible próximamente");
-      link.href = url;
-      link.setAttribute('download', `FRAP_${frap?.folio || id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-  const handleDownloadPDF = async () => {
+    const handleDownloadPDF = async () => {
     toast.info("La generación de PDF estará disponible próximamente");
   };
 
