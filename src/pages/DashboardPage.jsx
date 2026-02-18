@@ -36,7 +36,9 @@ import {
   FileText,
   AlertTriangle,
   CheckCircle,
+  Loader2,
 } from "lucide-react";
+import { generateFRAPPDF } from "../utils/generatePDF";
 
 export default function DashboardPage() {
   const [fraps, setFraps] = useState([]);
@@ -87,7 +89,22 @@ export default function DashboardPage() {
   };
 
   const handleDownloadPDF = async (id, folio) => {
-    toast.info("La generación de PDF estará disponible próximamente");
+    try {
+      toast.info("Generando PDF...");
+      const response = await fetch(`${API}/fraps/${id}`, {
+        headers: getAuthHeaders()
+      });
+      if (response.ok) {
+        const frapData = await response.json();
+        await generateFRAPPDF(frapData);
+        toast.success("PDF generado correctamente");
+      } else {
+        toast.error("Error al obtener datos del FRAP");
+      }
+    } catch (error) {
+      console.error("Error generando PDF:", error);
+      toast.error("Error al generar el PDF");
+    }
   };
 
   const getPriorityBadge = (priority) => {
