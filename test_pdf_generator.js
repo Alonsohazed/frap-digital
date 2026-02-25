@@ -1,11 +1,9 @@
 /**
  * ENTORNO DE PRUEBA - NO AFECTA CÓDIGO DE PRODUCCIÓN
- * 
- * Este archivo genera un PDF de prueba para comparación visual
- * con el PDF original sin tocar generatePDF.js
  */
 
-import jsPDF from 'jspdf';
+import pkg from 'jspdf';
+const { jsPDF } = pkg;
 import 'jspdf-autotable';
 import fs from 'fs';
 import { exec } from 'child_process';
