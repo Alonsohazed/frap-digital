@@ -7,11 +7,13 @@ const Page2 = ({ data }) => {
         display: 'inline-block',
         width: '11px',
         height: '11px',
-        border: '1px solid #000',
+        border: '1.5px solid #333',
+        borderRadius: '2px',
         marginRight: '5px',
         verticalAlign: 'middle',
         position: 'relative',
-        backgroundColor: checked ? '#000' : 'white'
+        backgroundColor: checked ? '#008000' : 'white',
+        transition: 'all 0.2s ease'
       }}>
         {checked && <span style={{ 
           color: 'white', 
@@ -32,13 +34,31 @@ const Page2 = ({ data }) => {
 
   const Underline = ({ children, width = '100px', style = {} }) => (
     <span style={{ 
-      borderBottom: '0.5px solid #000', 
+      borderBottom: '0.5px solid #666', 
       display: 'inline-block', 
       minWidth: width,
       fontSize: '8px',
       ...style 
     }}>{children || ''}</span>
   );
+
+  const sectionHeaderStyle = {
+    background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
+    color: 'white',
+    fontSize: '8px',
+    fontWeight: 'bold',
+    padding: '5px 8px',
+    height: '18px',
+    borderRadius: '4px 4px 0 0'
+  };
+
+  const sectionBodyStyle = {
+    padding: '8px',
+    border: '1px solid #e0e0e0',
+    borderTop: 'none',
+    borderRadius: '0 0 4px 4px',
+    backgroundColor: '#fafafa'
+  };
 
   return (
     <div style={{
