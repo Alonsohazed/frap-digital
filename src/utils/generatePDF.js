@@ -1,21 +1,25 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-// ─── Colores exactos del formulario original ───────────────────────────────
-const RED = [180, 0, 0];  // Rojo para títulos principales
+// ─── Colores corporativos VERDE ───────────────────────────────
+const DARK_GREEN = [0, 100, 60];
+const GREEN = [0, 128, 80];
+const LIGHT_GREEN = [0, 150, 100];
 const BLACK = [0, 0, 0];
 const WHITE = [255, 255, 255];
+const GRAY = [100, 100, 100];
+const LIGHT_GRAY = [200, 200, 200];
 
 export const generateFRAPPDF = async (frap) => {
   const doc = new jsPDF('p', 'mm', 'letter');
-  const pw = doc.internal.pageSize.getWidth();  // 215.9mm
-  const ph = doc.internal.pageSize.getHeight(); // 279.4mm
-  const mx = 4;  // Margen mínimo
-  const my = 4;
-  const cw = pw - mx * 2;  // Ancho total de contenido
-  const colW = cw / 2 - 1; // Ancho de cada columna
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const mx = 5;
+  const my = 5;
+  const cw = pw - mx * 2;
+  const colW = cw / 2 - 2;
   const col1X = mx;
-  const col2X = mx + colW + 2;
+  const col2X = mx + colW + 4;
   
   // ── Cargar logo ──
   let logoBase64 = null;
@@ -32,131 +36,175 @@ export const generateFRAPPDF = async (frap) => {
   } catch { /* sin logo */ }
 
   // ================================================================
-  // HELPERS - Estilo exacto del formulario físico
+  // HELPERS - Estética mejorada
   // ================================================================
   
-  const setRed = () => {
-    doc.setTextColor(...RED);
-    doc.setDrawColor(...RED);
-  };
-  
-  const setBlack = () => {
-    doc.setTextColor(...BLACK);
-    doc.setDrawColor(...BLACK);
-  };
-  
-  // Título de sección en ROJO
+  // Título de sección con fondo verde
   const sectionTitle = (title, x, y, width) => {
-    setRed();
-    doc.setFontSize(6.5);
+    doc.setFillColor(...GREEN);
+    doc.rect(x, y, width, 5, 'F');
+    doc.setFontSize(7);
     doc.setFont('helvetica', 'bold');
-    doc.text(title, x, y);
-    return y + 3;
+    doc.setTextColor(...WHITE);
+    doc.text(title, x + 2, y + 3.5);
+    return y + 6;
   };
 
-  // Etiqueta de campo
-  const fieldLabel = (label, x, y) => {
-    setBlack();
-    doc.setFontSize(5);
-    doc.setFont('helvetica', 'normal');
-    doc.text(label, x, y);
+  // Etiqueta de campo (alineación mejorada)
+  const label = (text, x, y) => {
+    doc.setFontSize(6);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...BLACK);
+    doc.text(text, x, y);
+    return doc.getTextWidth(text);
   };
 
   // Valor de campo
-  const fieldValue = (value, x, y, maxW = null) => {
-    setBlack();
-    doc.setFontSize(5.5);
+  const value = (text, x, y, maxW = null) => {
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
-    const val = String(value || '');
+    doc.setTextColor(...GRAY);
+    const val = String(text || '');
     if (maxW && val) {
       const lines = doc.splitTextToSize(val, maxW);
       doc.text(lines, x, y);
-      return lines.length * 2.2;
+      return lines.length * 3;
     }
     doc.text(val, x, y);
-    return 2.5;
+    return 3;
   };
 
   // Línea para escribir
-  const fieldLine = (x, y, width) => {
-    setBlack();
-    doc.setLineWidth(0.15);
+  const line = (x, y, width) => {
+    doc.setDrawColor(...LIGHT_GRAY);
+    doc.setLineWidth(0.3);
     doc.line(x, y, x + width, y);
   };
 
-  // Checkbox pequeño
-  const checkbox = (checked, x, y, size = 2.2) => {
-    setBlack();
-    doc.setLineWidth(0.15);
-    doc.rect(x, y, size, size);
-    if (checked) {
-      doc.setLineWidth(0.3);
-      doc.line(x + 0.4, y + size/2, x + size/2 - 0.2, y + size - 0.4);
-      doc.line(x + size/2 - 0.2, y + size - 0.4, x + size - 0.3, y + 0.3);
-    }
-    return size + 0.5;
-  };
-
-  // Checkbox con label
-  const checkboxLabel = (label, checked, x, y) => {
-    const boxW = checkbox(checked, x, y - 1.8);
-    doc.setFontSize(4.5);
-    doc.setFont('helvetica', 'normal');
-    doc.text(label, x + boxW + 0.5, y);
-    return boxW + doc.getTextWidth(label) + 2;
-  };
-
-  // Dibujar cuerpo humano con zonas numeradas
-  const drawBodyDiagram = (x, y, w, h) => {
-    setBlack();
+  // Checkbox ALINEADA (el checkbox y texto quedan a la misma altura)
+  const checkbox = (text, checked, x, y, size = 3) => {
+    // Dibujar el cuadro
+    doc.setDrawColor(...BLACK);
     doc.setLineWidth(0.2);
+    doc.rect(x, y - size + 0.8, size, size);
     
-    const cx = x + w/2;
-    const scale = Math.min(w/50, h/90);
+    // Si está marcado, rellenar con verde
+    if (checked) {
+      doc.setFillColor(...GREEN);
+      doc.rect(x + 0.4, y - size + 1.2, size - 0.8, size - 0.8, 'F');
+    }
     
-    // Cabeza
-    doc.circle(cx, y + 6*scale, 5*scale, 'S');
+    // Texto alineado al centro vertical del checkbox
+    doc.setFontSize(5.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...BLACK);
+    doc.text(text, x + size + 1, y);
     
-    // Cuello
-    doc.line(cx - 2*scale, y + 11*scale, cx - 2*scale, y + 14*scale);
-    doc.line(cx + 2*scale, y + 11*scale, cx + 2*scale, y + 14*scale);
+    return size + 1 + doc.getTextWidth(text) + 2;
+  };
+
+  // Dibujar cuerpo humano PROFESIONAL
+  const drawBodyDiagram = (x, y, w, h) => {
+    doc.setDrawColor(...BLACK);
+    doc.setLineWidth(0.4);
     
-    // Torso
-    doc.line(cx - 2*scale, y + 14*scale, cx - 12*scale, y + 18*scale); // hombro izq
-    doc.line(cx + 2*scale, y + 14*scale, cx + 12*scale, y + 18*scale); // hombro der
-    doc.line(cx - 12*scale, y + 18*scale, cx - 10*scale, y + 45*scale); // lado izq
-    doc.line(cx + 12*scale, y + 18*scale, cx + 10*scale, y + 45*scale); // lado der
-    doc.line(cx - 10*scale, y + 45*scale, cx - 3*scale, y + 45*scale); // cadera izq
-    doc.line(cx + 10*scale, y + 45*scale, cx + 3*scale, y + 45*scale); // cadera der
+    // Marco exterior
+    doc.setFillColor(255, 255, 255);
+    doc.rect(x, y, w, h, 'FD');
     
-    // Brazos
-    doc.line(cx - 12*scale, y + 18*scale, cx - 18*scale, y + 35*scale);
-    doc.line(cx - 18*scale, y + 35*scale, cx - 20*scale, y + 48*scale);
-    doc.line(cx + 12*scale, y + 18*scale, cx + 18*scale, y + 35*scale);
-    doc.line(cx + 18*scale, y + 35*scale, cx + 20*scale, y + 48*scale);
+    const cx = x + w / 2;
+    const scale = Math.min(w / 70, h / 100);
+    const startY = y + 8;
     
-    // Manos (círculos)
-    doc.circle(cx - 21*scale, y + 50*scale, 2*scale, 'S');
-    doc.circle(cx + 21*scale, y + 50*scale, 2*scale, 'S');
+    doc.setLineWidth(0.5);
     
-    // Piernas
-    doc.line(cx - 3*scale, y + 45*scale, cx - 8*scale, y + 75*scale);
-    doc.line(cx - 8*scale, y + 75*scale, cx - 7*scale, y + 85*scale);
-    doc.line(cx + 3*scale, y + 45*scale, cx + 8*scale, y + 75*scale);
-    doc.line(cx + 8*scale, y + 75*scale, cx + 7*scale, y + 85*scale);
+    // CABEZA - círculo más definido
+    doc.circle(cx, startY + 7 * scale, 6 * scale, 'S');
     
-    // Pies
-    doc.ellipse(cx - 7*scale, y + 87*scale, 3*scale, 2*scale, 'S');
-    doc.ellipse(cx + 7*scale, y + 87*scale, 3*scale, 2*scale, 'S');
+    // CUELLO
+    doc.setLineWidth(0.4);
+    doc.line(cx - 3 * scale, startY + 13 * scale, cx - 3 * scale, startY + 17 * scale);
+    doc.line(cx + 3 * scale, startY + 13 * scale, cx + 3 * scale, startY + 17 * scale);
     
-    // Pupilas al lado
-    doc.setFontSize(4);
-    doc.text('PUPILAS', x + w + 2, y + 5);
-    doc.circle(x + w + 5, y + 12, 4, 'S');
-    doc.circle(x + w + 5, y + 22, 4, 'S');
-    doc.setFontSize(3.5);
-    doc.text('D', x + w + 4, y + 18);
-    doc.text('I', x + w + 4.5, y + 28);
+    // HOMBROS
+    doc.line(cx - 3 * scale, startY + 17 * scale, cx - 14 * scale, startY + 20 * scale);
+    doc.line(cx + 3 * scale, startY + 17 * scale, cx + 14 * scale, startY + 20 * scale);
+    
+    // TORSO - rectángulo con lados curvados
+    doc.line(cx - 14 * scale, startY + 20 * scale, cx - 12 * scale, startY + 45 * scale);
+    doc.line(cx + 14 * scale, startY + 20 * scale, cx + 12 * scale, startY + 45 * scale);
+    
+    // CINTURA
+    doc.line(cx - 12 * scale, startY + 45 * scale, cx - 10 * scale, startY + 50 * scale);
+    doc.line(cx + 12 * scale, startY + 45 * scale, cx + 10 * scale, startY + 50 * scale);
+    
+    // CADERA
+    doc.line(cx - 10 * scale, startY + 50 * scale, cx - 4 * scale, startY + 52 * scale);
+    doc.line(cx + 10 * scale, startY + 50 * scale, cx + 4 * scale, startY + 52 * scale);
+    
+    // BRAZOS IZQUIERDO
+    doc.line(cx - 14 * scale, startY + 20 * scale, cx - 20 * scale, startY + 35 * scale); // brazo
+    doc.line(cx - 20 * scale, startY + 35 * scale, cx - 22 * scale, startY + 50 * scale); // antebrazo
+    // Mano izquierda
+    doc.ellipse(cx - 23 * scale, startY + 53 * scale, 2.5 * scale, 3 * scale, 'S');
+    
+    // BRAZOS DERECHO
+    doc.line(cx + 14 * scale, startY + 20 * scale, cx + 20 * scale, startY + 35 * scale); // brazo
+    doc.line(cx + 20 * scale, startY + 35 * scale, cx + 22 * scale, startY + 50 * scale); // antebrazo
+    // Mano derecha
+    doc.ellipse(cx + 23 * scale, startY + 53 * scale, 2.5 * scale, 3 * scale, 'S');
+    
+    // PIERNA IZQUIERDA
+    doc.line(cx - 4 * scale, startY + 52 * scale, cx - 8 * scale, startY + 75 * scale); // muslo
+    doc.line(cx - 8 * scale, startY + 75 * scale, cx - 7 * scale, startY + 90 * scale); // pierna
+    // Pie izquierdo
+    doc.ellipse(cx - 7 * scale, startY + 93 * scale, 4 * scale, 2 * scale, 'S');
+    
+    // PIERNA DERECHA
+    doc.line(cx + 4 * scale, startY + 52 * scale, cx + 8 * scale, startY + 75 * scale); // muslo
+    doc.line(cx + 8 * scale, startY + 75 * scale, cx + 7 * scale, startY + 90 * scale); // pierna
+    // Pie derecho
+    doc.ellipse(cx + 7 * scale, startY + 93 * scale, 4 * scale, 2 * scale, 'S');
+    
+    // Línea central del torso (división anatómica)
+    doc.setLineWidth(0.2);
+    doc.setDrawColor(...LIGHT_GRAY);
+    doc.line(cx, startY + 17 * scale, cx, startY + 52 * scale);
+    
+    // Etiqueta
+    doc.setFontSize(5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...BLACK);
+    doc.text('ANTERIOR', cx, y + h - 2, { align: 'center' });
+  };
+
+  // Dibujar pupilas profesionales
+  const drawPupilas = (x, y) => {
+    doc.setFontSize(6);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...BLACK);
+    doc.text('PUPILAS', x, y);
+    
+    // Ojo derecho
+    doc.setDrawColor(...BLACK);
+    doc.setLineWidth(0.4);
+    doc.circle(x + 8, y + 10, 6, 'S');
+    doc.circle(x + 8, y + 10, 2, 'S'); // pupila
+    doc.setFontSize(5);
+    doc.text('D', x + 6, y + 20);
+    
+    // Ojo izquierdo
+    doc.circle(x + 25, y + 10, 6, 'S');
+    doc.circle(x + 25, y + 10, 2, 'S'); // pupila
+    doc.text('I', x + 24, y + 20);
+  };
+
+  // Campo con etiqueta y valor en línea
+  const fieldRow = (labelText, valueText, x, y, labelW, valueW) => {
+    label(labelText, x, y);
+    line(x + labelW, y + 0.5, valueW);
+    if (valueText) value(valueText, x + labelW + 1, y);
+    return 4;
   };
 
   // ================================================================
@@ -165,439 +213,420 @@ export const generateFRAPPDF = async (frap) => {
   let y = my;
   
   // ── ENCABEZADO ──
-  // Logo
   if (logoBase64) {
-    doc.addImage(logoBase64, 'PNG', mx, y, 16, 16);
+    doc.addImage(logoBase64, 'PNG', mx, y, 18, 18);
   } else {
-    doc.setDrawColor(...BLACK);
-    doc.setLineWidth(0.5);
-    doc.circle(mx + 8, y + 8, 7, 'S');
+    doc.setDrawColor(...GREEN);
+    doc.setLineWidth(1);
+    doc.circle(mx + 9, y + 9, 8, 'S');
   }
   
-  // Título en ROJO
-  setRed();
-  doc.setFontSize(11);
+  // Título en VERDE
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('CUERPO DE RESCATE DE ENSENADA, A.C.', mx + 19, y + 4);
+  doc.setTextColor(...GREEN);
+  doc.text('CUERPO DE RESCATE DE ENSENADA, A.C.', mx + 22, y + 6);
   
-  setBlack();
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('Calle Magnolias No. 2356', mx + 19, y + 8);
-  doc.text('Col. Márquez de León, Ensenada, B.C.', mx + 19, y + 11);
-  doc.text('Tels. 176-8033 y 177-9992', mx + 19, y + 14);
+  doc.setTextColor(...BLACK);
+  doc.text('Calle Magnolias No. 2356', mx + 22, y + 10);
+  doc.text('Col. Márquez de León, Ensenada, B.C.', mx + 22, y + 13);
+  doc.text('Tels. 176-8033 y 177-9992', mx + 22, y + 16);
   
   // Fecha y Folio
-  const folioX = pw - mx - 40;
-  fieldLabel('FECHA:', folioX, y + 4);
-  fieldLine(folioX + 10, y + 4.5, 28);
-  fieldValue(frap.fecha || '', folioX + 11, y + 4);
+  const folioX = pw - mx - 45;
+  doc.setDrawColor(...GREEN);
+  doc.setLineWidth(0.5);
+  doc.rect(folioX, y, 43, 18, 'S');
   
-  doc.setFontSize(5);
-  doc.text('DÍA    MES    AÑO', folioX + 12, y + 7);
-  
-  fieldLabel('# FOLIO:', folioX, y + 12);
-  doc.setFontSize(12);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
-  doc.text(frap.folio || '', folioX + 14, y + 13);
+  doc.setTextColor(...BLACK);
+  doc.text('FECHA:', folioX + 2, y + 5);
+  doc.setFont('helvetica', 'normal');
+  doc.text(frap.fecha || '', folioX + 15, y + 5);
   
-  y += 18;
+  doc.setFont('helvetica', 'bold');
+  doc.text('# FOLIO:', folioX + 2, y + 12);
+  doc.setFontSize(14);
+  doc.setTextColor(...GREEN);
+  doc.text(frap.folio || '', folioX + 18, y + 13);
+  
+  y += 20;
   
   // ── TABLA DE HORAS ──
+  const horaHeaders = ['HORA LLAMADA', 'HORA SALIDA', 'HORA LLEGADA', 'HORA TRASLADO', 'HORA HOSPITAL', 'HORA BASE'];
   const horaW = cw / 6;
-  const horaHeaders = ['HORA', 'HORA', 'HORA', 'HORA', 'HORA', 'HORA'];
-  const horaLabels = ['LLAMADA', 'SALIDA', 'LLEGADA', 'TRASLADO', 'HOSPITAL', 'BASE'];
   
-  setBlack();
-  doc.setLineWidth(0.2);
-  doc.rect(mx, y, cw, 8);
+  doc.setFillColor(...GREEN);
+  doc.rect(mx, y, cw, 5, 'F');
+  doc.setFontSize(5.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  horaHeaders.forEach((h, i) => {
+    doc.text(h, mx + horaW * i + horaW / 2, y + 3.5, { align: 'center' });
+  });
   
-  for (let i = 0; i < 6; i++) {
-    if (i > 0) doc.line(mx + horaW * i, y, mx + horaW * i, y + 8);
-    doc.setFontSize(4.5);
-    doc.setFont('helvetica', 'bold');
-    doc.text(horaHeaders[i], mx + horaW * i + horaW/2, y + 2.5, { align: 'center' });
-    doc.setFontSize(4);
-    doc.text(horaLabels[i], mx + horaW * i + horaW/2, y + 5, { align: 'center' });
-  }
-  
-  doc.line(mx, y + 5.5, mx + cw, y + 5.5);
+  y += 5;
+  doc.setDrawColor(...GREEN);
+  doc.setLineWidth(0.3);
+  doc.rect(mx, y, cw, 6, 'S');
   
   const horaValues = [
     frap.hora_llamada || '', frap.hora_salida || '', frap.hora_llegada_traslado || '',
     frap.hora_traslado || '', frap.hora_llegada_hospital || '', frap.hora_llegada_base || ''
   ];
   
-  doc.setFontSize(6);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
   horaValues.forEach((v, i) => {
-    doc.text(v, mx + horaW * i + horaW/2, y + 7.5, { align: 'center' });
+    if (i > 0) doc.line(mx + horaW * i, y, mx + horaW * i, y + 6);
+    doc.text(v, mx + horaW * i + horaW / 2, y + 4, { align: 'center' });
   });
   
-  y += 10;
+  y += 8;
   
   // ════════════════════════════════════════════════════════════════
-  // COLUMNA IZQUIERDA - PÁGINA 1
+  // DOS COLUMNAS
   // ════════════════════════════════════════════════════════════════
   let leftY = y;
   let rightY = y;
   
+  // ─────────────────────────────────────────────────────────────────
+  // COLUMNA IZQUIERDA
+  // ─────────────────────────────────────────────────────────────────
+  
   // MOTIVO DE LA ATENCIÓN
-  leftY = sectionTitle('MOTIVO DE LA ATENCIÓN', col1X, leftY);
-  let xPos = col1X;
-  xPos += checkboxLabel('TRASLADO', frap.motivo_atencion === 'traslado_programado', xPos, leftY);
-  doc.setFontSize(4);
-  doc.text('PROGRAMADO', xPos - 8, leftY + 2);
-  xPos += checkboxLabel('ENFERMEDAD', frap.motivo_atencion === 'enfermedad', xPos + 5, leftY);
-  xPos += checkboxLabel('TRAUMATISMO', frap.motivo_atencion === 'traumatismo', xPos + 5, leftY);
-  checkboxLabel('GINECOOBSTÉTRICO', frap.motivo_atencion === 'gineco', xPos + 5, leftY);
-  leftY += 4;
-  
-  // UBICACIÓN DEL SERVICIO
-  leftY = sectionTitle('UBICACIÓN DEL SERVICIO:', col1X, leftY);
-  fieldLabel('CALLE:', col1X, leftY + 2);
-  fieldLine(col1X + 10, leftY + 2.5, colW - 12);
-  fieldValue(frap.ubicacion_calle, col1X + 11, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('ENTRE:', col1X, leftY + 2);
-  fieldLine(col1X + 10, leftY + 2.5, colW - 12);
-  fieldValue(frap.ubicacion_entre, col1X + 11, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('COLONIA/COMUNIDAD:', col1X, leftY + 2);
-  fieldLine(col1X + 28, leftY + 2.5, colW - 30);
-  fieldValue(frap.ubicacion_colonia, col1X + 29, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('DELEGACIÓN POLÍTICA/MUNICIPIO:', col1X, leftY + 2);
-  fieldLine(col1X + 42, leftY + 2.5, colW - 44);
-  fieldValue(frap.ubicacion_delegacion, col1X + 43, leftY + 2);
-  leftY += 4;
-  
-  fieldLabel('LUGAR DE OCURRENCIA:', col1X, leftY + 2);
-  xPos = col1X + 30;
-  xPos += checkboxLabel('HOGAR', frap.lugar_ocurrencia === 'hogar', xPos, leftY + 2);
-  xPos += checkboxLabel('VÍA PÚBLICA', frap.lugar_ocurrencia === 'via_publica', xPos, leftY + 2);
-  xPos += checkboxLabel('TRABAJO', frap.lugar_ocurrencia === 'trabajo', xPos, leftY + 2);
-  checkboxLabel('ESCUELA', frap.lugar_ocurrencia === 'escuela', xPos, leftY + 2);
-  leftY += 3.5;
-  xPos = col1X + 30;
-  xPos += checkboxLabel('RECREACIÓN Y DEPORTE', frap.lugar_ocurrencia === 'recreacion', xPos, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('TRANSPORTE PÚBLICO', col1X, leftY + 2);
-  fieldLabel('OTRA:', col1X + 28, leftY + 2);
-  fieldLine(col1X + 36, leftY + 2.5, colW - 38);
-  leftY += 3.5;
-  
-  fieldLabel('NÚMERO DE', col1X, leftY + 2);
-  fieldLabel('AMBULANCIA', col1X, leftY + 4.5);
-  doc.rect(col1X + 18, leftY, 12, 5);
-  fieldValue(frap.numero_ambulancia || '', col1X + 19, leftY + 3.5);
-  leftY += 6;
-  
-  fieldLabel('OPERADOR:', col1X, leftY + 2);
-  fieldLine(col1X + 16, leftY + 2.5, colW - 18);
-  fieldValue(frap.operador, col1X + 17, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('PRESTADORES DEL SERVICIO:', col1X, leftY + 2);
-  fieldLine(col1X + 38, leftY + 2.5, colW - 40);
-  fieldValue(frap.prestadores_servicio, col1X + 39, leftY + 2);
-  leftY += 4;
-  
-  // NOMBRE DEL PACIENTE
-  fieldLabel('NOMBRE DEL PACIENTE:', col1X, leftY + 2);
-  fieldLine(col1X + 32, leftY + 2.5, colW - 34);
-  fieldValue(frap.nombre_paciente, col1X + 33, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('NOMBRE DEL ACOMPAÑANTE:', col1X, leftY + 2);
-  fieldLine(col1X + 38, leftY + 2.5, colW - 40);
-  fieldValue(frap.nombre_acompanante, col1X + 39, leftY + 2);
+  leftY = sectionTitle('MOTIVO DE LA ATENCIÓN', col1X, leftY, colW);
+  let xPos = col1X + 2;
+  xPos += checkbox('TRASLADO PROGRAMADO', frap.motivo_atencion === 'traslado_programado', xPos, leftY + 1);
+  xPos += checkbox('ENFERMEDAD', frap.motivo_atencion === 'enfermedad', xPos, leftY + 1);
+  xPos += checkbox('TRAUMATISMO', frap.motivo_atencion === 'traumatismo', xPos, leftY + 1);
+  checkbox('GINECOOBSTÉTRICO', frap.motivo_atencion === 'gineco', xPos, leftY + 1);
   leftY += 5;
   
-  // SEXO y EDAD
-  fieldLabel('SEXO', col1X, leftY + 2);
-  doc.rect(col1X + 8, leftY - 0.5, 5, 4);
-  doc.rect(col1X + 15, leftY - 0.5, 5, 4);
-  if (frap.sexo === 'masculino') fieldValue('X', col1X + 9.5, leftY + 2);
-  if (frap.sexo === 'femenino') fieldValue('X', col1X + 16.5, leftY + 2);
-  doc.setFontSize(3.5);
-  doc.text('MASC.', col1X + 8, leftY + 5);
-  doc.text('FEM.', col1X + 15, leftY + 5);
+  // UBICACIÓN DEL SERVICIO
+  leftY = sectionTitle('UBICACIÓN DEL SERVICIO', col1X, leftY, colW);
+  leftY += fieldRow('CALLE:', frap.ubicacion_calle, col1X + 2, leftY, 12, colW - 16);
+  leftY += fieldRow('ENTRE:', frap.ubicacion_entre, col1X + 2, leftY, 12, colW - 16);
+  leftY += fieldRow('COLONIA/COMUNIDAD:', frap.ubicacion_colonia, col1X + 2, leftY, 32, colW - 36);
+  leftY += fieldRow('DELEGACIÓN POLÍTICA/MUNICIPIO:', frap.ubicacion_delegacion, col1X + 2, leftY, 48, colW - 52);
   
-  fieldLabel('EDAD:', col1X + 28, leftY + 2);
-  doc.rect(col1X + 36, leftY - 0.5, 8, 4);
-  doc.rect(col1X + 46, leftY - 0.5, 8, 4);
-  fieldValue(frap.edad_anos || '', col1X + 38, leftY + 2);
-  fieldValue(frap.edad_meses || '', col1X + 48, leftY + 2);
-  doc.setFontSize(3.5);
-  doc.text('AÑOS', col1X + 56, leftY + 2);
-  doc.text('MESES', col1X + 56, leftY + 4.5);
+  leftY += 1;
+  label('LUGAR DE OCURRENCIA:', col1X + 2, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('HOGAR', frap.lugar_ocurrencia === 'hogar', xPos, leftY);
+  xPos += checkbox('VÍA PÚBLICA', frap.lugar_ocurrencia === 'via_publica', xPos, leftY);
+  xPos += checkbox('TRABAJO', frap.lugar_ocurrencia === 'trabajo', xPos, leftY);
+  checkbox('ESCUELA', frap.lugar_ocurrencia === 'escuela', xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('RECREACIÓN Y DEPORTE', frap.lugar_ocurrencia === 'recreacion', xPos, leftY);
+  xPos += checkbox('TRANSPORTE PÚBLICO', frap.lugar_ocurrencia === 'transporte', xPos, leftY);
+  checkbox('OTRA', frap.lugar_ocurrencia === 'otro', xPos, leftY);
+  leftY += 5;
+  
+  label('NÚMERO DE AMBULANCIA:', col1X + 2, leftY);
+  doc.setDrawColor(...GREEN);
+  doc.rect(col1X + 40, leftY - 3, 12, 5, 'S');
+  value(frap.numero_ambulancia || '', col1X + 42, leftY);
+  leftY += 5;
+  
+  leftY += fieldRow('OPERADOR:', frap.operador, col1X + 2, leftY, 18, colW - 22);
+  leftY += fieldRow('PRESTADORES DEL SERVICIO:', frap.prestadores_servicio, col1X + 2, leftY, 42, colW - 46);
+  
+  // NOMBRE DEL PACIENTE
+  leftY = sectionTitle('NOMBRE DEL PACIENTE', col1X, leftY + 1, colW);
+  line(col1X + 2, leftY + 0.5, colW - 4);
+  value(frap.nombre_paciente, col1X + 3, leftY);
+  leftY += 4;
+  
+  leftY += fieldRow('NOMBRE DEL ACOMPAÑANTE:', frap.nombre_acompanante, col1X + 2, leftY, 42, colW - 46);
+  leftY += 2;
+  
+  // SEXO y EDAD
+  label('SEXO:', col1X + 2, leftY);
+  doc.rect(col1X + 14, leftY - 3, 8, 5, 'S');
+  doc.rect(col1X + 24, leftY - 3, 8, 5, 'S');
+  if (frap.sexo === 'masculino') {
+    doc.setFontSize(8);
+    doc.text('M', col1X + 16.5, leftY);
+  }
+  if (frap.sexo === 'femenino') {
+    doc.setFontSize(8);
+    doc.text('F', col1X + 27, leftY);
+  }
+  doc.setFontSize(5);
+  doc.text('MASC.', col1X + 14.5, leftY + 3);
+  doc.text('FEM.', col1X + 25, leftY + 3);
+  
+  label('EDAD:', col1X + 38, leftY);
+  doc.rect(col1X + 48, leftY - 3, 12, 5, 'S');
+  doc.rect(col1X + 62, leftY - 3, 12, 5, 'S');
+  value(frap.edad_anos || '', col1X + 51, leftY);
+  value(frap.edad_meses || '', col1X + 65, leftY);
+  doc.setFontSize(5);
+  doc.text('AÑOS', col1X + 76, leftY - 1);
+  doc.text('MESES', col1X + 76, leftY + 2);
   leftY += 7;
   
-  fieldLabel('DOMICILIO:', col1X, leftY + 2);
-  fieldLine(col1X + 16, leftY + 2.5, colW - 18);
-  fieldValue(frap.domicilio, col1X + 17, leftY + 2);
-  leftY += 3.5;
+  leftY += fieldRow('DOMICILIO:', frap.domicilio, col1X + 2, leftY, 18, colW - 22);
+  leftY += fieldRow('COLONIA/COMUNIDAD:', frap.colonia_paciente, col1X + 2, leftY, 32, colW - 36);
+  leftY += fieldRow('DELEGACIÓN POLÍTICA/MUNICIPIO:', frap.delegacion_paciente, col1X + 2, leftY, 48, colW - 52);
   
-  fieldLabel('COLONIA/COMUNIDAD:', col1X, leftY + 2);
-  fieldLine(col1X + 28, leftY + 2.5, colW - 30);
-  fieldValue(frap.colonia_paciente, col1X + 29, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('DELEGACIÓN POLÍTICA/MUNICIPIO:', col1X, leftY + 2);
-  fieldLine(col1X + 42, leftY + 2.5, colW - 44);
-  fieldValue(frap.delegacion_paciente, col1X + 43, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('TELÉFONO:', col1X, leftY + 2);
-  fieldLine(col1X + 15, leftY + 2.5, 22);
-  fieldValue(frap.telefono, col1X + 16, leftY + 2);
-  fieldLabel('OCUPACIÓN:', col1X + 40, leftY + 2);
-  fieldLine(col1X + 55, leftY + 2.5, colW - 57);
-  fieldValue(frap.ocupacion, col1X + 56, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('DERECHOHABIENTE A:', col1X, leftY + 2);
-  fieldLine(col1X + 28, leftY + 2.5, colW - 30);
-  fieldValue(frap.derechohabiente, col1X + 29, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('COMPAÑÍA DE SEGUROS GASTOS MÉDICOS:', col1X, leftY + 2);
-  fieldLine(col1X + 52, leftY + 2.5, colW - 54);
-  fieldValue(frap.compania_seguros, col1X + 53, leftY + 2);
+  label('TELÉFONO:', col1X + 2, leftY);
+  line(col1X + 18, leftY + 0.5, 25);
+  value(frap.telefono, col1X + 19, leftY);
+  label('OCUPACIÓN:', col1X + 48, leftY);
+  line(col1X + 65, leftY + 0.5, colW - 68);
+  value(frap.ocupacion, col1X + 66, leftY);
   leftY += 4;
+  
+  leftY += fieldRow('DERECHOHABIENTE A:', frap.derechohabiente, col1X + 2, leftY, 32, colW - 36);
+  leftY += fieldRow('COMPAÑÍA DE SEGUROS GASTOS MÉDICOS:', frap.compania_seguros, col1X + 2, leftY, 58, colW - 62);
   
   // ORIGEN PROBABLE
-  leftY = sectionTitle('ORIGEN PROBABLE:', col1X, leftY);
+  leftY = sectionTitle('ORIGEN PROBABLE', col1X, leftY + 1, colW);
   const origenes = frap.origen_probable || [];
-  xPos = col1X;
-  xPos += checkboxLabel('NEUROLOGÍA', origenes.includes('neurologia'), xPos, leftY);
-  xPos += checkboxLabel('DIGESTIVA', origenes.includes('digestiva'), xPos, leftY);
-  checkboxLabel('INTOXICACIÓN', origenes.includes('intoxicacion'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('CARDIOVASCULAR', origenes.includes('cardiovascular'), xPos, leftY);
-  xPos += checkboxLabel('UROGENITAL', origenes.includes('urogenital'), xPos, leftY);
-  checkboxLabel('INFECCIOSA', origenes.includes('infecciosa'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('RESPIRATORIO', origenes.includes('respiratorio'), xPos, leftY);
-  xPos += checkboxLabel('GINECO-OBSTÉTRICA', origenes.includes('gineco'), xPos, leftY);
-  checkboxLabel('ONCOLÓGICO', origenes.includes('oncologico'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('METABÓLICO', origenes.includes('metabolico'), xPos, leftY);
-  xPos += checkboxLabel('COGNITIVO EMOCIONAL', origenes.includes('cognitivo'), xPos, leftY);
-  checkboxLabel('OTRO', origenes.includes('otro'), xPos, leftY);
-  leftY += 3.5;
-  
-  fieldLabel('ESPECIFIQUE:', col1X, leftY + 2);
-  fieldLine(col1X + 18, leftY + 2.5, colW - 20);
-  fieldValue(frap.origen_probable_otro, col1X + 19, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('1A VEZ:', col1X, leftY + 2);
-  fieldLine(col1X + 12, leftY + 2.5, 15);
-  fieldLabel('SUBSECUENTE:', col1X + 32, leftY + 2);
-  fieldLine(col1X + 50, leftY + 2.5, colW - 52);
+  xPos = col1X + 2;
+  xPos += checkbox('NEUROLOGÍA', origenes.includes('neurologia'), xPos, leftY);
+  xPos += checkbox('DIGESTIVA', origenes.includes('digestiva'), xPos, leftY);
+  checkbox('INTOXICACIÓN', origenes.includes('intoxicacion'), xPos, leftY);
   leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('CARDIOVASCULAR', origenes.includes('cardiovascular'), xPos, leftY);
+  xPos += checkbox('UROGENITAL', origenes.includes('urogenital'), xPos, leftY);
+  checkbox('INFECCIOSA', origenes.includes('infecciosa'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('RESPIRATORIO', origenes.includes('respiratorio'), xPos, leftY);
+  xPos += checkbox('GINECO-OBSTÉTRICA', origenes.includes('gineco'), xPos, leftY);
+  checkbox('ONCOLÓGICO', origenes.includes('oncologico'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('METABÓLICO', origenes.includes('metabolico'), xPos, leftY);
+  xPos += checkbox('COGNITIVO EMOCIONAL', origenes.includes('cognitivo'), xPos, leftY);
+  checkbox('OTRO', origenes.includes('otro'), xPos, leftY);
+  leftY += 4;
+  
+  leftY += fieldRow('ESPECIFIQUE:', frap.origen_probable_otro, col1X + 2, leftY, 20, colW - 24);
+  
+  label('1A VEZ:', col1X + 2, leftY);
+  doc.rect(col1X + 16, leftY - 3, 6, 4, 'S');
+  label('SUBSECUENTE:', col1X + 30, leftY);
+  doc.rect(col1X + 52, leftY - 3, 6, 4, 'S');
+  leftY += 5;
   
   // ACCIDENTE AUTOMOVILÍSTICO
-  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY);
-  xPos = col1X;
-  xPos += checkboxLabel('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
-  doc.rect(xPos, leftY - 1.8, 2.2, 2.2);
-  xPos += 5;
-  xPos += checkboxLabel('VOLCADURA', frap.accidente_colision === 'volcadura', xPos + 15, leftY);
-  doc.rect(xPos + 13, leftY - 1.8, 2.2, 2.2);
-  leftY += 3;
-  
-  xPos = col1X;
-  xPos += checkboxLabel('AUTOMOTOR', frap.accidente_colision === 'automotor', xPos, leftY);
-  xPos += checkboxLabel('MOTOCICLETA', frap.accidente_colision === 'motocicleta', xPos, leftY);
-  xPos += checkboxLabel('BICICLETA', frap.accidente_colision === 'bicicleta', xPos, leftY);
-  checkboxLabel('MAQUINARIA', frap.accidente_colision === 'maquinaria', xPos, leftY);
+  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, colW);
+  xPos = col1X + 2;
+  xPos += checkbox('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
+  doc.rect(xPos - 1, leftY - 2.2, 3, 3, 'S');
+  xPos += 8;
+  xPos += checkbox('VOLCADURA', frap.accidente_colision === 'volcadura', xPos, leftY);
+  doc.rect(xPos - 1, leftY - 2.2, 3, 3, 'S');
   leftY += 4;
   
-  fieldLabel('CONTRA OBJETO:', col1X, leftY + 2);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('FIJO', frap.accidente_contra_objeto === 'fijo', xPos, leftY);
-  xPos += checkboxLabel('EN MOVIMIENTO', frap.accidente_contra_objeto === 'movimiento', xPos, leftY);
-  fieldLabel('IMPACTO:', col1X + 50, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('FRONTAL', frap.accidente_impacto === 'frontal', xPos, leftY);
-  xPos += checkboxLabel('LATERAL', frap.accidente_impacto === 'lateral', xPos, leftY);
-  checkboxLabel('POSTERIOR', frap.accidente_impacto === 'posterior', xPos, leftY);
-  leftY += 3.5;
+  xPos = col1X + 2;
+  xPos += checkbox('AUTOMOTOR', frap.accidente_colision === 'automotor', xPos, leftY);
+  xPos += checkbox('MOTOCICLETA', frap.accidente_colision === 'motocicleta', xPos, leftY);
+  xPos += checkbox('BICICLETA', frap.accidente_colision === 'bicicleta', xPos, leftY);
+  checkbox('MAQUINARIA', frap.accidente_colision === 'maquinaria', xPos, leftY);
+  leftY += 5;
   
-  fieldLabel('HUNDIMIENTO:', col1X, leftY + 2);
-  fieldLine(col1X + 18, leftY + 2.5, 10);
-  fieldLabel('CMS', col1X + 30, leftY + 2);
-  fieldLabel('PARABRISAS', col1X + 40, leftY + 2);
-  xPos = col1X + 58;
-  xPos += checkboxLabel('ROTO', frap.parabrisas_roto, xPos, leftY + 2);
-  checkboxLabel('DOBLADO', frap.parabrisas_doblado, xPos, leftY + 2);
-  leftY += 3.5;
+  label('CONTRA OBJETO:', col1X + 2, leftY);
+  xPos = col1X + 28;
+  xPos += checkbox('FIJO', frap.accidente_contra_objeto === 'fijo', xPos, leftY);
+  checkbox('EN MOVIMIENTO', frap.accidente_contra_objeto === 'movimiento', xPos, leftY);
   
-  fieldLabel('VOLANTE:', col1X, leftY + 2);
-  xPos = col1X + 14;
-  xPos += checkboxLabel('INTRUSIÓN', frap.volante === 'intrusion', xPos, leftY + 2);
-  checkboxLabel('DOBLADO', frap.volante === 'doblado', xPos, leftY + 2);
-  fieldLabel('BOLSA DE AIRE:', col1X + 52, leftY + 2);
-  checkboxLabel('SÍ', frap.bolsa_aire === 'si', col1X + 70, leftY + 2);
-  checkboxLabel('NO', frap.bolsa_aire === 'no', col1X + 78, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('CINTURÓN DE SEGURIDAD:', col1X, leftY + 2);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('COLOCADO', frap.cinturon_seguridad === 'colocado', xPos, leftY);
-  xPos += checkboxLabel('NO COLOCADO', frap.cinturon_seguridad === 'no_colocado', xPos, leftY);
-  checkboxLabel('SÍ', frap.dentro_vehiculo === 'si', col1X + 52, leftY);
-  checkboxLabel('NO', frap.dentro_vehiculo === 'no', col1X + 60, leftY);
-  checkboxLabel('EYECTADO', frap.eyectado === 'si', col1X + 70, leftY);
-  leftY += 3;
-  fieldLabel('DENTRO DEL VEHÍCULO:', col1X + 32, leftY - 0.5);
-  leftY += 3;
-  
-  fieldLabel('ATROPELLADO', col1X, leftY + 2);
-  fieldLabel('CASCO DE SEGURIDAD:', col1X + 50, leftY + 2);
-  checkboxLabel('SÍ', frap.casco_seguridad === 'si', col1X + 76, leftY + 2);
-  checkboxLabel('NO', frap.casco_seguridad === 'no', col1X + 84, leftY + 2);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('AUTOMOTOR', frap.atropellado === 'automotor', xPos, leftY);
-  xPos += checkboxLabel('MOTOCICLETA', frap.atropellado === 'motocicleta', xPos, leftY);
-  xPos += checkboxLabel('BICICLETA', frap.atropellado === 'bicicleta', xPos, leftY);
-  checkboxLabel('MAQUINARIA', frap.atropellado === 'maquinaria', xPos, leftY);
+  label('IMPACTO:', col1X + colW / 2 + 10, leftY);
   leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('FRONTAL', frap.accidente_impacto === 'frontal', xPos, leftY);
+  xPos += checkbox('LATERAL', frap.accidente_impacto === 'lateral', xPos, leftY);
+  checkbox('POSTERIOR', frap.accidente_impacto === 'posterior', xPos, leftY);
+  leftY += 5;
+  
+  label('HUNDIMIENTO:', col1X + 2, leftY);
+  line(col1X + 24, leftY + 0.5, 12);
+  label('CMS', col1X + 38, leftY);
+  label('PARABRISAS:', col1X + 48, leftY);
+  xPos = col1X + 68;
+  xPos += checkbox('ROTO', frap.parabrisas_roto, xPos, leftY);
+  checkbox('DOBLADO', frap.parabrisas_doblado, xPos, leftY);
+  leftY += 4;
+  
+  label('VOLANTE:', col1X + 2, leftY);
+  xPos = col1X + 18;
+  xPos += checkbox('INTRUSIÓN', frap.volante === 'intrusion', xPos, leftY);
+  checkbox('DOBLADO', frap.volante === 'doblado', xPos, leftY);
+  label('BOLSA DE AIRE:', col1X + colW / 2 + 5, leftY);
+  xPos = col1X + colW / 2 + 30;
+  xPos += checkbox('SÍ', frap.bolsa_aire === 'si', xPos, leftY);
+  checkbox('NO', frap.bolsa_aire === 'no', xPos, leftY);
+  leftY += 4;
+  
+  label('CINTURÓN DE SEGURIDAD:', col1X + 2, leftY);
+  xPos = col1X + 40;
+  xPos += checkbox('COLOCADO', frap.cinturon_seguridad === 'colocado', xPos, leftY);
+  checkbox('NO COLOCADO', frap.cinturon_seguridad === 'no_colocado', xPos, leftY);
+  leftY += 4;
+  
+  label('DENTRO DEL VEHÍCULO:', col1X + 2, leftY);
+  xPos = col1X + 38;
+  xPos += checkbox('SÍ', frap.dentro_vehiculo === 'si', xPos, leftY);
+  xPos += checkbox('NO', frap.dentro_vehiculo === 'no', xPos, leftY);
+  checkbox('EYECTADO', frap.eyectado === 'si', xPos, leftY);
+  leftY += 4;
+  
+  label('ATROPELLADO:', col1X + 2, leftY);
+  xPos = col1X + 25;
+  xPos += checkbox('AUTOMOTOR', frap.atropellado === 'automotor', xPos, leftY);
+  xPos += checkbox('MOTOCICLETA', frap.atropellado === 'motocicleta', xPos, leftY);
+  xPos += checkbox('BICICLETA', frap.atropellado === 'bicicleta', xPos, leftY);
+  checkbox('MAQUINARIA', frap.atropellado === 'maquinaria', xPos, leftY);
+  leftY += 4;
+  
+  label('CASCO DE SEGURIDAD:', col1X + 2, leftY);
+  xPos = col1X + 38;
+  xPos += checkbox('SÍ', frap.casco_seguridad === 'si', xPos, leftY);
+  checkbox('NO', frap.casco_seguridad === 'no', xPos, leftY);
+  leftY += 5;
   
   // AGENTE CAUSAL
-  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY);
+  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY, colW);
   const agentes = frap.agente_causal || [];
-  xPos = col1X;
-  xPos += checkboxLabel('ARMA', agentes.includes('arma'), xPos, leftY);
-  xPos += checkboxLabel('MAQUINARIA', agentes.includes('maquinaria'), xPos, leftY);
-  checkboxLabel('ELECTRICIDAD', agentes.includes('electricidad'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('JUGUETE', agentes.includes('juguete'), xPos, leftY);
-  xPos += checkboxLabel('HERRAMIENTA', agentes.includes('herramienta'), xPos, leftY);
-  checkboxLabel('EXPLOSIÓN', agentes.includes('explosion'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('AUTOMOTOR', agentes.includes('automotor'), xPos, leftY);
-  xPos += checkboxLabel('FUEGO', agentes.includes('fuego'), xPos, leftY);
-  checkboxLabel('SER HUMANO', agentes.includes('ser_humano'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('BICICLETA', agentes.includes('bicicleta'), xPos, leftY);
-  xPos += checkboxLabel('SUSTANCIA', agentes.includes('producto_caliente'), xPos, leftY);
-  checkboxLabel('ANIMAL', agentes.includes('animal'), xPos, leftY);
-  leftY += 2;
-  doc.setFontSize(3.5);
-  doc.text('CALIENTE', col1X + 20, leftY);
-  leftY += 2;
-  xPos = col1X;
-  xPos += checkboxLabel('PRODUCTO', agentes.includes('sustancia_biologica'), xPos, leftY);
-  doc.setFontSize(3.5);
-  doc.text('BIOLÓGICO', col1X + 1, leftY + 2);
-  xPos += checkboxLabel('SUSTANCIA', agentes.includes('sustancia_toxica'), xPos + 8, leftY);
-  doc.setFontSize(3.5);
-  doc.text('TÓXICA', col1X + 32, leftY + 2);
-  checkboxLabel('OTRO', agentes.includes('otro'), col1X + 55, leftY);
+  xPos = col1X + 2;
+  xPos += checkbox('ARMA', agentes.includes('arma'), xPos, leftY);
+  xPos += checkbox('MAQUINARIA', agentes.includes('maquinaria'), xPos, leftY);
+  checkbox('ELECTRICIDAD', agentes.includes('electricidad'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('JUGUETE', agentes.includes('juguete'), xPos, leftY);
+  xPos += checkbox('HERRAMIENTA', agentes.includes('herramienta'), xPos, leftY);
+  checkbox('EXPLOSIÓN', agentes.includes('explosion'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('AUTOMOTOR', agentes.includes('automotor'), xPos, leftY);
+  xPos += checkbox('FUEGO', agentes.includes('fuego'), xPos, leftY);
+  checkbox('SER HUMANO', agentes.includes('ser_humano'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('BICICLETA', agentes.includes('bicicleta'), xPos, leftY);
+  xPos += checkbox('SUSTANCIA CALIENTE', agentes.includes('producto_caliente'), xPos, leftY);
+  checkbox('ANIMAL', agentes.includes('animal'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('PRODUCTO BIOLÓGICO', agentes.includes('sustancia_biologica'), xPos, leftY);
+  xPos += checkbox('SUSTANCIA TÓXICA', agentes.includes('sustancia_toxica'), xPos, leftY);
+  checkbox('OTRO', agentes.includes('otro'), xPos, leftY);
   leftY += 4;
   
-  fieldLabel('ESPECIFIQUE:', col1X, leftY + 2);
-  fieldLine(col1X + 18, leftY + 2.5, colW - 20);
+  leftY += fieldRow('ESPECIFIQUE:', frap.agente_causal_otro, col1X + 2, leftY, 20, colW - 24);
+  leftY += fieldRow('LESIONES CAUSADAS POR:', frap.lesiones_causadas_por, col1X + 2, leftY, 38, colW - 42);
 
-  // ════════════════════════════════════════════════════════════════
-  // COLUMNA DERECHA - PÁGINA 1
-  // ════════════════════════════════════════════════════════════════
+  // ─────────────────────────────────────────────────────────────────
+  // COLUMNA DERECHA
+  // ─────────────────────────────────────────────────────────────────
   
   // NIVEL DE CONCIENCIA
-  rightY = sectionTitle('NIVEL DE CONSIENCIA:', col2X, rightY);
-  xPos = col2X;
-  xPos += checkboxLabel('CONSCIENTE', frap.nivel_conciencia === 'consciente', xPos, rightY);
+  rightY = sectionTitle('NIVEL DE CONCIENCIA', col2X, rightY, colW);
+  xPos = col2X + 2;
+  checkbox('CONSCIENTE', frap.nivel_conciencia === 'consciente', xPos, rightY);
   
-  // VÍA AÉREA al lado
-  fieldLabel('VÍA AÉREA:', col2X + colW - 30, rightY - 3);
-  fieldLabel('REFLEJO DE DEGLUCIÓN:', col2X + colW - 30, rightY);
-  rightY += 3;
-  xPos = col2X;
-  xPos += checkboxLabel('RESPUESTA A ESTÍMULO VERBAL', frap.nivel_conciencia === 'resp_verbal', xPos, rightY);
-  checkboxLabel('PERMEABLE', frap.via_aerea === 'permeable', col2X + colW - 30, rightY);
-  checkboxLabel('AUSENTE', frap.reflejo_deglucion === 'ausente', col2X + colW - 12, rightY);
-  rightY += 3;
-  xPos = col2X;
-  xPos += checkboxLabel('RESPUESTA A ESTÍMULO DOLOROSO', frap.nivel_conciencia === 'resp_dolor', xPos, rightY);
-  checkboxLabel('COMPROMETIDA', frap.via_aerea === 'comprometida', col2X + colW - 30, rightY);
-  checkboxLabel('PRESENTE', frap.reflejo_deglucion === 'presente', col2X + colW - 12, rightY);
-  rightY += 3;
-  checkboxLabel('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X, rightY);
+  label('VÍA AÉREA:', col2X + colW / 2, rightY);
+  checkbox('PERMEABLE', frap.via_aerea === 'permeable', col2X + colW / 2 + 18, rightY);
+  checkbox('COMPROMETIDA', frap.via_aerea === 'comprometida', col2X + colW - 25, rightY);
   rightY += 4;
   
-  // VENTILACIÓN
-  rightY = sectionTitle('VENTILACIÓN:', col2X, rightY);
-  xPos = col2X;
-  xPos += checkboxLabel('AUTOMATISMO REGULAR', frap.ventilacion === 'automatismo_regular', xPos, rightY);
-  // AUSCULTACIÓN al lado
-  sectionTitle('AUSCULTACIÓN:', col2X + colW/2 + 5, rightY - 3);
-  checkboxLabel('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + colW/2 + 5, rightY);
-  rightY += 3;
-  checkboxLabel('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X, rightY);
-  checkboxLabel('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + colW/2 + 5, rightY);
-  rightY += 3;
-  checkboxLabel('VENTILACIÓN RÁPIDA', frap.ventilacion === 'rapida', col2X, rightY);
-  checkboxLabel('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + colW/2 + 5, rightY);
-  rightY += 3;
-  checkboxLabel('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X, rightY);
-  rightY += 3;
-  checkboxLabel('APNEA', frap.ventilacion === 'apnea', col2X, rightY);
-  
-  // NEUMOTÓRAX
-  fieldLabel('NEUMOTORAX:', col2X + colW/2 + 5, rightY);
-  checkboxLabel('DERECHO', frap.neumotorax === 'derecho', col2X + colW - 15, rightY);
-  rightY += 3;
-  fieldLabel('SITIO:', col2X + colW/2 + 5, rightY);
-  checkboxLabel('APICAL', frap.sitio_neumotorax === 'apical', col2X + colW/2 + 18, rightY);
-  checkboxLabel('BASE', frap.sitio_neumotorax === 'base', col2X + colW - 8, rightY);
+  checkbox('RESPUESTA A ESTÍMULO VERBAL', frap.nivel_conciencia === 'resp_verbal', col2X + 2, rightY);
+  label('REFLEJO DE DEGLUCIÓN:', col2X + colW / 2, rightY);
+  checkbox('AUSENTE', frap.reflejo_deglucion === 'ausente', col2X + colW - 18, rightY);
   rightY += 4;
+  
+  checkbox('RESPUESTA A ESTÍMULO DOLOROSO', frap.nivel_conciencia === 'resp_dolor', col2X + 2, rightY);
+  checkbox('PRESENTE', frap.reflejo_deglucion === 'presente', col2X + colW - 18, rightY);
+  rightY += 4;
+  
+  checkbox('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X + 2, rightY);
+  rightY += 5;
+  
+  // VENTILACIÓN / AUSCULTACIÓN
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW / 2 - 1, 5, 'F');
+  doc.rect(col2X + colW / 2 + 1, rightY, colW / 2 - 1, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('VENTILACIÓN', col2X + 2, rightY + 3.5);
+  doc.text('AUSCULTACIÓN', col2X + colW / 2 + 3, rightY + 3.5);
+  rightY += 6;
+  
+  checkbox('AUTOMATISMO REGULAR', frap.ventilacion === 'automatismo_regular', col2X + 2, rightY);
+  checkbox('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + colW / 2 + 2, rightY);
+  rightY += 4;
+  checkbox('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X + 2, rightY);
+  checkbox('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + colW / 2 + 2, rightY);
+  rightY += 4;
+  checkbox('VENTILACIÓN RÁPIDA', frap.ventilacion === 'rapida', col2X + 2, rightY);
+  checkbox('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + colW / 2 + 2, rightY);
+  rightY += 4;
+  checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + 2, rightY);
+  rightY += 4;
+  checkbox('APNEA', frap.ventilacion === 'apnea', col2X + 2, rightY);
+  
+  label('NEUMOTÓRAX:', col2X + colW / 2 + 2, rightY);
+  checkbox('DERECHO', frap.neumotorax === 'derecho', col2X + colW - 22, rightY);
+  rightY += 4;
+  label('SITIO:', col2X + colW / 2 + 2, rightY);
+  checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + colW / 2 + 14, rightY);
+  checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + colW - 12, rightY);
+  rightY += 5;
   
   // CIRCULACIÓN
-  rightY = sectionTitle('CIRCULACIÓN:', col2X, rightY);
-  sectionTitle('PRESENCIA DE PULSOS', col2X + 22, rightY - 3);
-  fieldLabel('CALIDAD', col2X + colW/2 + 5, rightY - 3);
-  fieldLabel('PIEL', col2X + colW - 25, rightY - 3);
-  fieldLabel('CARACTERÍSTICAS', col2X + colW - 12, rightY - 3);
+  rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY, colW / 2 + 10);
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X + colW / 2 + 12, rightY - 6, 18, 5, 'F');
+  doc.rect(col2X + colW / 2 + 32, rightY - 6, 12, 5, 'F');
+  doc.rect(col2X + colW - 14, rightY - 6, 14, 5, 'F');
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('CALIDAD', col2X + colW / 2 + 14, rightY - 2.5);
+  doc.text('PIEL', col2X + colW / 2 + 34, rightY - 2.5);
+  doc.text('CARACT.', col2X + colW - 12, rightY - 2.5);
   
-  checkboxLabel('CAROTÍDEO', frap.presencia_pulsos === 'carotideo', col2X, rightY);
-  checkboxLabel('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW/2 + 5, rightY);
-  checkboxLabel('NORMAL', frap.piel === 'normal', col2X + colW - 25, rightY);
-  checkboxLabel('CALIENTE', frap.caracteristicas_piel === 'caliente', col2X + colW - 12, rightY);
-  rightY += 3;
-  checkboxLabel('RADIAL', frap.presencia_pulsos === 'radial', col2X, rightY);
-  checkboxLabel('LENTO', frap.calidad_pulso === 'lento', col2X + colW/2 + 5, rightY);
-  checkboxLabel('PÁLIDA', frap.piel === 'palida', col2X + colW - 25, rightY);
-  checkboxLabel('FRÍA', frap.caracteristicas_piel === 'fria', col2X + colW - 12, rightY);
-  rightY += 3;
-  checkboxLabel('PARO CARDIORESPIRATORIO', frap.presencia_pulsos === 'paro', col2X, rightY);
-  checkboxLabel('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + colW/2 + 5, rightY);
-  checkboxLabel('CIANÓTICA', frap.piel === 'cianotica', col2X + colW - 25, rightY);
-  checkboxLabel('DIAFORESIS', frap.caracteristicas_piel === 'diaforesis', col2X + colW - 12, rightY);
-  rightY += 3;
-  checkboxLabel('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + colW/2 + 5, rightY);
+  checkbox('CAROTÍDEO', frap.presencia_pulsos === 'carotideo', col2X + 2, rightY);
+  checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW / 2 + 12, rightY);
+  checkbox('NORMAL', frap.piel === 'normal', col2X + colW / 2 + 32, rightY);
+  checkbox('CALIENTE', frap.caracteristicas_piel === 'caliente', col2X + colW - 14, rightY);
   rightY += 4;
+  checkbox('RADIAL', frap.presencia_pulsos === 'radial', col2X + 2, rightY);
+  checkbox('LENTO', frap.calidad_pulso === 'lento', col2X + colW / 2 + 12, rightY);
+  checkbox('PÁLIDA', frap.piel === 'palida', col2X + colW / 2 + 32, rightY);
+  checkbox('FRÍA', frap.caracteristicas_piel === 'fria', col2X + colW - 14, rightY);
+  rightY += 4;
+  checkbox('PARO CARDIORESPIRATORIO', frap.presencia_pulsos === 'paro', col2X + 2, rightY);
+  checkbox('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + colW / 2 + 12, rightY);
+  checkbox('CIANÓTICA', frap.piel === 'cianotica', col2X + colW / 2 + 32, rightY);
+  checkbox('DIAFORESIS', frap.caracteristicas_piel === 'diaforesis', col2X + colW - 14, rightY);
+  rightY += 4;
+  checkbox('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + colW / 2 + 12, rightY);
+  rightY += 5;
   
   // EXPLORACIÓN FÍSICA y ZONAS DE LESIÓN
-  rightY = sectionTitle('EXPLORACIÓN FÍSICA', col2X, rightY);
-  sectionTitle('ZONAS DE LESIÓN', col2X + colW/2 + 10, rightY - 3);
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW / 2 - 5, 5, 'F');
+  doc.rect(col2X + colW / 2 - 3, rightY, colW / 2 + 3, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('EXPLORACIÓN FÍSICA', col2X + 2, rightY + 3.5);
+  doc.text('ZONAS DE LESIÓN', col2X + colW / 2 + 5, rightY + 3.5);
+  rightY += 6;
   
   const exploraciones = frap.exploracion_fisica || [];
   const expItems = [
@@ -619,206 +648,176 @@ export const generateFRAPPDF = async (frap) => {
   ];
   
   const expStartY = rightY;
-  expItems.forEach((item, i) => {
-    doc.setFontSize(4);
+  expItems.forEach((item) => {
+    doc.setFontSize(5);
     doc.setFont('helvetica', 'bold');
-    doc.text(item.num, col2X + 1, rightY + 2);
-    checkboxLabel(item.label, exploraciones.includes(item.value), col2X + 5, rightY + 2);
-    rightY += 2.8;
+    doc.setTextColor(...GREEN);
+    doc.text(item.num, col2X + 2, rightY + 1);
+    checkbox(item.label, exploraciones.includes(item.value), col2X + 6, rightY + 1, 2.5);
+    rightY += 3;
   });
   
-  // Dibujar cuerpo humano
-  drawBodyDiagram(col2X + colW/2 + 5, expStartY - 2, 35, 42);
+  // Diagrama corporal
+  drawBodyDiagram(col2X + colW / 2 - 2, expStartY - 1, 40, 42);
   
-  rightY = expStartY + 45;
+  // Pupilas
+  drawPupilas(col2X + colW / 2 + 5, expStartY + 42);
   
-  // TABLA DE SIGNOS VITALES
-  const vitalesY = rightY;
+  rightY = expStartY + 48;
+  
+  // SIGNOS VITALES
+  rightY = sectionTitle('SIGNOS VITALES', col2X, rightY, colW);
+  
   const vitalesHeaders = ['HORA', 'FR', 'FC', 'TAS', 'TAD', 'SaO2', 'TEMP', 'GLUC'];
   const vColW = colW / 8;
   
-  setBlack();
-  doc.setLineWidth(0.2);
+  doc.setFillColor(...DARK_GREEN);
+  doc.rect(col2X, rightY, colW, 4.5, 'F');
+  doc.setFontSize(5.5);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(4.5);
-  
-  // Header
-  doc.rect(col2X, rightY, colW, 4);
+  doc.setTextColor(...WHITE);
   vitalesHeaders.forEach((h, i) => {
-    if (i > 0) doc.line(col2X + vColW * i, rightY, col2X + vColW * i, rightY + 4 + 12);
-    doc.text(h, col2X + vColW * i + vColW/2, rightY + 2.8, { align: 'center' });
+    doc.text(h, col2X + vColW * i + vColW / 2, rightY + 3, { align: 'center' });
   });
-  rightY += 4;
+  rightY += 4.5;
   
-  // Filas de vitales
   const vitales = frap.vitales || [];
   for (let i = 0; i < 3; i++) {
-    doc.rect(col2X, rightY, colW, 4);
+    doc.setDrawColor(...GREEN);
+    doc.setLineWidth(0.2);
+    doc.rect(col2X, rightY, colW, 4.5, 'S');
+    
     const v = vitales[i] || {};
     const vValues = [v.hora, v.fr, v.fc, v.tas, v.tad, v.sao2, v.temp, v.gluc];
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(5);
+    doc.setTextColor(...BLACK);
     vValues.forEach((val, j) => {
-      doc.text(String(val || ''), col2X + vColW * j + vColW/2, rightY + 2.8, { align: 'center' });
+      doc.text(String(val || ''), col2X + vColW * j + vColW / 2, rightY + 3, { align: 'center' });
+      if (j < 7) {
+        doc.line(col2X + vColW * (j + 1), rightY, col2X + vColW * (j + 1), rightY + 4.5);
+      }
     });
-    rightY += 4;
+    rightY += 4.5;
   }
   rightY += 3;
   
-  // CONDICIÓN DEL PACIENTE y PRIORIDAD
-  rightY = sectionTitle('CONDICIÓN DEL PACIENTE', col2X, rightY);
-  sectionTitle('PRIORIDAD', col2X + colW/2 + 10, rightY - 3);
+  // CONDICIÓN DEL PACIENTE / PRIORIDAD
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW / 2 - 2, 5, 'F');
+  doc.rect(col2X + colW / 2, rightY, colW / 2, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('CONDICIÓN DEL PACIENTE', col2X + 2, rightY + 3.5);
+  doc.text('PRIORIDAD', col2X + colW / 2 + 2, rightY + 3.5);
+  rightY += 6;
   
-  xPos = col2X;
-  xPos += checkboxLabel('CRÍTICO INESTABLE', frap.condicion_paciente === 'critico_inestable', xPos, rightY);
-  checkboxLabel('NO CRÍTICO', frap.condicion_paciente === 'no_critico', xPos, rightY);
+  checkbox('CRÍTICO INESTABLE', frap.condicion_paciente === 'critico_inestable', col2X + 2, rightY);
+  checkbox('NO CRÍTICO', frap.condicion_paciente === 'no_critico', col2X + 38, rightY);
   
-  // Prioridad con colores
+  // Botones de prioridad con colores
   const prioColors = {
     rojo: [220, 53, 69],
-    amarillo: [255, 193, 7],
     verde: [40, 167, 69],
+    amarillo: [255, 193, 7],
     negro: [33, 33, 33]
   };
   
-  let prioX = col2X + colW/2 + 10;
-  ['rojo', 'verde'].forEach((p, i) => {
-    const px = prioX + i * 18;
-    doc.setDrawColor(...prioColors[p]);
-    doc.setLineWidth(0.3);
-    doc.rect(px, rightY - 2.5, 15, 4);
-    if (frap.prioridad === p) {
-      doc.setFillColor(...prioColors[p]);
-      doc.rect(px, rightY - 2.5, 15, 4, 'F');
-      doc.setTextColor(...WHITE);
+  let prioX = col2X + colW / 2 + 2;
+  Object.entries(prioColors).forEach(([key, color], i) => {
+    const px = prioX + (i % 2) * 22;
+    const py = rightY + Math.floor(i / 2) * 5 - 2.5;
+    
+    doc.setFillColor(...color);
+    if (frap.prioridad === key) {
+      doc.rect(px, py, 18, 4.5, 'F');
+      doc.setTextColor(...(key === 'amarillo' ? BLACK : WHITE));
     } else {
-      doc.setTextColor(...prioColors[p]);
+      doc.setDrawColor(...color);
+      doc.setLineWidth(0.5);
+      doc.rect(px, py, 18, 4.5, 'S');
+      doc.setTextColor(...color);
     }
-    doc.setFontSize(5);
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'bold');
-    doc.text(p.toUpperCase(), px + 7.5, rightY + 0.3, { align: 'center' });
+    doc.text(key.toUpperCase(), px + 9, py + 3, { align: 'center' });
   });
-  setBlack();
+  doc.setTextColor(...BLACK);
+  
   rightY += 4;
-  
-  checkboxLabel('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X, rightY);
-  
-  prioX = col2X + colW/2 + 10;
-  ['amarillo', 'negro'].forEach((p, i) => {
-    const px = prioX + i * 18;
-    doc.setDrawColor(...prioColors[p]);
-    doc.setLineWidth(0.3);
-    doc.rect(px, rightY - 2.5, 15, 4);
-    if (frap.prioridad === p) {
-      doc.setFillColor(...prioColors[p]);
-      doc.rect(px, rightY - 2.5, 15, 4, 'F');
-      doc.setTextColor(p === 'amarillo' ? BLACK : WHITE);
-    } else {
-      doc.setTextColor(...prioColors[p]);
-    }
-    doc.setFontSize(5);
-    doc.setFont('helvetica', 'bold');
-    doc.text(p.toUpperCase(), px + 7.5, rightY + 0.3, { align: 'center' });
-  });
-  setBlack();
-  rightY += 5;
+  checkbox('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X + 2, rightY);
+  rightY += 8;
   
   // VÍA AÉREA, CONTROL CERVICAL, ASIST. VENTILATORIA, OXIGENOTERAPIA
-  rightY = sectionTitle('VÍA AÉREA:', col2X, rightY);
-  sectionTitle('CONTROL CERVICAL:', col2X + 20, rightY - 3);
-  sectionTitle('ASIST. VENTILATORIA:', col2X + colW/2, rightY - 3);
-  sectionTitle('OXIGENOTERAPIA:', col2X + colW - 25, rightY - 3);
+  const manejoHeaders = ['VÍA AÉREA:', 'CONTROL CERVICAL', 'ASIST. VENTILATORIA', 'OXIGENOTERAPIA:'];
+  const manejoW = colW / 4;
+  manejoHeaders.forEach((h, i) => {
+    doc.setFillColor(...GREEN);
+    doc.rect(col2X + manejoW * i, rightY, manejoW - 0.5, 4.5, 'F');
+    doc.setFontSize(5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...WHITE);
+    doc.text(h, col2X + manejoW * i + 1, rightY + 3);
+  });
+  rightY += 5;
   
   const viaAereaManejo = frap.via_aerea_manejo || [];
-  checkboxLabel('ASPIRACIÓN', viaAereaManejo.includes('aspiracion'), col2X, rightY);
-  checkboxLabel('MANUAL', frap.control_cervical === 'manual', col2X + 20, rightY);
-  checkboxLabel('BALÓN-VÁLVULA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + colW/2, rightY);
-  doc.setFontSize(3.5);
-  doc.text('MASCARILLA', col2X + colW/2 + 1, rightY + 2);
-  checkboxLabel('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + colW - 25, rightY);
-  rightY += 3;
-  
-  checkboxLabel('CÁNULA OROFARÍNGEA', viaAereaManejo.includes('canula_oro'), col2X, rightY);
-  checkboxLabel('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + 20, rightY);
-  checkboxLabel('VENTILADOR', frap.asistencia_ventilatoria === 'ventilador', col2X + colW/2, rightY);
-  doc.setFontSize(3.5);
-  doc.text('AUTOMÁTICO', col2X + colW/2 + 1, rightY + 2);
-  checkboxLabel('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + colW - 25, rightY);
-  rightY += 3;
-  
-  checkboxLabel('CÁNULA NASOFARÍNGEA', viaAereaManejo.includes('canula_naso'), col2X, rightY);
-  checkboxLabel('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + 20, rightY);
-  fieldLabel('FREC.', col2X + colW/2, rightY);
-  fieldLine(col2X + colW/2 + 8, rightY + 0.5, 8);
-  fieldLabel('VOL.', col2X + colW/2 + 18, rightY);
-  fieldLine(col2X + colW/2 + 24, rightY + 0.5, 8);
-  checkboxLabel('MASCARILLA CON', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + colW - 25, rightY);
-  doc.setFontSize(3.5);
-  doc.text('RESERVORIO', col2X + colW - 24, rightY + 2);
+  checkbox('ASPIRACIÓN', viaAereaManejo.includes('aspiracion'), col2X + 1, rightY, 2.5);
+  checkbox('MANUAL', frap.control_cervical === 'manual', col2X + manejoW + 1, rightY, 2.5);
+  checkbox('BALÓN-VÁLVULA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + manejoW * 2 + 1, rightY, 2.5);
+  checkbox('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + manejoW * 3 + 1, rightY, 2.5);
   rightY += 4;
-  
-  fieldLabel('LTS X MIN:', col2X + colW - 25, rightY);
-  fieldLine(col2X + colW - 12, rightY + 0.5, 10);
-  fieldValue(frap.lts_x_min, col2X + colW - 11, rightY);
+  checkbox('CÁNULA OROFARÍNGEA', viaAereaManejo.includes('canula_oro'), col2X + 1, rightY, 2.5);
+  checkbox('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + manejoW + 1, rightY, 2.5);
+  checkbox('VENTILADOR AUTOMÁTICO', frap.asistencia_ventilatoria === 'ventilador', col2X + manejoW * 2 + 1, rightY, 2.5);
+  checkbox('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + manejoW * 3 + 1, rightY, 2.5);
+  rightY += 4;
+  checkbox('CÁNULA NASOFARÍNGEA', viaAereaManejo.includes('canula_naso'), col2X + 1, rightY, 2.5);
+  checkbox('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + manejoW + 1, rightY, 2.5);
+  doc.setFontSize(5);
+  label('FREC.', col2X + manejoW * 2 + 1, rightY);
+  label('VOL.', col2X + manejoW * 2 + 15, rightY);
+  checkbox('MASCARILLA CON RESERVORIO', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + manejoW * 3 + 1, rightY, 2.5);
+  rightY += 4;
+  label('LTS X MIN:', col2X + manejoW * 3 + 1, rightY);
+  line(col2X + manejoW * 3 + 18, rightY + 0.5, 8);
+  value(frap.lts_x_min, col2X + manejoW * 3 + 19, rightY);
   rightY += 4;
   
   // CONTROL DE HEMORRAGIAS, VÍAS VENOSAS, SITIO, TIPO SOLUCIONES
-  rightY = sectionTitle('CONTROL DE HEMORRAGIAS:', col2X, rightY);
-  sectionTitle('VÍAS VENOSAS:', col2X + 32, rightY - 3);
-  sectionTitle('SITIO DE APLICACIÓN:', col2X + colW/2 + 8, rightY - 3);
-  sectionTitle('TIPO DE SOLUCIONES:', col2X + colW - 22, rightY - 3);
+  const hemHeaders = ['CONTROL DE HEMORRAGIAS', 'VÍAS VENOSAS:', 'SITIO DE APLICACIÓN:', 'TIPO DE SOLUCIONES:'];
+  const hemW = colW / 4;
+  hemHeaders.forEach((h, i) => {
+    doc.setFillColor(...GREEN);
+    doc.rect(col2X + hemW * i, rightY, hemW - 0.5, 4.5, 'F');
+    doc.setFontSize(4.5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...WHITE);
+    doc.text(h, col2X + hemW * i + 1, rightY + 3);
+  });
+  rightY += 5;
   
   const controlHemorragias = frap.control_hemorragias || [];
-  checkboxLabel('PRESIÓN DIRECTA', controlHemorragias.includes('presion_directa'), col2X, rightY);
-  fieldLabel('VÍA IV #', col2X + 32, rightY);
-  fieldLine(col2X + 44, rightY + 0.5, 8);
-  fieldValue(frap.via_iv_num, col2X + 45, rightY);
-  fieldLabel('MANO', col2X + colW/2 + 8, rightY);
   const soluciones = frap.tipo_soluciones || [];
-  checkboxLabel('HARTMANN', soluciones.includes('hartmann'), col2X + colW - 22, rightY);
-  rightY += 3;
-  
-  checkboxLabel('TORNIQUETE', controlHemorragias.includes('torniquete'), col2X, rightY);
-  fieldLabel('CATETER #', col2X + 32, rightY);
-  fieldLine(col2X + 46, rightY + 0.5, 6);
-  fieldValue(frap.cateter_num, col2X + 47, rightY);
-  fieldLabel('PLIEGUE ANTECUBITAL', col2X + colW/2 + 8, rightY);
-  checkboxLabel('NaCl 0.9%', soluciones.includes('nacl'), col2X + colW - 22, rightY);
-  rightY += 3;
-  
-  checkboxLabel('VENDAJE COMPRESIVO', controlHemorragias.includes('vendaje'), col2X, rightY);
-  checkboxLabel('MIXTA', soluciones.includes('mixta'), col2X + colW - 22, rightY);
-  rightY += 3;
-  checkboxLabel('GLUCOSA 5%', soluciones.includes('glucosa'), col2X + colW - 22, rightY);
-  rightY += 3;
-  checkboxLabel('OTRA', soluciones.includes('otra'), col2X + colW - 22, rightY);
+  checkbox('PRESIÓN DIRECTA', controlHemorragias.includes('presion_directa'), col2X + 1, rightY, 2.5);
+  label('VÍA IV #', col2X + hemW + 1, rightY);
+  line(col2X + hemW + 14, rightY + 0.5, 8);
+  label('MANO', col2X + hemW * 2 + 1, rightY);
+  checkbox('HARTMANN', soluciones.includes('hartmann'), col2X + hemW * 3 + 1, rightY, 2.5);
   rightY += 4;
-  
-  // INTERROGATORIO
-  rightY = sectionTitle('INTERROGATORIO', col2X, rightY);
-  fieldLabel('ALERGIAS:', col2X, rightY + 2);
-  fieldLine(col2X + 14, rightY + 2.5, colW - 16);
-  fieldValue(frap.alergias, col2X + 15, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('MEDICAMENTOS QUE ESTÁ INGIRIENDO:', col2X, rightY + 2);
-  fieldLine(col2X + 48, rightY + 2.5, colW - 50);
-  fieldValue(frap.medicamentos, col2X + 49, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('ENFERMEDADES Y CIRUGÍAS PREVIAS:', col2X, rightY + 2);
-  fieldLine(col2X + 45, rightY + 2.5, colW - 47);
-  fieldValue(frap.enfermedades_previas, col2X + 46, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('HORA DE LA ÚLTIMA COMIDA:', col2X, rightY + 2);
-  fieldLine(col2X + 36, rightY + 2.5, colW - 38);
-  fieldValue(frap.ultima_comida, col2X + 37, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('EVENTOS PREVIOS RELACIONADOS:', col2X, rightY + 2);
-  fieldLine(col2X + 42, rightY + 2.5, colW - 44);
-  fieldValue(frap.eventos_previos, col2X + 43, rightY + 2);
+  checkbox('TORNIQUETE', controlHemorragias.includes('torniquete'), col2X + 1, rightY, 2.5);
+  label('CATETER #', col2X + hemW + 1, rightY);
+  line(col2X + hemW + 16, rightY + 0.5, 6);
+  label('PLIEGUE ANTECUBITAL', col2X + hemW * 2 + 1, rightY);
+  checkbox('NaCl 0.9%', soluciones.includes('nacl'), col2X + hemW * 3 + 1, rightY, 2.5);
+  rightY += 4;
+  checkbox('VENDAJE COMPRESIVO', controlHemorragias.includes('vendaje'), col2X + 1, rightY, 2.5);
+  checkbox('MIXTA', soluciones.includes('mixta'), col2X + hemW * 3 + 1, rightY, 2.5);
+  rightY += 4;
+  checkbox('GLUCOSA 5%', soluciones.includes('glucosa'), col2X + hemW * 3 + 1, rightY, 2.5);
+  rightY += 4;
+  checkbox('OTRA', soluciones.includes('otra'), col2X + hemW * 3 + 1, rightY, 2.5);
 
   // ================================================================
   // PÁGINA 2
@@ -828,330 +827,313 @@ export const generateFRAPPDF = async (frap) => {
   leftY = y;
   rightY = y;
   
-  // ════════════════════════════════════════════════════════════════
-  // PÁGINA 2 - COLUMNA IZQUIERDA (Repetir datos paciente)
-  // ════════════════════════════════════════════════════════════════
+  // ─────────────────────────────────────────────────────────────────
+  // PÁGINA 2 - COLUMNA IZQUIERDA
+  // ─────────────────────────────────────────────────────────────────
   
-  // NOMBRE DEL PACIENTE
-  fieldLabel('NOMBRE DEL PACIENTE:', col1X, leftY + 2);
-  fieldLine(col1X + 32, leftY + 2.5, colW - 34);
-  fieldValue(frap.nombre_paciente, col1X + 33, leftY + 2);
-  leftY += 3.5;
+  // NOMBRE DEL PACIENTE (repetido)
+  leftY = sectionTitle('NOMBRE DEL PACIENTE', col1X, leftY, colW);
+  line(col1X + 2, leftY + 0.5, colW - 4);
+  value(frap.nombre_paciente, col1X + 3, leftY);
+  leftY += 4;
   
-  fieldLabel('NOMBRE DEL ACOMPAÑANTE:', col1X, leftY + 2);
-  fieldLine(col1X + 38, leftY + 2.5, colW - 40);
-  fieldValue(frap.nombre_acompanante, col1X + 39, leftY + 2);
-  leftY += 5;
+  leftY += fieldRow('NOMBRE DEL ACOMPAÑANTE:', frap.nombre_acompanante, col1X + 2, leftY, 42, colW - 46);
+  leftY += 2;
   
   // SEXO y EDAD
-  fieldLabel('SEXO', col1X, leftY + 2);
-  doc.rect(col1X + 8, leftY - 0.5, 5, 4);
-  doc.rect(col1X + 15, leftY - 0.5, 5, 4);
-  if (frap.sexo === 'masculino') fieldValue('X', col1X + 9.5, leftY + 2);
-  if (frap.sexo === 'femenino') fieldValue('X', col1X + 16.5, leftY + 2);
-  doc.setFontSize(3.5);
-  doc.text('MASC.', col1X + 8, leftY + 5);
-  doc.text('FEM.', col1X + 15, leftY + 5);
+  label('SEXO:', col1X + 2, leftY);
+  doc.rect(col1X + 14, leftY - 3, 8, 5, 'S');
+  doc.rect(col1X + 24, leftY - 3, 8, 5, 'S');
+  if (frap.sexo === 'masculino') {
+    doc.setFontSize(8);
+    doc.text('M', col1X + 16.5, leftY);
+  }
+  if (frap.sexo === 'femenino') {
+    doc.setFontSize(8);
+    doc.text('F', col1X + 27, leftY);
+  }
+  doc.setFontSize(5);
+  doc.text('MASC.', col1X + 14.5, leftY + 3);
+  doc.text('FEM.', col1X + 25, leftY + 3);
   
-  fieldLabel('EDAD:', col1X + 28, leftY + 2);
-  doc.rect(col1X + 36, leftY - 0.5, 8, 4);
-  doc.rect(col1X + 46, leftY - 0.5, 8, 4);
-  fieldValue(frap.edad_anos || '', col1X + 38, leftY + 2);
-  fieldValue(frap.edad_meses || '', col1X + 48, leftY + 2);
-  doc.setFontSize(3.5);
-  doc.text('AÑOS', col1X + 56, leftY + 2);
-  doc.text('MESES', col1X + 56, leftY + 4.5);
+  label('EDAD:', col1X + 38, leftY);
+  doc.rect(col1X + 48, leftY - 3, 12, 5, 'S');
+  doc.rect(col1X + 62, leftY - 3, 12, 5, 'S');
+  value(frap.edad_anos || '', col1X + 51, leftY);
+  value(frap.edad_meses || '', col1X + 65, leftY);
+  doc.setFontSize(5);
+  doc.text('AÑOS', col1X + 76, leftY - 1);
+  doc.text('MESES', col1X + 76, leftY + 2);
   leftY += 7;
   
-  fieldLabel('DOMICILIO:', col1X, leftY + 2);
-  fieldLine(col1X + 16, leftY + 2.5, colW - 18);
-  fieldValue(frap.domicilio, col1X + 17, leftY + 2);
-  leftY += 3.5;
+  leftY += fieldRow('DOMICILIO:', frap.domicilio, col1X + 2, leftY, 18, colW - 22);
+  leftY += fieldRow('COLONIA/COMUNIDAD:', frap.colonia_paciente, col1X + 2, leftY, 32, colW - 36);
+  leftY += fieldRow('DELEGACIÓN POLÍTICA/MUNICIPIO:', frap.delegacion_paciente, col1X + 2, leftY, 48, colW - 52);
   
-  fieldLabel('COLONIA/COMUNIDAD:', col1X, leftY + 2);
-  fieldLine(col1X + 28, leftY + 2.5, colW - 30);
-  fieldValue(frap.colonia_paciente, col1X + 29, leftY + 2);
-  leftY += 3.5;
+  label('TELÉFONO:', col1X + 2, leftY);
+  line(col1X + 18, leftY + 0.5, 25);
+  value(frap.telefono, col1X + 19, leftY);
+  label('OCUPACIÓN:', col1X + 48, leftY);
+  line(col1X + 65, leftY + 0.5, colW - 68);
+  value(frap.ocupacion, col1X + 66, leftY);
+  leftY += 4;
   
-  fieldLabel('DELEGACIÓN POLÍTICA/MUNICIPIO:', col1X, leftY + 2);
-  fieldLine(col1X + 42, leftY + 2.5, colW - 44);
-  fieldValue(frap.delegacion_paciente, col1X + 43, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('TELÉFONO:', col1X, leftY + 2);
-  fieldLine(col1X + 15, leftY + 2.5, 22);
-  fieldValue(frap.telefono, col1X + 16, leftY + 2);
-  fieldLabel('OCUPACIÓN:', col1X + 40, leftY + 2);
-  fieldLine(col1X + 55, leftY + 2.5, colW - 57);
-  fieldValue(frap.ocupacion, col1X + 56, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('DERECHOHABIENTE A:', col1X, leftY + 2);
-  fieldLine(col1X + 28, leftY + 2.5, colW - 30);
-  fieldValue(frap.derechohabiente, col1X + 29, leftY + 2);
-  leftY += 3.5;
-  
-  fieldLabel('COMPAÑÍA DE SEGUROS GASTOS MÉDICOS:', col1X, leftY + 2);
-  fieldLine(col1X + 52, leftY + 2.5, colW - 54);
-  fieldValue(frap.compania_seguros, col1X + 53, leftY + 2);
-  leftY += 5;
+  leftY += fieldRow('DERECHOHABIENTE A:', frap.derechohabiente, col1X + 2, leftY, 32, colW - 36);
+  leftY += fieldRow('COMPAÑÍA DE SEGUROS GASTOS MÉDICOS:', frap.compania_seguros, col1X + 2, leftY, 58, colW - 62);
   
   // ORIGEN PROBABLE
-  leftY = sectionTitle('ORIGEN PROBABLE:', col1X, leftY);
-  xPos = col1X;
-  xPos += checkboxLabel('NEUROLOGÍA', origenes.includes('neurologia'), xPos, leftY);
-  xPos += checkboxLabel('DIGESTIVA', origenes.includes('digestiva'), xPos, leftY);
-  checkboxLabel('INTOXICACIÓN', origenes.includes('intoxicacion'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('CARDIOVASCULAR', origenes.includes('cardiovascular'), xPos, leftY);
-  xPos += checkboxLabel('UROGENITAL', origenes.includes('urogenital'), xPos, leftY);
-  checkboxLabel('INFECCIOSA', origenes.includes('infecciosa'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('RESPIRATORIO', origenes.includes('respiratorio'), xPos, leftY);
-  xPos += checkboxLabel('GINECO-OBSTÉTRICA', origenes.includes('gineco'), xPos, leftY);
-  checkboxLabel('ONCOLÓGICO', origenes.includes('oncologico'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('METABÓLICO', origenes.includes('metabolico'), xPos, leftY);
-  xPos += checkboxLabel('COGNITIVO EMOCIONAL', origenes.includes('cognitivo'), xPos, leftY);
-  checkboxLabel('OTRO', origenes.includes('otro'), xPos, leftY);
-  leftY += 3.5;
-  
-  fieldLabel('ESPECIFIQUE:', col1X, leftY + 2);
-  fieldLine(col1X + 18, leftY + 2.5, colW - 20);
-  leftY += 3.5;
-  
-  fieldLabel('1A VEZ:', col1X, leftY + 2);
-  fieldLine(col1X + 12, leftY + 2.5, 15);
-  fieldLabel('SUBSECUENTE:', col1X + 32, leftY + 2);
-  fieldLine(col1X + 50, leftY + 2.5, colW - 52);
-  leftY += 5;
-  
-  // ACCIDENTE AUTOMOVILÍSTICO (repetido en pág 2)
-  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY);
-  // ... contenido similar a página 1 pero más compacto
-  xPos = col1X;
-  xPos += checkboxLabel('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
-  checkboxLabel('VOLCADURA', frap.accidente_colision === 'volcadura', col1X + 30, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('AUTOMOTOR', frap.accidente_colision === 'automotor', xPos, leftY);
-  xPos += checkboxLabel('MOTOCICLETA', frap.accidente_colision === 'motocicleta', xPos, leftY);
-  xPos += checkboxLabel('BICICLETA', frap.accidente_colision === 'bicicleta', xPos, leftY);
-  checkboxLabel('MAQUINARIA', frap.accidente_colision === 'maquinaria', xPos, leftY);
-  leftY += 8;
-  
-  // AGENTE CAUSAL (compacto)
-  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY);
-  xPos = col1X;
-  xPos += checkboxLabel('ARMA', agentes.includes('arma'), xPos, leftY);
-  xPos += checkboxLabel('MAQUINARIA', agentes.includes('maquinaria'), xPos, leftY);
-  checkboxLabel('ELECTRICIDAD', agentes.includes('electricidad'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('JUGUETE', agentes.includes('juguete'), xPos, leftY);
-  xPos += checkboxLabel('HERRAMIENTA', agentes.includes('herramienta'), xPos, leftY);
-  checkboxLabel('EXPLOSIÓN', agentes.includes('explosion'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('AUTOMOTOR', agentes.includes('automotor'), xPos, leftY);
-  xPos += checkboxLabel('FUEGO', agentes.includes('fuego'), xPos, leftY);
-  checkboxLabel('SER HUMANO', agentes.includes('ser_humano'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('BICICLETA', agentes.includes('bicicleta'), xPos, leftY);
-  xPos += checkboxLabel('SUSTANCIA CALIENTE', agentes.includes('producto_caliente'), xPos, leftY);
-  checkboxLabel('ANIMAL', agentes.includes('animal'), xPos, leftY);
-  leftY += 3;
-  xPos = col1X;
-  xPos += checkboxLabel('PRODUCTO BIOLÓGICO', agentes.includes('sustancia_biologica'), xPos, leftY);
-  xPos += checkboxLabel('SUSTANCIA TÓXICA', agentes.includes('sustancia_toxica'), xPos, leftY);
-  checkboxLabel('OTRO', agentes.includes('otro'), xPos, leftY);
+  leftY = sectionTitle('ORIGEN PROBABLE', col1X, leftY + 1, colW);
+  xPos = col1X + 2;
+  xPos += checkbox('NEUROLOGÍA', origenes.includes('neurologia'), xPos, leftY);
+  xPos += checkbox('DIGESTIVA', origenes.includes('digestiva'), xPos, leftY);
+  checkbox('INTOXICACIÓN', origenes.includes('intoxicacion'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('CARDIOVASCULAR', origenes.includes('cardiovascular'), xPos, leftY);
+  xPos += checkbox('UROGENITAL', origenes.includes('urogenital'), xPos, leftY);
+  checkbox('INFECCIOSA', origenes.includes('infecciosa'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('RESPIRATORIO', origenes.includes('respiratorio'), xPos, leftY);
+  xPos += checkbox('GINECO-OBSTÉTRICA', origenes.includes('gineco'), xPos, leftY);
+  checkbox('ONCOLÓGICO', origenes.includes('oncologico'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('METABÓLICO', origenes.includes('metabolico'), xPos, leftY);
+  xPos += checkbox('COGNITIVO EMOCIONAL', origenes.includes('cognitivo'), xPos, leftY);
+  checkbox('OTRO', origenes.includes('otro'), xPos, leftY);
   leftY += 4;
   
-  fieldLabel('ESPECIFIQUE:', col1X, leftY + 2);
-  fieldLine(col1X + 18, leftY + 2.5, colW - 20);
-  leftY += 3.5;
-  fieldLabel('LESIONES CAUSADAS POR:', col1X, leftY + 2);
-  fieldLine(col1X + 32, leftY + 2.5, colW - 34);
-  fieldValue(frap.lesiones_causadas_por, col1X + 33, leftY + 2);
+  leftY += fieldRow('ESPECIFIQUE:', '', col1X + 2, leftY, 20, colW - 24);
+  
+  label('1A VEZ:', col1X + 2, leftY);
+  doc.rect(col1X + 16, leftY - 3, 6, 4, 'S');
+  label('SUBSECUENTE:', col1X + 30, leftY);
+  doc.rect(col1X + 52, leftY - 3, 6, 4, 'S');
   leftY += 5;
+  
+  // ACCIDENTE AUTOMOVILÍSTICO
+  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, colW);
+  xPos = col1X + 2;
+  xPos += checkbox('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
+  doc.rect(xPos - 1, leftY - 2.2, 3, 3, 'S');
+  xPos += 8;
+  checkbox('VOLCADURA', frap.accidente_colision === 'volcadura', xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('AUTOMOTOR', frap.accidente_colision === 'automotor', xPos, leftY);
+  xPos += checkbox('MOTOCICLETA', frap.accidente_colision === 'motocicleta', xPos, leftY);
+  xPos += checkbox('BICICLETA', frap.accidente_colision === 'bicicleta', xPos, leftY);
+  checkbox('MAQUINARIA', frap.accidente_colision === 'maquinaria', xPos, leftY);
+  leftY += 5;
+  
+  label('CONTRA OBJETO:', col1X + 2, leftY);
+  xPos = col1X + 28;
+  xPos += checkbox('FIJO', frap.accidente_contra_objeto === 'fijo', xPos, leftY);
+  checkbox('EN MOVIMIENTO', frap.accidente_contra_objeto === 'movimiento', xPos, leftY);
+  label('IMPACTO:', col1X + colW / 2 + 10, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('FRONTAL', frap.accidente_impacto === 'frontal', xPos, leftY);
+  xPos += checkbox('LATERAL', frap.accidente_impacto === 'lateral', xPos, leftY);
+  checkbox('POSTERIOR', frap.accidente_impacto === 'posterior', xPos, leftY);
+  leftY += 5;
+  
+  label('HUNDIMIENTO:', col1X + 2, leftY);
+  line(col1X + 24, leftY + 0.5, 12);
+  label('CMS', col1X + 38, leftY);
+  label('PARABRISAS:', col1X + 48, leftY);
+  xPos = col1X + 68;
+  xPos += checkbox('SÍ', frap.parabrisas_roto, xPos, leftY);
+  checkbox('NO', !frap.parabrisas_roto, xPos, leftY);
+  leftY += 4;
+  
+  label('VOLANTE:', col1X + 2, leftY);
+  xPos = col1X + 18;
+  xPos += checkbox('INTRUSIÓN', frap.volante === 'intrusion', xPos, leftY);
+  checkbox('DOBLADO', frap.volante === 'doblado', xPos, leftY);
+  label('BOLSA DE AIRE:', col1X + colW / 2 + 5, leftY);
+  leftY += 4;
+  
+  label('CINTURÓN DE SEGURIDAD:', col1X + 2, leftY);
+  xPos = col1X + 40;
+  xPos += checkbox('COLOCADO', frap.cinturon_seguridad === 'colocado', xPos, leftY);
+  checkbox('NO COLOCADO', frap.cinturon_seguridad === 'no_colocado', xPos, leftY);
+  leftY += 4;
+  
+  label('DENTRO DEL VEHÍCULO:', col1X + 2, leftY);
+  xPos = col1X + 38;
+  xPos += checkbox('SÍ', frap.dentro_vehiculo === 'si', xPos, leftY);
+  xPos += checkbox('NO', frap.dentro_vehiculo === 'no', xPos, leftY);
+  checkbox('EYECTADO', frap.eyectado === 'si', xPos, leftY);
+  leftY += 4;
+  
+  label('ATROPELLADO:', col1X + 2, leftY);
+  xPos = col1X + 25;
+  xPos += checkbox('AUTOMOTOR', frap.atropellado === 'automotor', xPos, leftY);
+  xPos += checkbox('MOTOCICLETA', frap.atropellado === 'motocicleta', xPos, leftY);
+  xPos += checkbox('BICICLETA', frap.atropellado === 'bicicleta', xPos, leftY);
+  checkbox('MAQUINARIA', frap.atropellado === 'maquinaria', xPos, leftY);
+  leftY += 4;
+  label('CASCO DE SEGURIDAD:', col1X + 2, leftY);
+  xPos = col1X + 38;
+  xPos += checkbox('SÍ', frap.casco_seguridad === 'si', xPos, leftY);
+  checkbox('NO', frap.casco_seguridad === 'no', xPos, leftY);
+  leftY += 5;
+  
+  // AGENTE CAUSAL
+  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY, colW);
+  xPos = col1X + 2;
+  xPos += checkbox('ARMA', agentes.includes('arma'), xPos, leftY);
+  xPos += checkbox('MAQUINARIA', agentes.includes('maquinaria'), xPos, leftY);
+  checkbox('ELECTRICIDAD', agentes.includes('electricidad'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('JUGUETE', agentes.includes('juguete'), xPos, leftY);
+  xPos += checkbox('HERRAMIENTA', agentes.includes('herramienta'), xPos, leftY);
+  checkbox('EXPLOSIÓN', agentes.includes('explosion'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('AUTOMOTOR', agentes.includes('automotor'), xPos, leftY);
+  xPos += checkbox('FUEGO', agentes.includes('fuego'), xPos, leftY);
+  checkbox('SER HUMANO', agentes.includes('ser_humano'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('BICICLETA', agentes.includes('bicicleta'), xPos, leftY);
+  xPos += checkbox('SUSTANCIA CALIENTE', agentes.includes('producto_caliente'), xPos, leftY);
+  checkbox('ANIMAL', agentes.includes('animal'), xPos, leftY);
+  leftY += 4;
+  xPos = col1X + 2;
+  xPos += checkbox('PRODUCTO BIOLÓGICO', agentes.includes('sustancia_biologica'), xPos, leftY);
+  xPos += checkbox('SUSTANCIA TÓXICA', agentes.includes('sustancia_toxica'), xPos, leftY);
+  checkbox('OTRO', agentes.includes('otro'), xPos, leftY);
+  leftY += 4;
+  
+  leftY += fieldRow('ESPECIFIQUE:', '', col1X + 2, leftY, 20, colW - 24);
+  leftY += fieldRow('LESIONES CAUSADAS POR:', frap.lesiones_causadas_por, col1X + 2, leftY, 38, colW - 42);
   
   // DATOS DE LA MADRE
-  leftY = sectionTitle('DATOS DE LA MADRE.', col1X, leftY);
-  fieldLabel('GESTA:', col1X, leftY + 2);
-  fieldLine(col1X + 10, leftY + 2.5, 8);
-  fieldValue(frap.madre_gesta, col1X + 11, leftY + 2);
-  fieldLabel('CESÁREAS:', col1X + 20, leftY + 2);
-  fieldLine(col1X + 34, leftY + 2.5, 8);
-  fieldValue(frap.madre_cesareas, col1X + 35, leftY + 2);
-  fieldLabel('PARA:', col1X + 44, leftY + 2);
-  fieldLine(col1X + 52, leftY + 2.5, 8);
-  fieldValue(frap.madre_para, col1X + 53, leftY + 2);
-  fieldLabel('ABORTOS:', col1X + 62, leftY + 2);
-  fieldLine(col1X + 76, leftY + 2.5, 8);
-  fieldValue(frap.madre_abortos, col1X + 77, leftY + 2);
-  fieldLabel('FUM:', col1X + 86, leftY + 2);
-  fieldLine(col1X + 92, leftY + 2.5, colW - 94);
-  fieldValue(frap.madre_fum, col1X + 93, leftY + 2);
+  leftY = sectionTitle('DATOS DE LA MADRE', col1X, leftY + 1, colW);
+  label('GESTA:', col1X + 2, leftY);
+  line(col1X + 14, leftY + 0.5, 10);
+  value(frap.madre_gesta, col1X + 15, leftY);
+  label('CESÁREAS:', col1X + 28, leftY);
+  line(col1X + 44, leftY + 0.5, 8);
+  value(frap.madre_cesareas, col1X + 45, leftY);
+  label('PARA:', col1X + 56, leftY);
+  line(col1X + 66, leftY + 0.5, 8);
+  value(frap.madre_para, col1X + 67, leftY);
+  label('ABORTOS:', col1X + 78, leftY);
+  line(col1X + 94, leftY + 0.5, colW - 98);
+  value(frap.madre_abortos, col1X + 95, leftY);
   leftY += 4;
   
-  fieldLabel('SEMANAS DE GESTACIÓN:', col1X, leftY + 2);
-  fieldLine(col1X + 32, leftY + 2.5, 12);
-  fieldValue(frap.madre_semanas, col1X + 33, leftY + 2);
-  fieldLabel('FECHA PROBABLE DE PARTO:', col1X + 48, leftY + 2);
-  fieldLine(col1X + 80, leftY + 2.5, colW - 82);
-  fieldValue(frap.madre_fecha_probable, col1X + 81, leftY + 2);
+  label('FUM:', col1X + 2, leftY);
+  line(col1X + 12, leftY + 0.5, 20);
+  value(frap.madre_fum, col1X + 13, leftY);
   leftY += 4;
   
-  fieldLabel('HORA INICIO CONTRACCIONES:', col1X, leftY + 2);
-  fieldLine(col1X + 40, leftY + 2.5, 15);
-  fieldValue(frap.madre_hora_contracciones, col1X + 41, leftY + 2);
-  fieldLabel('FRECUENCIA:', col1X + 58, leftY + 2);
-  fieldLine(col1X + 75, leftY + 2.5, 10);
-  fieldValue(frap.madre_frecuencia, col1X + 76, leftY + 2);
-  fieldLabel('DURACIÓN:', col1X + 88, leftY + 2);
-  fieldLine(col1X + 100, leftY + 2.5, colW - 102);
-  fieldValue(frap.madre_duracion, col1X + 101, leftY + 2);
+  leftY += fieldRow('SEMANAS DE GESTACIÓN:', frap.madre_semanas, col1X + 2, leftY, 36, 15);
+  
+  label('FECHA PROBABLE DE PARTO:', col1X + 2, leftY);
+  line(col1X + 45, leftY + 0.5, colW - 48);
+  value(frap.madre_fecha_probable, col1X + 46, leftY);
+  leftY += 4;
+  
+  label('HORA INICIO CONTRACCIONES:', col1X + 2, leftY);
+  line(col1X + 45, leftY + 0.5, 15);
+  value(frap.madre_hora_contracciones, col1X + 46, leftY);
+  label('FRECUENCIA:', col1X + 65, leftY);
+  line(col1X + 82, leftY + 0.5, colW - 86);
+  value(frap.madre_frecuencia, col1X + 83, leftY);
+  leftY += 4;
+  
+  label('DURACIÓN:', col1X + 2, leftY);
+  line(col1X + 18, leftY + 0.5, colW - 22);
+  value(frap.madre_duracion, col1X + 19, leftY);
   leftY += 5;
   
   // DATOS POST-PARTO
-  leftY = sectionTitle('DATOS POST-PARTO:', col1X, leftY);
-  fieldLabel('HORA DE NACIMIENTO:', col1X, leftY + 2);
-  fieldLine(col1X + 30, leftY + 2.5, 15);
-  fieldValue(frap.postparto_hora_nacimiento, col1X + 31, leftY + 2);
-  fieldLabel('LUGAR:', col1X + 48, leftY + 2);
-  fieldLine(col1X + 58, leftY + 2.5, colW - 60);
-  fieldValue(frap.postparto_lugar, col1X + 59, leftY + 2);
+  leftY = sectionTitle('DATOS POST-PARTO', col1X, leftY, colW);
+  label('HORA DE NACIMIENTO:', col1X + 2, leftY);
+  line(col1X + 35, leftY + 0.5, 20);
+  value(frap.postparto_hora_nacimiento, col1X + 36, leftY);
+  label('LUGAR:', col1X + 60, leftY);
+  line(col1X + 72, leftY + 0.5, colW - 76);
+  value(frap.postparto_lugar, col1X + 73, leftY);
   leftY += 4;
   
-  fieldLabel('PLACENTA EXPULSADA:', col1X, leftY + 2);
-  fieldLine(col1X + 30, leftY + 2.5, colW - 32);
+  label('PLACENTA EXPULSADA:', col1X + 2, leftY);
+  xPos = col1X + 38;
+  xPos += checkbox('SÍ', frap.postparto_placenta === true, xPos, leftY);
+  checkbox('NO', frap.postparto_placenta === false, xPos, leftY);
 
-  // ════════════════════════════════════════════════════════════════
+  // ─────────────────────────────────────────────────────────────────
   // PÁGINA 2 - COLUMNA DERECHA
-  // ════════════════════════════════════════════════════════════════
-  
-  // Caja de signos vitales vacía
-  doc.setLineWidth(0.2);
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 8; col++) {
-      doc.rect(col2X + col * 12, rightY + row * 5, 12, 5);
-    }
-  }
-  rightY += 18;
-  
-  // CONDICIÓN DEL PACIENTE
-  rightY = sectionTitle('CONDICIÓN DEL PACIENTE', col2X, rightY);
-  sectionTitle('PRIORIDAD', col2X + colW/2, rightY - 3);
-  xPos = col2X;
-  xPos += checkboxLabel('CRÍTICO INESTABLE', frap.condicion_paciente === 'critico_inestable', xPos, rightY);
-  checkboxLabel('NO CRÍTICO', frap.condicion_paciente === 'no_critico', xPos, rightY);
-  checkboxLabel('ROJO', frap.prioridad === 'rojo', col2X + colW/2, rightY);
-  checkboxLabel('VERDE', frap.prioridad === 'verde', col2X + colW - 15, rightY);
-  rightY += 3;
-  checkboxLabel('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X, rightY);
-  checkboxLabel('AMARILLO', frap.prioridad === 'amarillo', col2X + colW/2, rightY);
-  checkboxLabel('NEGRO', frap.prioridad === 'negro', col2X + colW - 15, rightY);
-  rightY += 5;
-  
-  // VÍA AÉREA etc (compacto en pág 2)
-  rightY = sectionTitle('VÍA AÉREA:', col2X, rightY);
-  sectionTitle('CONTROL CERVICAL:', col2X + 22, rightY - 3);
-  sectionTitle('ASISTENCIA VENTILATORIA/OXIGENOTERAPIA:', col2X + colW/2, rightY - 3);
-  
-  checkboxLabel('ASPIRACIÓN', viaAereaManejo.includes('aspiracion'), col2X, rightY);
-  checkboxLabel('MANUAL', frap.control_cervical === 'manual', col2X + 22, rightY);
-  checkboxLabel('BALÓN-VÁLVULA MASCARILLA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + colW/2, rightY);
-  checkboxLabel('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + colW - 22, rightY);
-  rightY += 3;
-  checkboxLabel('CÁNULA OROFARÍNGEA', viaAereaManejo.includes('canula_oro'), col2X, rightY);
-  checkboxLabel('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + 22, rightY);
-  checkboxLabel('VENTILADOR AUTOMÁTICO', frap.asistencia_ventilatoria === 'ventilador', col2X + colW/2, rightY);
-  checkboxLabel('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + colW - 22, rightY);
-  rightY += 3;
-  checkboxLabel('CÁNULA NASOFARÍNGEA', viaAereaManejo.includes('canula_naso'), col2X, rightY);
-  checkboxLabel('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + 22, rightY);
-  fieldLabel('FREC.', col2X + colW/2, rightY);
-  fieldLabel('VOL.', col2X + colW/2 + 18, rightY);
-  checkboxLabel('MASCARILLA CON RESERVORIO', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + colW - 22, rightY);
-  rightY += 5;
+  // ─────────────────────────────────────────────────────────────────
   
   // INTERROGATORIO
-  rightY = sectionTitle('INTERROGATORIO', col2X, rightY);
-  fieldLabel('ALERGIAS:', col2X, rightY + 2);
-  fieldLine(col2X + 14, rightY + 2.5, colW - 16);
-  fieldValue(frap.alergias, col2X + 15, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('MEDICAMENTOS QUE ESTÁ INGIRIENDO:', col2X, rightY + 2);
-  fieldLine(col2X + 48, rightY + 2.5, colW - 50);
-  fieldValue(frap.medicamentos, col2X + 49, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('ENFERMEDADES Y CIRUGÍAS PREVIAS:', col2X, rightY + 2);
-  fieldLine(col2X + 45, rightY + 2.5, colW - 47);
-  fieldValue(frap.enfermedades_previas, col2X + 46, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('HORA DE LA ÚLTIMA COMIDA:', col2X, rightY + 2);
-  fieldLine(col2X + 36, rightY + 2.5, colW - 38);
-  fieldValue(frap.ultima_comida, col2X + 37, rightY + 2);
-  rightY += 3.5;
-  
-  fieldLabel('EVENTOS PREVIOS RELACIONADOS:', col2X, rightY + 2);
-  fieldLine(col2X + 42, rightY + 2.5, colW - 44);
-  fieldValue(frap.eventos_previos, col2X + 43, rightY + 2);
-  rightY += 5;
+  rightY = sectionTitle('INTERROGATORIO', col2X, rightY, colW);
+  rightY += fieldRow('ALERGIAS:', frap.alergias, col2X + 2, rightY, 16, colW - 20);
+  rightY += fieldRow('MEDICAMENTOS QUE ESTÁ INGIRIENDO:', frap.medicamentos, col2X + 2, rightY, 55, colW - 59);
+  rightY += fieldRow('ENFERMEDADES Y CIRUGÍAS PREVIAS:', frap.enfermedades_previas, col2X + 2, rightY, 52, colW - 56);
+  rightY += fieldRow('HORA DE LA ÚLTIMA COMIDA:', frap.ultima_comida, col2X + 2, rightY, 42, colW - 46);
+  rightY += fieldRow('EVENTOS PREVIOS RELACIONADOS:', frap.eventos_previos, col2X + 2, rightY, 48, colW - 52);
+  rightY += 2;
   
   // OBSERVACIONES
-  rightY = sectionTitle('OBSERVACIONES:', col2X, rightY);
-  doc.rect(col2X, rightY, colW, 18);
+  rightY = sectionTitle('OBSERVACIONES', col2X, rightY, colW);
+  doc.setDrawColor(...GREEN);
+  doc.setLineWidth(0.3);
+  doc.rect(col2X, rightY, colW, 22, 'S');
+  
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
   const obsLines = doc.splitTextToSize(frap.observaciones || '', colW - 4);
-  doc.setFontSize(5);
-  doc.text(obsLines, col2X + 2, rightY + 3);
-  rightY += 20;
+  doc.text(obsLines, col2X + 2, rightY + 4);
+  rightY += 24;
   
   // ESCALA DE GLASGOW
-  fieldLabel('ESCALA DE GLASGOW', col2X, rightY + 2);
-  doc.rect(col2X + colW - 12, rightY - 1, 10, 5);
-  fieldValue(frap.glasgow_total || '', col2X + colW - 9, rightY + 2);
+  label('ESCALA DE GLASGOW:', col2X + 2, rightY);
+  doc.setDrawColor(...GREEN);
+  doc.rect(col2X + colW - 15, rightY - 4, 13, 6, 'S');
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  value(frap.glasgow_total || '', col2X + colW - 11, rightY);
   rightY += 6;
   
   // ESCALA PREHOSPITALARIA DE CINCINNATI
-  rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY);
-  fieldLabel('ASIMETRÍA FACIAL', col2X + 2, rightY + 2);
-  checkboxLabel('SÍ', frap.asimetria_facial === 'si', col2X + colW - 20, rightY + 2);
-  checkboxLabel('NO', frap.asimetria_facial === 'no', col2X + colW - 8, rightY + 2);
-  rightY += 3;
-  fieldLabel('PARESIA DE LOS BRAZOS', col2X + 2, rightY + 2);
-  checkboxLabel('SÍ', frap.paresia_brazos === 'si', col2X + colW - 20, rightY + 2);
-  checkboxLabel('NO', frap.paresia_brazos === 'no', col2X + colW - 8, rightY + 2);
-  rightY += 3;
-  fieldLabel('ALTERACIÓN DEL LENGUAJE', col2X + 2, rightY + 2);
-  checkboxLabel('SÍ', frap.alteracion_lenguaje === 'si', col2X + colW - 20, rightY + 2);
-  checkboxLabel('NO', frap.alteracion_lenguaje === 'no', col2X + colW - 8, rightY + 2);
+  rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY, colW);
+  
+  label('ASIMETRÍA FACIAL', col2X + 2, rightY);
+  checkbox('SÍ', frap.asimetria_facial === 'si', col2X + colW - 22, rightY);
+  checkbox('NO', frap.asimetria_facial === 'no', col2X + colW - 10, rightY);
+  rightY += 4;
+  label('PARESIA DE LOS BRAZOS', col2X + 2, rightY);
+  checkbox('SÍ', frap.paresia_brazos === 'si', col2X + colW - 22, rightY);
+  checkbox('NO', frap.paresia_brazos === 'no', col2X + colW - 10, rightY);
+  rightY += 4;
+  label('ALTERACIÓN DEL LENGUAJE', col2X + 2, rightY);
+  checkbox('SÍ', frap.alteracion_lenguaje === 'si', col2X + colW - 22, rightY);
+  checkbox('NO', frap.alteracion_lenguaje === 'no', col2X + colW - 10, rightY);
   rightY += 5;
   
   // ESCALA DE TRAUMA
-  rightY = sectionTitle('ESCALA DE TRAUMA', col2X, rightY);
-  const traumaHeaders = ['(A)GCS', '(B)PAS', '(C)FR', '(D) Esfuerzo', '(E)Llenado', 'Puntuación'];
+  rightY = sectionTitle('ESCALA DE TRAUMA', col2X, rightY, colW);
+  
+  const traumaHeaders = ['(A)GCS', '(B) PAS', '(C)FR', '(D) Esfuerzo Respiratorio', '(E)Llenado Capilar', 'Puntuación'];
   const tColW = colW / 6;
   
-  doc.setLineWidth(0.2);
-  doc.rect(col2X, rightY, colW, 4);
-  doc.setFontSize(4);
+  doc.setFillColor(...DARK_GREEN);
+  doc.rect(col2X, rightY, colW, 5, 'F');
+  doc.setFontSize(4.5);
   doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
   traumaHeaders.forEach((h, i) => {
-    if (i > 0) doc.line(col2X + tColW * i, rightY, col2X + tColW * i, rightY + 28);
-    doc.text(h, col2X + tColW * i + tColW/2, rightY + 2.8, { align: 'center' });
+    doc.text(h, col2X + tColW * i + tColW / 2, rightY + 3.2, { align: 'center' });
   });
-  doc.setFontSize(3);
-  doc.text('Respiratorio', col2X + tColW * 3 + tColW/2, rightY + 5.5, { align: 'center' });
-  doc.text('Capilar', col2X + tColW * 4 + tColW/2, rightY + 5.5, { align: 'center' });
-  rightY += 4;
+  rightY += 5;
   
   const traumaRows = [
     ['14-15', '', '', '', '', '5'],
@@ -1163,135 +1145,191 @@ export const generateFRAPPDF = async (frap) => {
   ];
   
   traumaRows.forEach((row) => {
-    doc.rect(col2X, rightY, colW, 4);
-    doc.setFontSize(4);
+    doc.setDrawColor(...GREEN);
+    doc.setLineWidth(0.2);
+    doc.rect(col2X, rightY, colW, 4, 'S');
+    doc.setFontSize(5);
     doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...BLACK);
     row.forEach((cell, j) => {
-      doc.text(cell, col2X + tColW * j + tColW/2, rightY + 2.8, { align: 'center' });
+      doc.text(cell, col2X + tColW * j + tColW / 2, rightY + 2.8, { align: 'center' });
+      if (j < 5) {
+        doc.line(col2X + tColW * (j + 1), rightY, col2X + tColW * (j + 1), rightY + 4);
+      }
     });
     rightY += 4;
   });
   
-  fieldLabel('Puntuación Total:', col2X + colW - 35, rightY + 2);
-  fieldLabel('A+B+C+D+E', col2X + colW - 18, rightY + 2);
-  rightY += 5;
-  
-  // DATOS RECIÉN NACIDO y DESTINO
-  const rnY = Math.max(leftY, rightY) - 40;
-  rightY = sectionTitle('DATOS RECIÉN NACIDO:', col2X, rnY);
-  sectionTitle('DESTINO', col2X + colW/2 + 10, rnY);
-  
-  fieldLabel('PRODUCTO:', col2X, rightY + 2);
-  checkboxLabel('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 18, rightY + 2);
-  checkboxLabel('MUERTO', frap.recien_nacido_producto === 'muerto', col2X + 32, rightY + 2);
-  fieldLabel('SEXO:', col2X + 48, rightY + 2);
-  checkboxLabel('MASC', frap.recien_nacido_sexo === 'masculino', col2X + 58, rightY + 2);
-  checkboxLabel('FEM', frap.recien_nacido_sexo === 'femenino', col2X + 72, rightY + 2);
-  checkboxLabel('TRASLADADO', frap.recien_nacido_destino === 'trasladado', col2X + colW/2 + 10, rightY + 2);
-  rightY += 3;
-  
-  fieldLabel('APGAR:', col2X, rightY + 2);
-  checkboxLabel('NO TRASLADADO', frap.recien_nacido_destino === 'no_trasladado', col2X + colW/2 + 10, rightY + 2);
-  rightY += 3;
-  
-  doc.rect(col2X + 12, rightY - 1, 10, 4);
-  doc.rect(col2X + 24, rightY - 1, 10, 4);
-  doc.rect(col2X + 36, rightY - 1, 10, 4);
-  fieldValue(frap.recien_nacido_apgar_1 || '', col2X + 15, rightY + 1.5);
-  fieldValue(frap.recien_nacido_apgar_5 || '', col2X + 27, rightY + 1.5);
-  fieldValue(frap.recien_nacido_apgar_10 || '', col2X + 39, rightY + 1.5);
-  doc.setFontSize(3.5);
-  doc.text('1 MIN', col2X + 14, rightY + 5);
-  doc.text('5 MIN', col2X + 26, rightY + 5);
-  doc.text('10 MIN', col2X + 37.5, rightY + 5);
-  checkboxLabel('FUGA', frap.recien_nacido_destino === 'fuga', col2X + colW/2 + 10, rightY + 2);
+  label('Puntuación Total:', col2X + colW - 38, rightY + 2);
+  label('A+B+C+D+E', col2X + colW - 18, rightY + 2);
   rightY += 6;
   
-  fieldLabel('PRODUCTO:', col2X, rightY + 2);
-  doc.rect(col2X + 18, rightY - 1, 10, 4);
-  doc.rect(col2X + 30, rightY - 1, 10, 4);
-  doc.rect(col2X + 42, rightY - 1, 10, 4);
+  // DATOS RECIÉN NACIDO y DESTINO
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW / 2, 5, 'F');
+  doc.rect(col2X + colW / 2 + 2, rightY, colW / 2 - 2, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('DATOS RECIÉN NACIDO', col2X + 2, rightY + 3.5);
+  doc.text('DESTINO', col2X + colW / 2 + 4, rightY + 3.5);
+  rightY += 6;
+  
+  label('PRODUCTO:', col2X + 2, rightY);
+  checkbox('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 22, rightY);
+  checkbox('MUERTO', frap.recien_nacido_producto === 'muerto', col2X + 40, rightY);
+  checkbox('TRASLADADO', frap.recien_nacido_destino === 'trasladado', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  label('SEXO:', col2X + 2, rightY);
+  checkbox('MASC', frap.recien_nacido_sexo === 'masculino', col2X + 15, rightY);
+  checkbox('FEM', frap.recien_nacido_sexo === 'femenino', col2X + 32, rightY);
+  checkbox('NO TRASLADADO', frap.recien_nacido_destino === 'no_trasladado', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  label('APGAR:', col2X + 2, rightY);
+  checkbox('FUGA', frap.recien_nacido_destino === 'fuga', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  doc.setDrawColor(...GREEN);
+  doc.rect(col2X + 15, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 29, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 43, rightY - 3, 12, 5, 'S');
+  value(frap.recien_nacido_apgar_1 || '', col2X + 18, rightY);
+  value(frap.recien_nacido_apgar_5 || '', col2X + 32, rightY);
+  value(frap.recien_nacido_apgar_10 || '', col2X + 46, rightY);
+  doc.setFontSize(4.5);
+  doc.text('1 MIN', col2X + 17, rightY + 4);
+  doc.text('5 MIN', col2X + 31, rightY + 4);
+  doc.text('10 MIN', col2X + 44, rightY + 4);
+  rightY += 6;
+  
+  label('PRODUCTO:', col2X + 2, rightY);
+  doc.rect(col2X + 20, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 34, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 48, rightY - 3, 12, 5, 'S');
 
   // ════════════════════════════════════════════════════════════════
   // SECCIÓN INFERIOR - FIRMAS Y CONSENTIMIENTOS
   // ════════════════════════════════════════════════════════════════
-  const footerY = ph - 55;
+  const footerY = ph - 65;
   
   // NEGATIVA A RECIBIR ATENCIÓN
-  setRed();
+  doc.setFillColor(...GREEN);
+  doc.rect(mx, footerY, cw / 2 - 2, 5, 'F');
   doc.setFontSize(5.5);
   doc.setFont('helvetica', 'bold');
-  doc.text('NEGATIVA A RECIBIR ATENCIÓN/ SER TRASLADADO EXIMENTE DE RESPONSABILIDAD', mx, footerY);
+  doc.setTextColor(...WHITE);
+  doc.text('NEGATIVA A RECIBIR ATENCIÓN/ SER TRASLADADO EXIMENTE DE RESPONSABILIDAD', mx + 2, footerY + 3.5);
   
-  setBlack();
-  doc.setFontSize(4);
+  doc.setFontSize(5);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
   const negText = 'DECLARO QUE NO ACEPTO LAS RECOMENDACIONES DEL PERSONAL DE LA AMBULANCIA DEL CUERPO DE RESCATE EN CUANTO AL (TRATAMIENTO) Y/O (TRASLADO) A UN HOSPITAL; POR LO QUE EXIMO A EL CUERPO DE RESCATE Y A DICHAS PERSONAS DE TODA RESPONSABILIDAD QUE PUDIERA DERIVAR AL HABER RESPETADO Y CUMPLIDO MI DECISIÓN.';
-  const negLines = doc.splitTextToSize(negText, cw/2 - 4);
-  doc.text(negLines, mx + 2, footerY + 4);
+  const negLines = doc.splitTextToSize(negText, cw / 2 - 6);
+  doc.text(negLines, mx + 2, footerY + 10);
   
   // CONSENTIMIENTO INFORMADO
-  setRed();
-  doc.setFontSize(5.5);
+  doc.setFillColor(...GREEN);
+  doc.rect(mx + cw / 2, footerY, cw / 2, 5, 'F');
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
-  doc.text('CONSENTIMIENTO INFORMADO', pw/2 + 2, footerY);
+  doc.setTextColor(...WHITE);
+  doc.text('CONSENTIMIENTO INFORMADO', mx + cw / 2 + 2, footerY + 3.5);
   
-  setBlack();
-  doc.setFontSize(4);
+  doc.setFontSize(5);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
   const consText = 'PREVIO A UNA DETALLADA EXPLICACIÓN DOY MI CONSENTIMIENTO A SER TRASLADADO Y/O ATENDIDO POR EL PERSONAL DEL CUERPO DE RESCATE A.C.';
-  const consLines = doc.splitTextToSize(consText, cw/2 - 4);
-  doc.text(consLines, pw/2 + 4, footerY + 4);
+  const consLines = doc.splitTextToSize(consText, cw / 2 - 6);
+  doc.text(consLines, mx + cw / 2 + 2, footerY + 10);
   
-  // AUTORIDADES QUE INTERVINIERON
-  setRed();
-  doc.setFontSize(5.5);
-  doc.setFont('helvetica', 'bold');
-  doc.text('AUTORIDADES QUE INTERVINIERON', pw/2 + cw/4, footerY);
+  // Líneas de firmas principales
+  const sigY = footerY + 30;
   
-  setBlack();
-  fieldLabel('ENTREGA PACIENTE', pw/2 + cw/4 + 2, footerY + 8);
-  fieldLine(pw/2 + cw/4 + 28, footerY + 8.5, 30);
-  doc.setFontSize(3.5);
-  doc.text('NOMBRE Y FIRMA', pw/2 + cw/4 + 38, footerY + 11);
+  // Firmas izquierda (negativa)
+  line(mx + 10, sigY, 40);
+  doc.setFontSize(5);
+  doc.text('NOMBRE/FIRMA DEL PACIENTE', mx + 15, sigY + 3);
   
-  fieldLabel('MÉDICO QUE RECIBE', pw/2 + cw/4 + 2, footerY + 16);
-  fieldLine(pw/2 + cw/4 + 28, footerY + 16.5, 30);
-  doc.setFontSize(3.5);
-  doc.text('NOMBRE Y FIRMA', pw/2 + cw/4 + 38, footerY + 19);
-  
-  // Líneas de firmas
-  const sigY = footerY + 25;
-  fieldLine(mx + 5, sigY, 40);
-  doc.setFontSize(4);
-  doc.text('NOMBRE/FIRMA DEL PACIENTE', mx + 10, sigY + 3);
-  
-  fieldLine(mx + 55, sigY, 40);
+  line(mx + 55, sigY, 40);
   doc.text('NOMBRE/FIRMA DEL TESTIGO', mx + 60, sigY + 3);
   
-  fieldLine(pw/2 + 5, sigY, 40);
-  doc.text('NOMBRE/FIRMA DEL PACIENTE', pw/2 + 10, sigY + 3);
+  // Firmas derecha (consentimiento)
+  line(mx + cw / 2 + 10, sigY, 40);
+  doc.text('NOMBRE/FIRMA DEL PACIENTE', mx + cw / 2 + 15, sigY + 3);
   
-  fieldLine(pw/2 + 55, sigY, 40);
-  doc.text('NOMBRE/FIRMA DE FAMILIAR O TUTOR', pw/2 + 55, sigY + 3);
+  line(mx + cw / 2 + 55, sigY, 40);
+  doc.text('NOMBRE/FIRMA DE FAMILIAR O TUTOR', mx + cw / 2 + 52, sigY + 3);
   
-  // Agregar firmas si existen
+  // AUTORIDADES QUE INTERVINIERON
+  const authY = sigY + 10;
+  doc.setFillColor(...GREEN);
+  doc.rect(mx + cw / 2, authY, cw / 2, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('AUTORIDADES QUE INTERVINIERON', mx + cw / 2 + 2, authY + 3.5);
+  
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...BLACK);
+  doc.text('ENTREGA PACIENTE', mx + cw / 2 + 5, authY + 10);
+  line(mx + cw / 2 + 35, authY + 10.5, 40);
+  doc.setFontSize(5);
+  doc.setFont('helvetica', 'normal');
+  doc.text('NOMBRE Y FIRMA', mx + cw / 2 + 50, authY + 13);
+  
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'bold');
+  doc.text('MÉDICO QUE RECIBE', mx + cw / 2 + 5, authY + 20);
+  line(mx + cw / 2 + 35, authY + 20.5, 40);
+  doc.setFontSize(5);
+  doc.setFont('helvetica', 'normal');
+  doc.text('NOMBRE Y FIRMA', mx + cw / 2 + 50, authY + 23);
+  
+  // AGREGAR FIRMAS DIGITALES si existen
   if (frap.firmas) {
+    // Firma paciente (negativa)
     if (frap.firmas.paciente) {
-      try { doc.addImage(frap.firmas.paciente, 'PNG', mx + 10, sigY - 10, 30, 8); } catch(e){}
+      try { doc.addImage(frap.firmas.paciente, 'PNG', mx + 15, sigY - 12, 30, 10); } catch(e){}
     }
+    // Firma testigo
     if (frap.firmas.testigo) {
-      try { doc.addImage(frap.firmas.testigo, 'PNG', mx + 60, sigY - 10, 30, 8); } catch(e){}
+      try { doc.addImage(frap.firmas.testigo, 'PNG', mx + 60, sigY - 12, 30, 10); } catch(e){}
     }
+    // Firma paciente (consentimiento)
+    if (frap.firmas.paciente_consentimiento) {
+      try { doc.addImage(frap.firmas.paciente_consentimiento, 'PNG', mx + cw / 2 + 15, sigY - 12, 30, 10); } catch(e){}
+    }
+    // Firma familiar o tutor
     if (frap.firmas.familiar_tutor) {
-      try { doc.addImage(frap.firmas.familiar_tutor, 'PNG', pw/2 + 60, sigY - 10, 30, 8); } catch(e){}
+      try { doc.addImage(frap.firmas.familiar_tutor, 'PNG', mx + cw / 2 + 55, sigY - 12, 30, 10); } catch(e){}
     }
+    // Firma entrega paciente
     if (frap.firmas.entrega_paciente) {
-      try { doc.addImage(frap.firmas.entrega_paciente, 'PNG', pw/2 + cw/4 + 30, footerY + 2, 25, 6); } catch(e){}
+      try { doc.addImage(frap.firmas.entrega_paciente, 'PNG', mx + cw / 2 + 40, authY + 3, 30, 8); } catch(e){}
     }
+    // Firma médico que recibe
     if (frap.firmas.medico_recibe) {
-      try { doc.addImage(frap.firmas.medico_recibe, 'PNG', pw/2 + cw/4 + 30, footerY + 10, 25, 6); } catch(e){}
+      try { doc.addImage(frap.firmas.medico_recibe, 'PNG', mx + cw / 2 + 40, authY + 13, 30, 8); } catch(e){}
     }
+  }
+  
+  // Pie de página
+  doc.setFontSize(5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...GRAY);
+  doc.text(`Creado por: ${frap.created_by_name || '—'}  •  Fecha: ${frap.created_at ? new Date(frap.created_at).toLocaleString('es-MX') : '—'}`, pw / 2, ph - 8, { align: 'center' });
+  doc.text('FRAP – Formulario de Rescate y Atención Prehospitalaria • Cuerpo de Rescate de Ensenada, A.C.', pw / 2, ph - 5, { align: 'center' });
+  
+  // Números de página
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(6);
+    doc.setTextColor(...GRAY);
+    doc.text(`Página ${i} de ${totalPages}`, pw - mx - 5, ph - 3, { align: 'right' });
   }
 
   // ── Descargar ──
