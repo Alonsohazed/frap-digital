@@ -1211,11 +1211,13 @@ export const generateFRAPPDF = async (frap) => {
   doc.rect(col2X + 20, rightY - 3, 12, 5, 'S');
   doc.rect(col2X + 34, rightY - 3, 12, 5, 'S');
   doc.rect(col2X + 48, rightY - 3, 12, 5, 'S');
+  rightY += 8;
 
   // ════════════════════════════════════════════════════════════════
   // SECCIÓN INFERIOR - FIRMAS Y CONSENTIMIENTOS
   // ════════════════════════════════════════════════════════════════
-  const footerY = ph - 65;
+  // Usar el máximo entre leftY y rightY + un margen
+  const footerY = Math.max(leftY, rightY) + 5;
   
   // NEGATIVA A RECIBIR ATENCIÓN
   doc.setFillColor(...GREEN);
