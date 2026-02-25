@@ -90,31 +90,11 @@ export default function DashboardPage() {
 
   const handleDownloadPDF = async (id, folio) => {
     try {
-      toast.info("Generando PDF...");
-      const response = await fetch(`${API}/fraps/${id}`, {
-        headers: getAuthHeaders()
-      });
-      if (response.ok) {
-        const frapData = await response.json();
-        const pdfBlob = await generateFRAPPDF(frapData);
-        
-        // Crear URL del blob y descargar
-        const url = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `FRAP_${frapData.folio || 'documento'}_${new Date().toISOString().split('T')[0]}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        
-        toast.success("PDF descargado correctamente");
-      } else {
-        toast.error("Error al obtener datos del FRAP");
-      }
+      toast.info("Abriendo PDF...");
+      navigate(`/frap/${id}`);
     } catch (error) {
-      console.error("Error generando PDF:", error);
-      toast.error("Error al generar el PDF");
+      console.error("Error:", error);
+      toast.error("Error al abrir el PDF");
     }
   };
 
