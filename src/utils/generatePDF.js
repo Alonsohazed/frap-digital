@@ -713,8 +713,8 @@ export const generateFRAPPDF = async (frap) => {
     rightY += 3;
   });
   
-  // Diagrama corporal con zonas de lesión marcadas
-  drawBodyDiagram(col2X + colW / 2 - 2, expStartY - 1, 40, 42, frap.zonas_lesion || {});
+  // Diagrama corporal con zonas de lesión marcadas - MÁS GRANDE para llenar la caja
+  drawBodyDiagram(col2X + colW / 2, expStartY - 1, colW / 2, 50, frap.zonas_lesion || {});
   
   // Pupilas
   drawPupilas(col2X + colW / 2 + 5, expStartY + 42);
