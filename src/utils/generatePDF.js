@@ -589,18 +589,17 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 5;
   
   // CIRCULACIÓN
-  // CIRCULACIÓN
   rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY + 2, colW / 2 + 10);
   doc.setFillColor(...GREEN);
-  doc.rect(col2X + colW / 2 + 12, rightY - 6, 18, 5, 'F');
-  doc.rect(col2X + colW / 2 + 32, rightY - 6, 12, 5, 'F');
-  doc.rect(col2X + colW - 14, rightY - 6, 14, 5, 'F');
+  doc.rect(col2X + colW / 2 + 12, rightY - 8, 18, 5, 'F');
+  doc.rect(col2X + colW / 2 + 32, rightY - 8, 12, 5, 'F');
+  doc.rect(col2X + colW - 14, rightY - 8, 14, 5, 'F');
   doc.setFontSize(6);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
-  doc.text('CALIDAD', col2X + colW / 2 + 14, rightY - 2.5);
-  doc.text('PIEL', col2X + colW / 2 + 34, rightY - 2.5);
-  doc.text('CARACT.', col2X + colW - 12, rightY - 2.5);
+  doc.text('CALIDAD', col2X + colW / 2 + 14, rightY - 4.5);
+  doc.text('PIEL', col2X + colW / 2 + 34, rightY - 4.5);
+  doc.text('CARACT.', col2X + colW - 12, rightY - 4.5);
   
   checkbox('CAROTÍDEO', frap.presencia_pulsos === 'carotideo', col2X + 2, rightY);
   checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW / 2 + 12, rightY);
