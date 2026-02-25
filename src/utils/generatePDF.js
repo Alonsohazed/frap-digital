@@ -1129,7 +1129,8 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 5;
   
   // ESCALA DE TRAUMA
-  rightY = sectionTitle('ESCALA DE TRAUMA', col2X, rightY, colW);
+  // ESCALA DE TRAUMA
+  rightY = sectionTitle('ESCALA DE TRAUMA', col2X, rightY + 2, colW);
   
   const traumaHeaders = ['(A)GCS', '(B) PAS', '(C)FR', '(D) Esfuerzo Respiratorio', '(E)Llenado Capilar', 'Puntuación'];
   const tColW = colW / 6;
