@@ -51,13 +51,13 @@ const Page1 = ({ data }) => {
     color: 'white',
     fontSize: '8px',
     fontWeight: 'bold',
-    padding: '5px 8px',
-    height: '18px',
+    padding: '4px 8px',
+    height: '16px',
     borderRadius: '4px 4px 0 0'
   };
 
   const sectionBodyStyle = {
-    padding: '8px',
+    padding: '6px',
     border: '1px solid #e0e0e0',
     borderTop: 'none',
     borderRadius: '0 0 4px 4px',
@@ -85,7 +85,7 @@ const Page1 = ({ data }) => {
   return (
     <div style={{
       width: '808px',
-      height: '1180px',
+      height: '1048px',
       position: 'relative',
       backgroundColor: 'white',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
