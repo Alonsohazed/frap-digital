@@ -7,11 +7,13 @@ const Page1 = ({ data }) => {
         display: 'inline-block',
         width: '11px',
         height: '11px',
-        border: '1px solid #000',
+        border: '1.5px solid #333',
+        borderRadius: '2px',
         marginRight: '5px',
         verticalAlign: 'middle',
         position: 'relative',
-        backgroundColor: checked ? '#000' : 'white'
+        backgroundColor: checked ? '#008000' : 'white',
+        transition: 'all 0.2s ease'
       }}>
         {checked && <span style={{ 
           color: 'white', 
@@ -44,15 +46,34 @@ const Page1 = ({ data }) => {
     }}>{children || ''}</span>
   );
 
+  const sectionHeader = {
+    background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
+    color: 'white',
+    fontSize: '8px',
+    fontWeight: 'bold',
+    padding: '5px 8px',
+    height: '18px',
+    borderRadius: '4px 4px 0 0'
+  };
+
+  const sectionBody = {
+    padding: '8px',
+    border: '1px solid #e0e0e0',
+    borderTop: 'none',
+    borderRadius: '0 0 4px 4px',
+    backgroundColor: '#fafafa'
+  };
+
   return (
     <div style={{
       width: '808px',
       height: '1048px',
       position: 'relative',
       backgroundColor: 'white',
-      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       overflow: 'hidden',
-      border: '1px solid #ddd'
+      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      borderRadius: '4px'
     }}>
       
       {/* ==================== HEADER ==================== */}
@@ -62,16 +83,55 @@ const Page1 = ({ data }) => {
         left: '0',
         width: '808px',
         height: '68px',
-        backgroundColor: '#008000',
-        padding: '10px 15px'
+        background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
+        padding: '10px 15px',
+        boxShadow: '0 2px 8px rgba(0,128,0,0.2)'
       }}>
-        <div style={{ color: 'white', fontSize: '20px', fontWeight: 'bold', marginBottom: '3px' }}>
-          CUERPO DE RESCATE DE ENSENADA, A.C.
+        {/* Logo */}
+        <div style={{
+          position: 'absolute',
+          left: '15px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '45px',
+          height: '45px',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+        }}>
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            style={{ 
+              width: '38px', 
+              height: '38px',
+              objectFit: 'contain'
+            }}
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.parentElement.innerHTML = '<div style="color: #008000; font-weight: bold; font-size: 20px;">CR</div>';
+            }}
+          />
         </div>
-        <div style={{ color: 'white', fontSize: '9px', lineHeight: '1.3' }}>
-          <div>Calle Magnolias No. 2356</div>
-          <div>Col. Márquez de León, Ensenada, B.C.</div>
-          <div>Tels. 176-8033 y 177-9992</div>
+        
+        <div style={{ marginLeft: '65px' }}>
+          <div style={{ 
+            color: 'white', 
+            fontSize: '20px', 
+            fontWeight: '700', 
+            marginBottom: '3px',
+            letterSpacing: '0.3px'
+          }}>
+            CUERPO DE RESCATE DE ENSENADA, A.C.
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.95)', fontSize: '9px', lineHeight: '1.4' }}>
+            <div>Calle Magnolias No. 2356</div>
+            <div>Col. Márquez de León, Ensenada, B.C.</div>
+            <div>Tels. 176-8033 y 177-9992</div>
+          </div>
         </div>
         
         {/* Fecha y Folio */}
@@ -82,15 +142,22 @@ const Page1 = ({ data }) => {
           width: '190px',
           height: '48px',
           backgroundColor: 'white',
-          border: '2px solid #008000',
-          padding: '6px 10px'
+          border: '2px solid rgba(0,128,0,0.3)',
+          borderRadius: '6px',
+          padding: '6px 10px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
         }}>
           <div style={{ marginBottom: '4px' }}>
             <Label>FECHA:</Label> <Value>{data.fecha}</Value>
           </div>
           <div>
             <Label># FOLIO:</Label> 
-            <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#008000', marginLeft: '8px' }}>
+            <span style={{ 
+              fontSize: '20px', 
+              fontWeight: 'bold', 
+              color: '#008000', 
+              marginLeft: '8px'
+            }}>
               {data.folio}
             </span>
           </div>
@@ -151,16 +218,23 @@ const Page1 = ({ data }) => {
         {/* MOTIVO DE LA ATENCIÓN */}
         <div style={{ marginBottom: '6px' }}>
           <div style={{
-            backgroundColor: '#008000',
+            background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
             color: 'white',
             fontSize: '8px',
             fontWeight: 'bold',
             padding: '5px 8px',
-            height: '18px'
+            height: '18px',
+            borderRadius: '4px 4px 0 0'
           }}>
             MOTIVO DE LA ATENCIÓN
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none' }}>
+          <div style={{ 
+            padding: '8px', 
+            border: '1px solid #e0e0e0', 
+            borderTop: 'none',
+            borderRadius: '0 0 4px 4px',
+            backgroundColor: '#fafafa'
+          }}>
             <div>
               <Checkbox checked={data.motivo_atencion === 'traslado_programado'} label="TRASLADO PROGRAMADO" />
               <Checkbox checked={data.motivo_atencion === 'enfermedad'} label="ENFERMEDAD" />
