@@ -1774,19 +1774,12 @@ export default function FRAPFormPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <div>
                       <Label>Gesta</Label>
                       <Input
                         value={formData.madre_gesta}
                         onChange={(e) => handleChange("madre_gesta", e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label>Para</Label>
-                      <Input
-                        value={formData.madre_para}
-                        onChange={(e) => handleChange("madre_para", e.target.value)}
                       />
                     </div>
                     <div>
@@ -1797,10 +1790,25 @@ export default function FRAPFormPage() {
                       />
                     </div>
                     <div>
+                      <Label>Para</Label>
+                      <Input
+                        value={formData.madre_para}
+                        onChange={(e) => handleChange("madre_para", e.target.value)}
+                      />
+                    </div>
+                    <div>
                       <Label>Abortos</Label>
                       <Input
                         value={formData.madre_abortos}
                         onChange={(e) => handleChange("madre_abortos", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>FUM</Label>
+                      <Input
+                        type="date"
+                        value={formData.madre_fum}
+                        onChange={(e) => handleChange("madre_fum", e.target.value)}
                       />
                     </div>
                     <div>
