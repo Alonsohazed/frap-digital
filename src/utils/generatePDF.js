@@ -422,7 +422,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // ACCIDENTE AUTOMOVILÍSTICO
-  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, colW);
+  // ACCIDENTE AUTOMOVILÍSTICO
+  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY + 3, colW);
   xPos = col1X + 2;
   xPos += checkbox('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
   doc.rect(xPos - 1, leftY - 2.2, 3, 3, 'S');
@@ -914,7 +915,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // ACCIDENTE AUTOMOVILÍSTICO
-  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, colW);
+  // ACCIDENTE AUTOMOVILÍSTICO
+  leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY + 3, colW);
   xPos = col1X + 2;
   xPos += checkbox('COLISIÓN', frap.accidente_colision === 'colision', xPos, leftY);
   doc.rect(xPos - 1, leftY - 2.2, 3, 3, 'S');
