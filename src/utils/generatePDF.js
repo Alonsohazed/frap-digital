@@ -1334,20 +1334,20 @@ export const generateFRAPPDF = async (frap) => {
     }
   }
   
-  // Pie de página
+  // Pie de página - solo en la primera página
+  doc.setPage(1);
   doc.setFontSize(5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...GRAY);
-  doc.text(`Creado por: ${frap.created_by_name || '—'}  •  Fecha: ${frap.created_at ? new Date(frap.created_at).toLocaleString('es-MX') : '—'}`, pw / 2, ph - 8, { align: 'center' });
-  doc.text('FRAP – Formulario de Rescate y Atención Prehospitalaria • Cuerpo de Rescate de Ensenada, A.C.', pw / 2, ph - 5, { align: 'center' });
+  doc.text(`Creado por: ${frap.created_by_name || '—'}  •  Fecha: ${frap.created_at ? new Date(frap.created_at).toLocaleString('es-MX') : '—'}`, pw / 2, ph - 4, { align: 'center' });
   
   // Números de página
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    doc.setFontSize(6);
+    doc.setFontSize(5);
     doc.setTextColor(...GRAY);
-    doc.text(`Página ${i} de ${totalPages}`, pw - mx - 5, ph - 3, { align: 'right' });
+    doc.text(`Página ${i} de ${totalPages}`, pw - mx - 5, ph - 4, { align: 'right' });
   }
 
   // ── Descargar ──
