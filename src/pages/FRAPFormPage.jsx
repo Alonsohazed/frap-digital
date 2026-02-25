@@ -581,9 +581,17 @@ export default function FRAPFormPage() {
               {/* Operador */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Personal</CardTitle>
+                  <CardTitle className="text-base">Personal y Ambulancia</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label>Número de Ambulancia</Label>
+                    <Input
+                      value={formData.numero_ambulancia}
+                      onChange={(e) => handleChange("numero_ambulancia", e.target.value)}
+                      data-testid="input-numero-ambulancia"
+                    />
+                  </div>
                   <div>
                     <Label>Operador</Label>
                     <Input
