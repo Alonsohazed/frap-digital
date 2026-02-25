@@ -49,18 +49,18 @@ const Page1 = ({ data }) => {
   const sectionHeaderStyle = {
     background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
     color: 'white',
-    fontSize: '8px',
+    fontSize: '7.5px',
     fontWeight: 'bold',
-    padding: '4px 8px',
-    height: '16px',
-    borderRadius: '4px 4px 0 0'
+    padding: '3px 6px',
+    height: '13px',
+    borderRadius: '3px 3px 0 0'
   };
 
   const sectionBodyStyle = {
-    padding: '5px',
+    padding: '4px',
     border: '1px solid #e0e0e0',
     borderTop: 'none',
-    borderRadius: '0 0 4px 4px',
+    borderRadius: '0 0 3px 3px',
     backgroundColor: '#fafafa'
   };
 
