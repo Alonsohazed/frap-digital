@@ -47,13 +47,13 @@ const Page2 = ({ data }) => {
     color: 'white',
     fontSize: '8px',
     fontWeight: 'bold',
-    padding: '5px 8px',
-    height: '18px',
+    padding: '4px 8px',
+    height: '16px',
     borderRadius: '4px 4px 0 0'
   };
 
   const sectionBodyStyle = {
-    padding: '8px',
+    padding: '6px',
     border: '1px solid #e0e0e0',
     borderTop: 'none',
     borderRadius: '0 0 4px 4px',
@@ -63,7 +63,7 @@ const Page2 = ({ data }) => {
   return (
     <div style={{
       width: '808px',
-      height: '1180px',
+      height: '1048px',
       position: 'relative',
       backgroundColor: 'white',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -96,7 +96,7 @@ const Page2 = ({ data }) => {
       <div style={{ position: 'absolute', top: '50px', left: '15px', width: '380px' }}>
         
         {/* DATOS DE LA MADRE */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             DATOS DE LA MADRE
           </div>
@@ -133,7 +133,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* DATOS POST-PARTO */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             DATOS POST-PARTO
           </div>
@@ -156,7 +156,7 @@ const Page2 = ({ data }) => {
       <div style={{ position: 'absolute', top: '50px', right: '15px', width: '380px' }}>
         
         {/* INTERROGATORIO */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             INTERROGATORIO
           </div>
@@ -180,7 +180,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* OBSERVACIONES */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             OBSERVACIONES
           </div>
@@ -195,7 +195,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* AUTORIDADES QUE INTERVINIERON */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             AUTORIDADES QUE INTERVINIERON
           </div>
@@ -212,7 +212,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* ESCALA DE GLASGOW */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             ESCALA DE GLASGOW
           </div>
@@ -257,7 +257,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* ESCALA PREHOSPITALARIA DE CINCINNATI */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             ESCALA PREHOSPITALARIA DE CINCINNATI
           </div>
@@ -281,7 +281,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* ESCALA DE TRAUMA */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>
             ESCALA DE TRAUMA
           </div>
@@ -341,7 +341,7 @@ const Page2 = ({ data }) => {
         </div>
 
         {/* DATOS RECIÉN NACIDO / DESTINO */}
-        <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+        <div style={{ marginBottom: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
           <div>
             <div style={{
               ...sectionHeaderStyle,

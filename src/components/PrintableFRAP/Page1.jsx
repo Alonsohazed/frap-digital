@@ -235,7 +235,7 @@ const Page1 = ({ data }) => {
       <div style={{ position: 'absolute', top: '120px', left: '15px', width: '380px' }}>
         
         {/* MOTIVO DE LA ATENCIÓN */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
             color: 'white',
@@ -266,7 +266,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* UBICACIÓN DEL SERVICIO */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -323,7 +323,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* NOMBRE DEL PACIENTE */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -379,7 +379,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* ORIGEN PROBABLE */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -418,7 +418,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* ACCIDENTE AUTOMOVILÍSTICO */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -490,7 +490,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* AGENTE CAUSAL */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -531,7 +531,7 @@ const Page1 = ({ data }) => {
       <div style={{ position: 'absolute', top: '120px', right: '15px', width: '380px' }}>
         
         {/* NIVEL DE CONCIENCIA */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -551,7 +551,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* VÍA AÉREA / REFLEJO DE DEGLUCIÓN */}
-        <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+        <div style={{ marginBottom: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
           <div>
             <div style={{
               backgroundColor: '#008000',
@@ -587,7 +587,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* VENTILACIÓN */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -608,7 +608,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* AUSCULTACIÓN */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -637,7 +637,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* CIRCULACIÓN */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={{
             backgroundColor: '#008000',
             color: 'white',
@@ -656,7 +656,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* CALIDAD / PIEL */}
-        <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+        <div style={{ marginBottom: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
           <div>
             <div style={{
               backgroundColor: '#008000',
@@ -700,7 +700,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* EXPLORACIÓN FÍSICA */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>EXPLORACIÓN FÍSICA</div>
           <div style={{ ...sectionBodyStyle, fontSize: '6px', lineHeight: '1.4' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
@@ -733,7 +733,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* ZONAS DE LESIÓN Y PUPILAS */}
-        <div style={{ marginBottom: '6px', display: 'flex', gap: '8px' }}>
+        <div style={{ marginBottom: '4px', display: 'flex', gap: '8px' }}>
           {/* Zonas de Lesión */}
           <div style={{ flex: 1 }}>
             <div style={{ ...sectionHeaderStyle, fontSize: '7px' }}>ZONAS DE LESIÓN</div>
@@ -798,7 +798,7 @@ const Page1 = ({ data }) => {
             <div style={{ ...sectionBodyStyle, paddingTop: '12px' }}>
               <div style={{ textAlign: 'center', marginBottom: '8px' }}>
                 {/* Pupila Derecha */}
-                <div style={{ marginBottom: '6px' }}>
+                <div style={{ marginBottom: '4px' }}>
                   <svg width="30" height="30">
                     <circle cx="15" cy="15" r="12" fill="white" stroke="#333" strokeWidth="1.5" />
                     <circle cx="15" cy="15" r="7" fill="#333" />
@@ -820,7 +820,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* SIGNOS VITALES */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>SIGNOS VITALES</div>
           <div style={{ ...sectionBodyStyle, padding: '4px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '6px' }}>
@@ -858,7 +858,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* CONDICIÓN DEL PACIENTE / PRIORIDAD */}
-        <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+        <div style={{ marginBottom: '4px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
           <div>
             <div style={sectionHeaderStyle}>CONDICIÓN DEL PACIENTE</div>
             <div style={{ ...sectionBodyStyle, lineHeight: '1.6' }}>
@@ -899,7 +899,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* MANEJO (4 columnas) */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>MANEJO</div>
           <div style={{ ...sectionBodyStyle, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', padding: '6px' }}>
             {/* Columna 1: VÍA AÉREA */}
@@ -953,7 +953,7 @@ const Page1 = ({ data }) => {
         </div>
 
         {/* CONTROL DE HEMORRAGIAS (4 columnas) */}
-        <div style={{ marginBottom: '6px' }}>
+        <div style={{ marginBottom: '4px' }}>
           <div style={sectionHeaderStyle}>CONTROL DE HEMORRAGIAS</div>
           <div style={{ ...sectionBodyStyle, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', padding: '6px' }}>
             {/* Columna 1: CONTROL */}
