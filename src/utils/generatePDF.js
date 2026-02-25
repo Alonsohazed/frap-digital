@@ -1016,7 +1016,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += fieldRow('LESIONES CAUSADAS POR:', frap.lesiones_causadas_por, col1X + 2, leftY, 38, colW - 42);
   
   // DATOS DE LA MADRE
-  leftY = sectionTitle('DATOS DE LA MADRE', col1X, leftY + 1, colW);
+  // DATOS DE LA MADRE
+  leftY = sectionTitle('DATOS DE LA MADRE', col1X, leftY + 3, colW);
   label('GESTA:', col1X + 2, leftY);
   line(col1X + 14, leftY + 0.5, 10);
   value(frap.madre_gesta, col1X + 15, leftY);
