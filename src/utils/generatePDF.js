@@ -1298,32 +1298,6 @@ export const generateFRAPPDF = async (frap) => {
   line(mx + cw / 2 + 55, sigY, 40);
   doc.text('NOMBRE/FIRMA DE FAMILIAR O TUTOR', mx + cw / 2 + 52, sigY + 3);
   
-  // AUTORIDADES QUE INTERVINIERON
-  const authY = sigY + 10;
-  doc.setFillColor(...GREEN);
-  doc.rect(mx + cw / 2, authY, cw / 2, 5, 'F');
-  doc.setFontSize(7);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...WHITE);
-  doc.text('AUTORIDADES QUE INTERVINIERON', mx + cw / 2 + 2, authY + 3.5);
-  
-  doc.setFontSize(6);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...BLACK);
-  doc.text('ENTREGA PACIENTE', mx + cw / 2 + 5, authY + 10);
-  line(mx + cw / 2 + 35, authY + 10.5, 40);
-  doc.setFontSize(5);
-  doc.setFont('helvetica', 'normal');
-  doc.text('NOMBRE Y FIRMA', mx + cw / 2 + 50, authY + 13);
-  
-  doc.setFontSize(6);
-  doc.setFont('helvetica', 'bold');
-  doc.text('MÉDICO QUE RECIBE', mx + cw / 2 + 5, authY + 20);
-  line(mx + cw / 2 + 35, authY + 20.5, 40);
-  doc.setFontSize(5);
-  doc.setFont('helvetica', 'normal');
-  doc.text('NOMBRE Y FIRMA', mx + cw / 2 + 50, authY + 23);
-  
   // AGREGAR FIRMAS DIGITALES si existen
   if (frap.firmas) {
     // Firma paciente (negativa)
@@ -1341,14 +1315,6 @@ export const generateFRAPPDF = async (frap) => {
     // Firma familiar o tutor
     if (frap.firmas.familiar_tutor) {
       try { doc.addImage(frap.firmas.familiar_tutor, 'PNG', mx + cw / 2 + 55, sigY - 12, 30, 10); } catch(e){}
-    }
-    // Firma entrega paciente
-    if (frap.firmas.entrega_paciente) {
-      try { doc.addImage(frap.firmas.entrega_paciente, 'PNG', mx + cw / 2 + 40, authY + 3, 30, 8); } catch(e){}
-    }
-    // Firma médico que recibe
-    if (frap.firmas.medico_recibe) {
-      try { doc.addImage(frap.firmas.medico_recibe, 'PNG', mx + cw / 2 + 40, authY + 13, 30, 8); } catch(e){}
     }
   }
   
