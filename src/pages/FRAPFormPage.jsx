@@ -1511,10 +1511,17 @@ export default function FRAPFormPage() {
                     ))}
                   </div>
                   <div className="mt-4">
-                    <Label>Otro</Label>
+                    <Label>Otro (Especificar)</Label>
                     <Input
                       value={formData.agente_causal_otro}
                       onChange={(e) => handleChange("agente_causal_otro", e.target.value)}
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <Label>Lesiones Causadas Por</Label>
+                    <Input
+                      value={formData.lesiones_causadas_por}
+                      onChange={(e) => handleChange("lesiones_causadas_por", e.target.value)}
                     />
                   </div>
                 </CardContent>
