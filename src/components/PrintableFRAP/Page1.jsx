@@ -898,7 +898,120 @@ const Page1 = ({ data }) => {
           </div>
         </div>
 
-        {/* Resto de secciones... */}
+        {/* MANEJO (4 columnas) */}
+        <div style={{ marginBottom: '6px' }}>
+          <div style={sectionHeaderStyle}>MANEJO</div>
+          <div style={{ ...sectionBodyStyle, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', padding: '6px' }}>
+            {/* Columna 1: VÍA AÉREA */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>VÍA AÉREA</div>
+              <Checkbox checked={(data.manejo_via_aerea || []).includes('canula_orofaringea')} label="Cánula Orofaríngea" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.manejo_via_aerea || []).includes('canula_nasofaringea')} label="Cánula Nasofaríngea" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.manejo_via_aerea || []).includes('aspiracion')} label="Aspiración" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.manejo_via_aerea || []).includes('intubacion')} label="Intubación" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 2: CONTROL CERVICAL */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>CONTROL CERVICAL</div>
+              <Checkbox checked={(data.control_cervical || []).includes('manual')} label="Manual" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.control_cervical || []).includes('collar')} label="Collar" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.control_cervical || []).includes('inmovilizador')} label="Inmovilizador" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 3: ASIST. VENTILATORIA */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>ASIST. VENTILATORIA</div>
+              <Checkbox checked={(data.asist_ventilatoria || []).includes('balon_valvula_mascarilla')} label="Balón Válvula Mascarilla" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.asist_ventilatoria || []).includes('valvula_demanda')} label="Válvula de Demanda" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 4: OXIGENOTERAPIA */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>OXIGENOTERAPIA</div>
+              <Checkbox checked={(data.oxigenoterapia || []).includes('puntas_nasales')} label="Puntas Nasales" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.oxigenoterapia || []).includes('mascarilla_simple')} label="Mascarilla Simple" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.oxigenoterapia || []).includes('mascarilla_recirculacion')} label="Mascarilla No Recirculación" style={{ fontSize: '5.5px' }} /></div>
+              <div style={{ marginTop: '3px' }}>
+                <Label>LTS/MIN:</Label>
+                <input 
+                  type="text" 
+                  value={data.oxigeno_lts_min || ''} 
+                  readOnly 
+                  style={{ 
+                    width: '30px', 
+                    border: '1px solid #ccc', 
+                    textAlign: 'center', 
+                    fontSize: '6px',
+                    marginLeft: '2px',
+                    padding: '1px'
+                  }} 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CONTROL DE HEMORRAGIAS (4 columnas) */}
+        <div style={{ marginBottom: '6px' }}>
+          <div style={sectionHeaderStyle}>CONTROL DE HEMORRAGIAS</div>
+          <div style={{ ...sectionBodyStyle, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', padding: '6px' }}>
+            {/* Columna 1: CONTROL */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>CONTROL</div>
+              <Checkbox checked={(data.control_hemorragia || []).includes('presion_directa')} label="Presión Directa" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.control_hemorragia || []).includes('vendaje_compresivo')} label="Vendaje Compresivo" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.control_hemorragia || []).includes('torniquete')} label="Torniquete" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.control_hemorragia || []).includes('empaquetamiento')} label="Empaquetamiento" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 2: VÍAS VENOSAS */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>VÍAS VENOSAS</div>
+              <Checkbox checked={(data.vias_venosas || []).includes('periferica')} label="Periférica" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.vias_venosas || []).includes('central')} label="Central" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.vias_venosas || []).includes('intraosea')} label="Intraósea" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 3: SITIO */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>SITIO</div>
+              <Checkbox checked={(data.sitio_via || []).includes('mano_derecha')} label="Mano Derecha" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.sitio_via || []).includes('mano_izquierda')} label="Mano Izquierda" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.sitio_via || []).includes('brazo_derecho')} label="Brazo Derecho" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.sitio_via || []).includes('brazo_izquierdo')} label="Brazo Izquierdo" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.sitio_via || []).includes('pierna_derecha')} label="Pierna Derecha" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.sitio_via || []).includes('pierna_izquierda')} label="Pierna Izquierda" style={{ fontSize: '5.5px' }} /></div>
+            </div>
+            
+            {/* Columna 4: TIPO SOLUCIONES */}
+            <div style={{ fontSize: '6px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', textAlign: 'center', color: '#008000' }}>TIPO SOLUCIONES</div>
+              <Checkbox checked={(data.tipo_soluciones || []).includes('hartmann')} label="Hartmann" style={{ fontSize: '5.5px' }} />
+              <div><Checkbox checked={(data.tipo_soluciones || []).includes('salina')} label="Salina 0.9%" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.tipo_soluciones || []).includes('mixta')} label="Mixta" style={{ fontSize: '5.5px' }} /></div>
+              <div><Checkbox checked={(data.tipo_soluciones || []).includes('glucosada')} label="Glucosada 5%" style={{ fontSize: '5.5px' }} /></div>
+              <div style={{ marginTop: '3px' }}>
+                <Label>CANTIDAD:</Label>
+                <input 
+                  type="text" 
+                  value={data.cantidad_solucion || ''} 
+                  readOnly 
+                  style={{ 
+                    width: '40px', 
+                    border: '1px solid #ccc', 
+                    textAlign: 'center', 
+                    fontSize: '6px',
+                    marginLeft: '2px',
+                    padding: '1px'
+                  }} 
+                />
+                <span style={{ fontSize: '5px', marginLeft: '2px' }}>ML</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
