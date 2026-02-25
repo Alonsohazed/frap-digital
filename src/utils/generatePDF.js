@@ -45,7 +45,7 @@ export const generateFRAPPDF = async (frap) => {
     doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...BLACK);
-    doc.text(label, x + size + 2.5, y);
+    doc.text(label, x + size + 3.5, y);
   };
   
   const label = (text, x, y) => {
@@ -166,7 +166,7 @@ export const generateFRAPPDF = async (frap) => {
   ];
   
   motivos.forEach(({ value, label: lbl }, i) => {
-    checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 47.5), leftY + Math.floor(i / 2) * 4.5, 3.5);
+    checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 47.5), leftY + Math.floor(i / 2) * 4.5, 3);
   });
   leftY += 9;
   
@@ -208,7 +208,7 @@ export const generateFRAPPDF = async (frap) => {
   lugares.forEach(({ value: val, label: lbl }, i) => {
     const row = Math.floor(i / 2);
     const col = i % 2;
-    checkbox(lbl, frap.lugar_ocurrencia === val, col1X + 2 + (col * 47), leftY + (row * 3.5), 3.5);
+    checkbox(lbl, frap.lugar_ocurrencia === val, col1X + 2 + (col * 47), leftY + (row * 3.5), 3);
   });
   leftY += 15;
   
@@ -238,8 +238,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 4;
   
   label('SEXO:', col1X + 2, leftY);
-  checkbox('M MASC.', frap.sexo === 'masculino', col1X + 15, leftY, 3.5);
-  checkbox('FEM.', frap.sexo === 'femenino', col1X + 35, leftY, 3.5);
+  checkbox('M MASC.', frap.sexo === 'masculino', col1X + 15, leftY, 3);
+  checkbox('FEM.', frap.sexo === 'femenino', col1X + 35, leftY, 3);
   
   label('EDAD:', col1X + 50, leftY);
   doc.rect(col1X + 62, leftY - 3, 10, 5, 'S');
@@ -304,7 +304,7 @@ export const generateFRAPPDF = async (frap) => {
   origenes.forEach(({ value: val, label: lbl }, i) => {
     const row = Math.floor(i / 3);
     const col = i % 3;
-    checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
+    checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3);
   });
   leftY += 15;
   
@@ -321,27 +321,27 @@ export const generateFRAPPDF = async (frap) => {
   // ACCIDENTE AUTOMOVILÍSTICO
   leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, col1W);
   
-  checkbox('COLISIÓN', frap.accidente_tipo === 'colision', col1X + 2, leftY, 3.5);
-  checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 32, leftY, 3.5);
+  checkbox('COLISIÓN', frap.accidente_tipo === 'colision', col1X + 2, leftY, 3);
+  checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 32, leftY, 3);
   leftY += 4;
   
-  checkbox('AUTOMOTOR', frap.automotor, col1X + 2, leftY, 3.5);
-  checkbox('MOTOCICLETA', frap.motocicleta, col1X + 32, leftY, 3.5);
-  checkbox('BICICLETA', frap.bicicleta, col1X + 60, leftY, 3.5);
+  checkbox('AUTOMOTOR', frap.automotor, col1X + 2, leftY, 3);
+  checkbox('MOTOCICLETA', frap.motocicleta, col1X + 32, leftY, 3);
+  checkbox('BICICLETA', frap.bicicleta, col1X + 60, leftY, 3);
   leftY += 4;
   
   label('CONTRA OBJETO:', col1X + 2, leftY);
-  checkbox('FIJO', frap.contra_objeto === 'fijo', col1X + 28, leftY, 3.5);
-  checkbox('EN MOVIMIENTO', frap.contra_objeto === 'movimiento', col1X + 48, leftY, 3.5);
+  checkbox('FIJO', frap.contra_objeto === 'fijo', col1X + 28, leftY, 3);
+  checkbox('EN MOVIMIENTO', frap.contra_objeto === 'movimiento', col1X + 48, leftY, 3);
   leftY += 4;
   
   label('IMPACTO:', col1X + 2, leftY);
   line(col1X + 18, leftY + 0.5, 10);
   leftY += 4;
   
-  checkbox('FRONTAL', frap.impacto === 'frontal', col1X + 2, leftY, 3.5);
-  checkbox('LATERAL', frap.impacto === 'lateral', col1X + 24, leftY, 3.5);
-  checkbox('POSTERIOR', frap.impacto === 'posterior', col1X + 46, leftY, 3.5);
+  checkbox('FRONTAL', frap.impacto === 'frontal', col1X + 2, leftY, 3);
+  checkbox('LATERAL', frap.impacto === 'lateral', col1X + 24, leftY, 3);
+  checkbox('POSTERIOR', frap.impacto === 'posterior', col1X + 46, leftY, 3);
   leftY += 4;
   
   label('HUNDIMIENTO:', col1X + 2, leftY);
@@ -349,36 +349,36 @@ export const generateFRAPPDF = async (frap) => {
   label('CMS', col1X + 44, leftY);
   
   label('PARABRISAS:', col1X + 52, leftY);
-  checkbox('ROTO', frap.parabrisas === 'roto', col1X + 72, leftY, 3.5);
+  checkbox('ROTO', frap.parabrisas === 'roto', col1X + 72, leftY, 3);
   leftY += 4;
   
   label('VOLANTE:', col1X + 2, leftY);
-  checkbox('DOBLADO', frap.parabrisas === 'doblado', col1X + 20, leftY, 3.5);
-  checkbox('INTRUSIÓN', frap.volante === 'intrusion', col1X + 42, leftY, 3.5);
+  checkbox('DOBLADO', frap.parabrisas === 'doblado', col1X + 20, leftY, 3);
+  checkbox('INTRUSIÓN', frap.volante === 'intrusion', col1X + 42, leftY, 3);
   
   label('BOLSA DE AIRE:', col1X + 64, leftY);
-  checkbox('SÍ', frap.bolsa_aire === 'si', col1X + 88, leftY, 3.5);
+  checkbox('SÍ', frap.bolsa_aire === 'si', col1X + 88, leftY, 3);
   leftY += 4;
   
   label('CINTURÓN DE SEGURIDAD:', col1X + 2, leftY);
-  checkbox('COLOCADO', frap.cinturon === 'colocado', col1X + 45, leftY, 3.5);
-  checkbox('NO COLOCADO', frap.cinturon === 'no_colocado', col1X + 70, leftY, 3.5);
+  checkbox('COLOCADO', frap.cinturon === 'colocado', col1X + 45, leftY, 3);
+  checkbox('NO COLOCADO', frap.cinturon === 'no_colocado', col1X + 70, leftY, 3);
   leftY += 4;
   
   label('DENTRO DEL VEHÍCULO:', col1X + 2, leftY);
-  checkbox('SÍ', frap.dentro_vehiculo === 'si', col1X + 40, leftY, 3.5);
-  checkbox('NO', frap.dentro_vehiculo === 'no', col1X + 52, leftY, 3.5);
-  checkbox('EYECTADO', frap.dentro_vehiculo === 'eyectado', col1X + 65, leftY, 3.5);
+  checkbox('SÍ', frap.dentro_vehiculo === 'si', col1X + 40, leftY, 3);
+  checkbox('NO', frap.dentro_vehiculo === 'no', col1X + 52, leftY, 3);
+  checkbox('EYECTADO', frap.dentro_vehiculo === 'eyectado', col1X + 65, leftY, 3);
   leftY += 4;
   
   label('ATROPELLADO:', col1X + 2, leftY);
-  checkbox('AUTOMOTOR', frap.atropellado_tipo === 'automotor', col1X + 28, leftY, 3.5);
-  checkbox('MOTOCICLETA', frap.atropellado_tipo === 'motocicleta', col1X + 52, leftY, 3.5);
+  checkbox('AUTOMOTOR', frap.atropellado_tipo === 'automotor', col1X + 28, leftY, 3);
+  checkbox('MOTOCICLETA', frap.atropellado_tipo === 'motocicleta', col1X + 52, leftY, 3);
   leftY += 4;
   
   label('CASCO DE SEGURIDAD:', col1X + 2, leftY);
-  checkbox('SÍ', frap.casco_seguridad === 'si', col1X + 40, leftY, 3.5);
-  checkbox('NO', frap.casco_seguridad === 'no', col1X + 52, leftY, 3.5);
+  checkbox('SÍ', frap.casco_seguridad === 'si', col1X + 40, leftY, 3);
+  checkbox('NO', frap.casco_seguridad === 'no', col1X + 52, leftY, 3);
   leftY += 4.5;
   
   // AGENTE CAUSAL
@@ -403,7 +403,7 @@ export const generateFRAPPDF = async (frap) => {
   agentes.forEach(({ value: val, label: lbl }, i) => {
     const row = Math.floor(i / 3);
     const col = i % 3;
-    checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
+    checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3);
   });
   leftY += 15;
   
@@ -424,13 +424,13 @@ export const generateFRAPPDF = async (frap) => {
   // NIVEL DE CONCIENCIA
   rightY = sectionTitle('NIVEL DE CONCIENCIA', col2X, rightY, col2W);
   
-  checkbox('CONSCIENTE', frap.nivel_conciencia === 'consciente', col2X + 2, rightY, 3.5);
+  checkbox('CONSCIENTE', frap.nivel_conciencia === 'consciente', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('RESPUESTA A ESTÍMULO VERBAL', frap.nivel_conciencia === 'verbal', col2X + 2, rightY, 3.5);
+  checkbox('RESPUESTA A ESTÍMULO VERBAL', frap.nivel_conciencia === 'verbal', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('RESPUESTA A ESTÍMULO DOLOROSO', frap.nivel_conciencia === 'doloroso', col2X + 2, rightY, 3.5);
+  checkbox('RESPUESTA A ESTÍMULO DOLOROSO', frap.nivel_conciencia === 'doloroso', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X + 2, rightY, 3.5);
+  checkbox('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X + 2, rightY, 3);
   rightY += 4;
   
   // VÍA AÉREA / REFLEJO DE DEGLUCIÓN
@@ -445,51 +445,51 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 10 + 3;
   
   doc.setTextColor(...BLACK);
-  checkbox('PERMEABLE', frap.via_aerea === 'permeable', col2X + 2, rightY, 3.5);
-  checkbox('AUSENTE', frap.reflejo_deglucion === 'ausente', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('PERMEABLE', frap.via_aerea === 'permeable', col2X + 2, rightY, 3);
+  checkbox('AUSENTE', frap.reflejo_deglucion === 'ausente', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
-  checkbox('COMPROMETIDA', frap.via_aerea === 'comprometida', col2X + 2, rightY, 3.5);
-  checkbox('PRESENTE', frap.reflejo_deglucion === 'presente', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('COMPROMETIDA', frap.via_aerea === 'comprometida', col2X + 2, rightY, 3);
+  checkbox('PRESENTE', frap.reflejo_deglucion === 'presente', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
   
   // VENTILACIÓN
   rightY = sectionTitle('VENTILACIÓN', col2X, rightY, col2W);
-  checkbox('AUTOMATISMO REGULAR', frap.ventilacion === 'automatismo_regular', col2X + 2, rightY, 3.5);
+  checkbox('AUTOMATISMO REGULAR', frap.ventilacion === 'automatismo_regular', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X + 2, rightY, 3.5);
+  checkbox('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('VENTILACIÓN RÁPIDA', frap.ventilacion === 'rapida', col2X + 2, rightY, 3.5);
+  checkbox('VENTILACIÓN RÁPIDA', frap.ventilacion === 'rapida', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + 2, rightY, 3.5);
+  checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('APNEA', frap.ventilacion === 'apnea', col2X + 2, rightY, 3.5);
+  checkbox('APNEA', frap.ventilacion === 'apnea', col2X + 2, rightY, 3);
   rightY += 4;
   
   // AUSCULTACIÓN
   rightY = sectionTitle('AUSCULTACIÓN', col2X, rightY, col2W);
-  checkbox('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + 2, rightY, 3.5);
+  checkbox('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + 2, rightY, 3.5);
+  checkbox('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + 2, rightY, 3.5);
+  checkbox('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + 2, rightY, 3);
   rightY += 4;
   
   label('NEUMOTÓRAX:', col2X + 2, rightY);
-  checkbox('DERECHO', frap.neumotorax === 'derecho', col2X + 30, rightY, 3.5);
-  checkbox('IZQUIERDO', frap.neumotorax === 'izquierdo', col2X + 56, rightY, 3.5);
+  checkbox('DERECHO', frap.neumotorax === 'derecho', col2X + 30, rightY, 3);
+  checkbox('IZQUIERDO', frap.neumotorax === 'izquierdo', col2X + 56, rightY, 3);
   rightY += 4;
   label('SITIO:', col2X + 2, rightY);
-  checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + 14, rightY, 3.5);
-  checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + 32, rightY, 3.5);
+  checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + 14, rightY, 3);
+  checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + 32, rightY, 3);
   rightY += 4;
   
   // CIRCULACIÓN
   rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY, col2W);
-  checkbox('CAROTÍDEO', frap.pulso_presente === 'carotideo', col2X + 2, rightY, 3.5);
+  checkbox('CAROTÍDEO', frap.pulso_presente === 'carotideo', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('RADIAL', frap.pulso_presente === 'radial', col2X + 2, rightY, 3.5);
+  checkbox('RADIAL', frap.pulso_presente === 'radial', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('PARO CARDIORRESPIRATORIO', frap.pulso_presente === 'paro', col2X + 2, rightY, 3.5);
+  checkbox('PARO CARDIORRESPIRATORIO', frap.pulso_presente === 'paro', col2X + 2, rightY, 3);
   rightY += 4;
   
   // CALIDAD / PIEL
@@ -504,17 +504,17 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 10 + 3;
   
   doc.setTextColor(...BLACK);
-  checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + 2, rightY, 3.5);
-  checkbox('NORMAL', frap.piel === 'normal', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + 2, rightY, 3);
+  checkbox('NORMAL', frap.piel === 'normal', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
-  checkbox('LENTO', frap.calidad_pulso === 'lento', col2X + 2, rightY, 3.5);
-  checkbox('PÁLIDA', frap.piel === 'palida', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('LENTO', frap.calidad_pulso === 'lento', col2X + 2, rightY, 3);
+  checkbox('PÁLIDA', frap.piel === 'palida', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
-  checkbox('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + 2, rightY, 3.5);
-  checkbox('CIANÓTICA', frap.piel === 'cianotica', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + 2, rightY, 3);
+  checkbox('CIANÓTICA', frap.piel === 'cianotica', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
-  checkbox('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + 2, rightY, 3.5);
-  checkbox('DIAFORESIS', frap.piel === 'diaforesis', col2X + col2W / 2 + 2, rightY, 3.5);
+  checkbox('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + 2, rightY, 3);
+  checkbox('DIAFORESIS', frap.piel === 'diaforesis', col2X + col2W / 2 + 2, rightY, 3);
   rightY += 4;
   
   label('CARACTERÍSTICAS:', col2X + 2, rightY);
@@ -660,7 +660,7 @@ export const generateFRAPPDF = async (frap) => {
     });
     rightY += 4;
   }
-  rightY += 3;
+  rightY += 2.5;
   
   // CONDICIÓN DEL PACIENTE / PRIORIDAD
   doc.setFillColor(...GREEN);
@@ -674,7 +674,7 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 10 + 3;
   
   doc.setTextColor(...BLACK);
-  checkbox('CRÍTICO INESTABLE', frap.condicion_paciente === 'critico_inestable', col2X + 2, rightY, 3.5);
+  checkbox('CRÍTICO INESTABLE', frap.condicion_paciente === 'critico_inestable', col2X + 2, rightY, 3);
   
   // Botones de prioridad
   const prioColors = {
@@ -706,9 +706,9 @@ export const generateFRAPPDF = async (frap) => {
   doc.setTextColor(...BLACK);
   
   rightY += 4;
-  checkbox('NO CRÍTICO', frap.condicion_paciente === 'no_critico', col2X + 2, rightY, 3.5);
+  checkbox('NO CRÍTICO', frap.condicion_paciente === 'no_critico', col2X + 2, rightY, 3);
   rightY += 4;
-  checkbox('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X + 2, rightY, 3.5);
+  checkbox('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X + 2, rightY, 3);
   rightY += 7;
   
   // MANEJO (4 columnas)
@@ -734,18 +734,18 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('MANUAL', frap.control_cervical === 'manual', col2X + mW + 1, rightY, 2);
   checkbox('BALÓN-VÁLVULA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + mW * 2 + 1, rightY, 2);
   checkbox('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + mW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('CÁNULA ORO', viaAereaManejo.includes('canula_oro'), col2X + 1, rightY, 2);
   checkbox('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + mW + 1, rightY, 2);
   checkbox('VENT. AUTOMÁTICO', frap.asistencia_ventilatoria === 'ventilador', col2X + mW * 2 + 1, rightY, 2);
   checkbox('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + mW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('CÁNULA NASO', viaAereaManejo.includes('canula_naso'), col2X + 1, rightY, 2);
   checkbox('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + mW + 1, rightY, 2);
   checkbox('MASCARILLA C/RESERV', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + mW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   label('LTS X MIN:', col2X + mW * 3 + 1, rightY);
   line(col2X + mW * 3 + 14, rightY + 0.5, 8);
@@ -777,21 +777,21 @@ export const generateFRAPPDF = async (frap) => {
   line(col2X + hW + 12, rightY + 0.5, 6);
   label('MANO', col2X + hW * 2 + 1, rightY);
   checkbox('HARTMANN', soluciones.includes('hartmann'), col2X + hW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('TORNIQUETE', controlHemorragias.includes('torniquete'), col2X + 1, rightY, 2);
   label('CATETER #', col2X + hW + 1, rightY);
   line(col2X + hW + 13, rightY + 0.5, 5);
   label('PLIEGUE ANTEC', col2X + hW * 2 + 1, rightY);
   checkbox('NaCl 0.9%', soluciones.includes('nacl'), col2X + hW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('VENDAJE COMPRES', controlHemorragias.includes('vendaje'), col2X + 1, rightY, 2);
   checkbox('MIXTA', soluciones.includes('mixta'), col2X + hW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('GLUCOSA 5%', soluciones.includes('glucosa'), col2X + hW * 3 + 1, rightY, 2);
-  rightY += 3;
+  rightY += 2.5;
   
   checkbox('OTRA', soluciones.includes('otra'), col2X + hW * 3 + 1, rightY, 2);
   
@@ -869,8 +869,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 4;
   
   label('PLACENTA EXPULSADA:', col1X + 2, leftY);
-  checkbox('SÍ', frap.postparto_placenta === 'si', col1X + 40, leftY, 3.5);
-  checkbox('NO', frap.postparto_placenta === 'no', col1X + 52, leftY, 3.5);
+  checkbox('SÍ', frap.postparto_placenta === 'si', col1X + 40, leftY, 3);
+  checkbox('NO', frap.postparto_placenta === 'no', col1X + 52, leftY, 3);
   
   // ════════════════════════════════════════════════════════════════
   // COLUMNA DERECHA - PÁGINA 2
@@ -928,55 +928,55 @@ export const generateFRAPPDF = async (frap) => {
   line(col2X + 32, rightY + 0.5, col2W - 37);
   doc.setFontSize(5);
   doc.text('NOMBRE Y FIRMA', col2X + col2W - 22, rightY + 3);
-  rightY += 5;
+  rightY += 4;
   
   // ESCALA DE GLASGOW
   rightY = sectionTitle('ESCALA DE GLASGOW', col2X, rightY, col2W);
   doc.setFontSize(6);
   
   label('APERTURA OCULAR', col2X + 2, rightY);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('4. ESPONTÁNEA', frap.glasgow_apertura === '4', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('3. A LA VOZ', frap.glasgow_apertura === '3', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('2. AL DOLOR', frap.glasgow_apertura === '2', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('1. NINGUNA', frap.glasgow_apertura === '1', col2X + 2, rightY, 3);
   rightY += 4;
   
   label('MEJOR RESPUESTA VERBAL', col2X + 2, rightY);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('5. ORIENTADO', frap.glasgow_verbal === '5', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('4. CONFUSO', frap.glasgow_verbal === '4', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('3. PALABRAS INAPROPIADAS', frap.glasgow_verbal === '3', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('2. SONIDOS INCOMPRENSIBLES', frap.glasgow_verbal === '2', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('1. NINGUNA', frap.glasgow_verbal === '1', col2X + 2, rightY, 3);
   rightY += 4;
   
   label('MEJOR RESPUESTA MOTORA', col2X + 2, rightY);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('6. OBEDECE ÓRDENES', frap.glasgow_motora === '6', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('5. LOCALIZA DOLOR', frap.glasgow_motora === '5', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('4. RETIRA AL DOLOR', frap.glasgow_motora === '4', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('3. FLEXIÓN ANORMAL', frap.glasgow_motora === '3', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('2. EXTENSIÓN ANORMAL', frap.glasgow_motora === '2', col2X + 2, rightY, 3);
-  rightY += 3;
+  rightY += 2.5;
   checkbox('1. NINGUNA', frap.glasgow_motora === '1', col2X + 2, rightY, 3);
   rightY += 4;
   
   label('ESCALA DE GLASGOW:', col2X + 2, rightY);
   doc.rect(col2X + 32, rightY - 3, 10, 5, 'S');
   value(frap.glasgow_total, col2X + 34, rightY);
-  rightY += 5;
+  rightY += 4;
   
   // ESCALA PREHOSPITALARIA DE CINCINNATI
   rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY, col2W);
@@ -1038,24 +1038,24 @@ export const generateFRAPPDF = async (frap) => {
   doc.setTextColor(...WHITE);
   doc.text('DATOS RECIÉN NACIDO', col2X + 2, rightY + 4);
   doc.text('DESTINO', col2X + col2W / 2 + 4, rightY + 4);
-  rightY += 5;
+  rightY += 4;
   
   doc.setTextColor(...BLACK);
   doc.setFontSize(7);
   label('PRODUCTO:', col2X + 2, rightY);
-  checkbox('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 22, rightY, 3.5);
-  checkbox('MUERTO', frap.recien_nacido_producto === 'muerto', col2X + 36, rightY, 3.5);
-  checkbox('TRASLADADO', frap.recien_nacido_destino === 'trasladado', col2X + col2W / 2 + 4, rightY, 3.5);
+  checkbox('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 22, rightY, 3);
+  checkbox('MUERTO', frap.recien_nacido_producto === 'muerto', col2X + 36, rightY, 3);
+  checkbox('TRASLADADO', frap.recien_nacido_destino === 'trasladado', col2X + col2W / 2 + 4, rightY, 3);
   rightY += 4;
   
   label('SEXO:', col2X + 2, rightY);
-  checkbox('MASC', frap.recien_nacido_sexo === 'masculino', col2X + 14, rightY, 3.5);
-  checkbox('FEM', frap.recien_nacido_sexo === 'femenino', col2X + 30, rightY, 3.5);
-  checkbox('NO TRASLADADO', frap.recien_nacido_destino === 'no_trasladado', col2X + col2W / 2 + 4, rightY, 3.5);
+  checkbox('MASC', frap.recien_nacido_sexo === 'masculino', col2X + 14, rightY, 3);
+  checkbox('FEM', frap.recien_nacido_sexo === 'femenino', col2X + 30, rightY, 3);
+  checkbox('NO TRASLADADO', frap.recien_nacido_destino === 'no_trasladado', col2X + col2W / 2 + 4, rightY, 3);
   rightY += 4;
   
   label('APGAR:', col2X + 2, rightY);
-  checkbox('FUGA', frap.recien_nacido_destino === 'fuga', col2X + col2W / 2 + 4, rightY, 3.5);
+  checkbox('FUGA', frap.recien_nacido_destino === 'fuga', col2X + col2W / 2 + 4, rightY, 3);
   rightY += 4;
   
   doc.setDrawColor(...GREEN);
@@ -1066,7 +1066,7 @@ export const generateFRAPPDF = async (frap) => {
   doc.text('1 MIN', col2X + 16, rightY + 4);
   doc.text('5 MIN', col2X + 28, rightY + 4);
   doc.text('10 MIN', col2X + 39, rightY + 4);
-  rightY += 5;
+  rightY += 4;
   
   label('PRODUCTO:', col2X + 2, rightY);
   doc.rect(col2X + 18, rightY - 3, 10, 5, 'S');
@@ -1077,8 +1077,12 @@ export const generateFRAPPDF = async (frap) => {
   // FOOTER - FIRMAS
   // ════════════════════════════════════════════════════════════════
   
-  let footerY = Math.max(leftY, rightY) + 3;
-  if (footerY > ph - 48) footerY = ph - 48;
+  // Calcular footer para que SIEMPRE quepa
+  const footerHeight = 42;
+  let footerY = Math.max(leftY, rightY) + 2;
+  if (footerY > ph - footerHeight - 5) {
+    footerY = ph - footerHeight - 5;
+  };
   
   // NEGATIVA / CONSENTIMIENTO
   doc.setFillColor(...GREEN);
@@ -1095,7 +1099,7 @@ export const generateFRAPPDF = async (frap) => {
   
   footerY += 8;
   
-  const firmaH = 15;
+  const firmaH = 12;
   
   // Cajas de firmas
   doc.setDrawColor(...BLACK);
