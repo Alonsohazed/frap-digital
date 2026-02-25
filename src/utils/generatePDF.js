@@ -1132,7 +1132,7 @@ export const generateFRAPPDF = async (frap) => {
   
   footerY += 8;
   
-  // Cajas de firmas (3 firmas por lado)
+  // Cajas de firmas
   const firmaH = 15;
   
   // IZQUIERDA - NEGATIVA
@@ -1159,7 +1159,7 @@ export const generateFRAPPDF = async (frap) => {
   
   footerY += firmaH + 1;
   
-  // Segunda fila de firmas
+  // Segunda fila
   doc.rect(mx, footerY, (cw / 2) - 2, firmaH, 'S');
   doc.text('NOMBRE/FIRMA DEL TESTIGO', mx + 2, footerY + 4);
   line(mx + 2, footerY + 11, (cw / 2) - 6);
