@@ -282,17 +282,10 @@ const Page2 = ({ data }) => {
 
         {/* ESCALA DE TRAUMA */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             ESCALA DE TRAUMA
           </div>
-          <div style={{ padding: '6px', border: '1px solid #ccc', borderTop: 'none' }}>
+          <div style={{ ...sectionBodyStyle, padding: '6px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '6px' }}>
               <thead>
                 <tr style={{ backgroundColor: '#008000', color: 'white' }}>
@@ -351,16 +344,12 @@ const Page2 = ({ data }) => {
         <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
           <div>
             <div style={{
-              backgroundColor: '#008000',
-              color: 'white',
-              fontSize: '7px',
-              fontWeight: 'bold',
-              padding: '4px 6px',
-              height: '16px'
+              ...sectionHeaderStyle,
+              fontSize: '7px'
             }}>
               DATOS RECIÉN NACIDO
             </div>
-            <div style={{ padding: '5px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px', lineHeight: '1.5' }}>
+            <div style={{ ...sectionBodyStyle, fontSize: '7px', lineHeight: '1.5' }}>
               <div>
                 <Label>PRODUCTO:</Label>
                 <Checkbox checked={data.recien_nacido_producto === 'vivo'} label="VIVO" style={{ marginLeft: '5px' }} />
@@ -377,16 +366,12 @@ const Page2 = ({ data }) => {
           </div>
           <div>
             <div style={{
-              backgroundColor: '#008000',
-              color: 'white',
-              fontSize: '7px',
-              fontWeight: 'bold',
-              padding: '4px 6px',
-              height: '16px'
+              ...sectionHeaderStyle,
+              fontSize: '7px'
             }}>
               DESTINO
             </div>
-            <div style={{ padding: '5px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px', lineHeight: '1.5' }}>
+            <div style={{ ...sectionBodyStyle, fontSize: '7px', lineHeight: '1.5' }}>
               <Checkbox checked={data.recien_nacido_destino === 'trasladado'} label="TRASLADADO" />
               <div><Checkbox checked={data.recien_nacido_destino === 'no_trasladado'} label="NO TRASLADADO" /></div>
               <div><Checkbox checked={data.recien_nacido_destino === 'fuga'} label="FUGA" /></div>
