@@ -47,7 +47,7 @@ export const generateFRAPPDF = async (frap) => {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...WHITE);
     doc.text(title, x + 2, y + 3.5);
-    return y + 6;
+    return y + 8;  // Aumentado de 6 a 8 para dar más espacio al contenido
   };
 
   // Etiqueta de campo (alineación mejorada)
