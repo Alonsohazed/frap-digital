@@ -111,6 +111,7 @@ const INITIAL_FORM_STATE = {
   // Via aerea manejo
   via_aerea_manejo: [],
   control_cervical: "",
+  asistencia_ventilatoria: "",
   
   // Ventilacion/Oxigenoterapia
   ventilador_automatico: false,
@@ -140,9 +141,14 @@ const INITIAL_FORM_STATE = {
   dentro_vehiculo: "",
   casco_seguridad: "",
   eyectado: "",
+  parabrisas_roto: false,
+  parabrisas_doblado: false,
   
   // Atropellado
   atropellado: "",
+  
+  // Lesiones
+  lesiones_causadas_por: "",
   
   // Agente causal
   agente_causal: [],
