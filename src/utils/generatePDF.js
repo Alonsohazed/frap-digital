@@ -1107,6 +1107,26 @@ export const generateFRAPPDF = async (frap) => {
   doc.text(obsLines, col2X + 2, rightY + 4);
   rightY += 17;
   
+  // AUTORIDADES QUE INTERVINIERON
+  rightY = sectionTitle('AUTORIDADES QUE INTERVINIERON', col2X, rightY, colW);
+  label('ENTREGA PACIENTE:', col2X + 2, rightY);
+  line(col2X + 30, rightY + 0.5, colW - 35);
+  doc.setFontSize(5);
+  doc.text('NOMBRE Y FIRMA', col2X + colW - 25, rightY + 3);
+  if (frap.firmas && frap.firmas.entrega_paciente) {
+    try { doc.addImage(frap.firmas.entrega_paciente, 'PNG', col2X + 35, rightY - 8, 30, 8); } catch(e){}
+  }
+  rightY += 6;
+  
+  label('MÉDICO QUE RECIBE:', col2X + 2, rightY);
+  line(col2X + 32, rightY + 0.5, colW - 37);
+  doc.setFontSize(5);
+  doc.text('NOMBRE Y FIRMA', col2X + colW - 25, rightY + 3);
+  if (frap.firmas && frap.firmas.medico_recibe) {
+    try { doc.addImage(frap.firmas.medico_recibe, 'PNG', col2X + 37, rightY - 8, 30, 8); } catch(e){}
+  }
+  rightY += 8;
+  
   // ESCALA DE GLASGOW
   label('ESCALA DE GLASGOW:', col2X + 2, rightY);
   doc.setDrawColor(...GREEN);
@@ -1116,7 +1136,6 @@ export const generateFRAPPDF = async (frap) => {
   value(frap.glasgow_total || '', col2X + colW - 11, rightY);
   rightY += 6;
   
-  // ESCALA PREHOSPITALARIA DE CINCINNATI
   // ESCALA PREHOSPITALARIA DE CINCINNATI
   rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY + 2, colW);
   
