@@ -858,24 +858,26 @@ export const generateFRAPPDF = async (frap) => {
   
   const controlHemorragias = frap.control_hemorragias || [];
   const soluciones = frap.tipo_soluciones || [];
-  checkbox('PRESIÓN DIRECTA', controlHemorragias.includes('presion_directa'), col2X + 1, rightY, 2.5);
+  doc.setFontSize(4);
+  checkbox('PRESIÓN DIRECTA', controlHemorragias.includes('presion_directa'), col2X + 1, rightY, 2);
   label('VÍA IV #', col2X + hemW + 1, rightY);
-  line(col2X + hemW + 14, rightY + 0.5, 8);
+  line(col2X + hemW + 12, rightY + 0.5, 8);
   label('MANO', col2X + hemW * 2 + 1, rightY);
-  checkbox('HARTMANN', soluciones.includes('hartmann'), col2X + hemW * 3 + 1, rightY, 2.5);
+  checkbox('HARTMANN', soluciones.includes('hartmann'), col2X + hemW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('TORNIQUETE', controlHemorragias.includes('torniquete'), col2X + 1, rightY, 2.5);
+  checkbox('TORNIQUETE', controlHemorragias.includes('torniquete'), col2X + 1, rightY, 2);
   label('CATETER #', col2X + hemW + 1, rightY);
-  line(col2X + hemW + 16, rightY + 0.5, 6);
-  label('PLIEGUE ANTECUBITAL', col2X + hemW * 2 + 1, rightY);
-  checkbox('NaCl 0.9%', soluciones.includes('nacl'), col2X + hemW * 3 + 1, rightY, 2.5);
+  line(col2X + hemW + 14, rightY + 0.5, 6);
+  label('PLIEGUE ANTEC', col2X + hemW * 2 + 1, rightY);
+  checkbox('NaCl 0.9%', soluciones.includes('nacl'), col2X + hemW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('VENDAJE COMPRESIVO', controlHemorragias.includes('vendaje'), col2X + 1, rightY, 2.5);
-  checkbox('MIXTA', soluciones.includes('mixta'), col2X + hemW * 3 + 1, rightY, 2.5);
+  checkbox('VENDAJE COMPRES', controlHemorragias.includes('vendaje'), col2X + 1, rightY, 2);
+  checkbox('MIXTA', soluciones.includes('mixta'), col2X + hemW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('GLUCOSA 5%', soluciones.includes('glucosa'), col2X + hemW * 3 + 1, rightY, 2.5);
+  checkbox('GLUCOSA 5%', soluciones.includes('glucosa'), col2X + hemW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('OTRA', soluciones.includes('otra'), col2X + hemW * 3 + 1, rightY, 2.5);
+  checkbox('OTRA', soluciones.includes('otra'), col2X + hemW * 3 + 1, rightY, 2);
+  rightY += 2;
 
   // ================================================================
   // PÁGINA 2
