@@ -45,7 +45,7 @@ export const generateFRAPPDF = async (frap) => {
     doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...BLACK);
-    doc.text(label, x + size + 1, y);
+    doc.text(label, x + size + 2.5, y);
   };
   
   const label = (text, x, y) => {
@@ -166,7 +166,7 @@ export const generateFRAPPDF = async (frap) => {
   ];
   
   motivos.forEach(({ value, label: lbl }, i) => {
-    checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 47), leftY + Math.floor(i / 2) * 4.5, 3.5);
+    checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 47.5), leftY + Math.floor(i / 2) * 4.5, 3.5);
   });
   leftY += 9;
   
@@ -190,7 +190,7 @@ export const generateFRAPPDF = async (frap) => {
   label('DELEGACIÓN POLÍTICA/MUNICIPIO:', col1X + 2, leftY);
   line(col1X + 55, leftY + 0.5, 37);
   value(frap.delegacion_municipio, col1X + 56, leftY);
-  leftY += 4.5;
+  leftY += 4;
   
   label('LUGAR DE OCURRENCIA:', col1X + 2, leftY);
   leftY += 4;
@@ -225,17 +225,17 @@ export const generateFRAPPDF = async (frap) => {
   label('PRESTADORES DEL SERVICIO:', col1X + 2, leftY);
   line(col1X + 50, leftY + 0.5, 42);
   value(frap.prestadores_servicio, col1X + 51, leftY);
-  leftY += 5;
+  leftY += 4.5;
   
   // NOMBRE DEL PACIENTE
   leftY = sectionTitle('NOMBRE DEL PACIENTE', col1X, leftY, col1W);
   value(frap.nombre_paciente, col1X + 2, leftY);
-  leftY += 4.5;
+  leftY += 4;
   
   label('NOMBRE DEL ACOMPAÑANTE:', col1X + 2, leftY);
   line(col1X + 50, leftY + 0.5, 42);
   value(frap.nombre_acompanante, col1X + 51, leftY);
-  leftY += 4.5;
+  leftY += 4;
   
   label('SEXO:', col1X + 2, leftY);
   checkbox('M MASC.', frap.sexo === 'masculino', col1X + 15, leftY, 3.5);
@@ -281,7 +281,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('COMPAÑÍA DE SEGUROS GASTOS MÉDICOS:', col1X + 2, leftY);
   line(col1X + 68, leftY + 0.5, 24);
-  leftY += 5;
+  leftY += 4.5;
   
   // ORIGEN PROBABLE
   leftY = sectionTitle('ORIGEN PROBABLE', col1X, leftY, col1W);
@@ -304,7 +304,7 @@ export const generateFRAPPDF = async (frap) => {
   origenes.forEach(({ value: val, label: lbl }, i) => {
     const row = Math.floor(i / 3);
     const col = i % 3;
-    checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31), leftY + (row * 3.5), 3.5);
+    checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
   });
   leftY += 15;
   
@@ -316,17 +316,17 @@ export const generateFRAPPDF = async (frap) => {
   doc.rect(col1X + 15, leftY - 3, 3.5, 3.5, 'S');
   label('SUBSECUENTE:', col1X + 40, leftY);
   doc.rect(col1X + 65, leftY - 3, 3.5, 3.5, 'S');
-  leftY += 5;
+  leftY += 4.5;
   
   // ACCIDENTE AUTOMOVILÍSTICO
   leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, col1W);
   
   checkbox('COLISIÓN', frap.accidente_tipo === 'colision', col1X + 2, leftY, 3.5);
-  checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 30, leftY, 3.5);
+  checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 32, leftY, 3.5);
   leftY += 4;
   
   checkbox('AUTOMOTOR', frap.automotor, col1X + 2, leftY, 3.5);
-  checkbox('MOTOCICLETA', frap.motocicleta, col1X + 30, leftY, 3.5);
+  checkbox('MOTOCICLETA', frap.motocicleta, col1X + 32, leftY, 3.5);
   checkbox('BICICLETA', frap.bicicleta, col1X + 60, leftY, 3.5);
   leftY += 4;
   
@@ -379,7 +379,7 @@ export const generateFRAPPDF = async (frap) => {
   label('CASCO DE SEGURIDAD:', col1X + 2, leftY);
   checkbox('SÍ', frap.casco_seguridad === 'si', col1X + 40, leftY, 3.5);
   checkbox('NO', frap.casco_seguridad === 'no', col1X + 52, leftY, 3.5);
-  leftY += 5;
+  leftY += 4.5;
   
   // AGENTE CAUSAL
   leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY, col1W);
@@ -403,9 +403,9 @@ export const generateFRAPPDF = async (frap) => {
   agentes.forEach(({ value: val, label: lbl }, i) => {
     const row = Math.floor(i / 3);
     const col = i % 3;
-    checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31), leftY + (row * 3.5), 3.5);
+    checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
   });
-  leftY += 17;
+  leftY += 15;
   
   label('ESPECIFIQUE:', col1X + 2, leftY);
   line(col1X + 25, leftY + 0.5, 67);
@@ -431,7 +431,7 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('RESPUESTA A ESTÍMULO DOLOROSO', frap.nivel_conciencia === 'doloroso', col2X + 2, rightY, 3.5);
   rightY += 4;
   checkbox('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X + 2, rightY, 3.5);
-  rightY += 5;
+  rightY += 4;
   
   // VÍA AÉREA / REFLEJO DE DEGLUCIÓN
   doc.setFillColor(...GREEN);
@@ -450,7 +450,7 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 4;
   checkbox('COMPROMETIDA', frap.via_aerea === 'comprometida', col2X + 2, rightY, 3.5);
   checkbox('PRESENTE', frap.reflejo_deglucion === 'presente', col2X + col2W / 2 + 2, rightY, 3.5);
-  rightY += 5;
+  rightY += 4;
   
   // VENTILACIÓN
   rightY = sectionTitle('VENTILACIÓN', col2X, rightY, col2W);
@@ -463,7 +463,7 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + 2, rightY, 3.5);
   rightY += 4;
   checkbox('APNEA', frap.ventilacion === 'apnea', col2X + 2, rightY, 3.5);
-  rightY += 5;
+  rightY += 4;
   
   // AUSCULTACIÓN
   rightY = sectionTitle('AUSCULTACIÓN', col2X, rightY, col2W);
@@ -481,7 +481,7 @@ export const generateFRAPPDF = async (frap) => {
   label('SITIO:', col2X + 2, rightY);
   checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + 14, rightY, 3.5);
   checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + 32, rightY, 3.5);
-  rightY += 5;
+  rightY += 4;
   
   // CIRCULACIÓN
   rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY, col2W);
@@ -490,7 +490,7 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('RADIAL', frap.pulso_presente === 'radial', col2X + 2, rightY, 3.5);
   rightY += 4;
   checkbox('PARO CARDIORRESPIRATORIO', frap.pulso_presente === 'paro', col2X + 2, rightY, 3.5);
-  rightY += 5;
+  rightY += 4;
   
   // CALIDAD / PIEL
   doc.setFillColor(...GREEN);
@@ -519,7 +519,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('CARACTERÍSTICAS:', col2X + 2, rightY);
   line(col2X + 32, rightY + 0.5, col2W - 34);
-  rightY += 5;
+  rightY += 4;
   
   // EXPLORACIÓN FÍSICA
   rightY = sectionTitle('EXPLORACIÓN FÍSICA', col2X, rightY, col2W);
@@ -546,10 +546,10 @@ export const generateFRAPPDF = async (frap) => {
   exploracion.forEach(({ n, value: val, label: lbl }, i) => {
     const row = Math.floor(i / 2);
     const col = i % 2;
-    const x = col2X + 2 + (col * (col2W / 2));
+    const x = col2X + 2 + (col * 42);
     const y = rightY + (row * 3.5);
     
-    checkbox(`${n}. ${lbl}`, expFisicaArray.includes(val), x, y, 2.5);
+    checkbox(`${n}. ${lbl}`, expFisicaArray.includes(val), x, y, 2.2);
   });
   rightY += 28;
   
@@ -723,7 +723,7 @@ export const generateFRAPPDF = async (frap) => {
     doc.setTextColor(...WHITE);
     doc.text(h, col2X + (mW * i) + 1, rightY + 3.5);
   });
-  rightY += 5;
+  rightY += 4;
   
   doc.setFontSize(5);
   doc.setTextColor(...BLACK);
@@ -764,7 +764,7 @@ export const generateFRAPPDF = async (frap) => {
     doc.setTextColor(...WHITE);
     doc.text(h, col2X + (hW * i) + 1, rightY + 3.5);
   });
-  rightY += 5;
+  rightY += 4;
   
   doc.setFontSize(5);
   doc.setTextColor(...BLACK);
@@ -830,22 +830,22 @@ export const generateFRAPPDF = async (frap) => {
   
   label('PARA:', col1X + 64, leftY);
   doc.rect(col1X + 76, leftY - 3, 10, 5, 'S');
-  leftY += 4.5;
+  leftY += 4;
   
   label('ABORTOS:', col1X + 2, leftY);
   doc.rect(col1X + 20, leftY - 3, 10, 5, 'S');
-  leftY += 5;
+  leftY += 4.5;
   
   label('FUM:', col1X + 2, leftY);
   line(col1X + 12, leftY + 0.5, 20);
   
   label('SEMANAS DE GESTACIÓN:', col1X + 35, leftY);
   doc.rect(col1X + 70, leftY - 3, 10, 5, 'S');
-  leftY += 4.5;
+  leftY += 4;
   
   label('FECHA PROBABLE DE PARTO:', col1X + 2, leftY);
   line(col1X + 48, leftY + 0.5, 25);
-  leftY += 4.5;
+  leftY += 4;
   
   label('HORA INICIO CONTRACCIONES:', col1X + 2, leftY);
   line(col1X + 52, leftY + 0.5, 20);
@@ -856,7 +856,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('DURACIÓN:', col1X + 50, leftY);
   line(col1X + 70, leftY + 0.5, 22);
-  leftY += 5;
+  leftY += 4.5;
   
   // DATOS POST-PARTO
   leftY = sectionTitle('DATOS POST-PARTO', col1X, leftY, col1W);
@@ -866,7 +866,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('LUGAR:', col1X + 62, leftY);
   line(col1X + 75, leftY + 0.5, 17);
-  leftY += 4.5;
+  leftY += 4;
   
   label('PLACENTA EXPULSADA:', col1X + 2, leftY);
   checkbox('SÍ', frap.postparto_placenta === 'si', col1X + 40, leftY, 3.5);
@@ -901,7 +901,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('EVENTOS PREVIOS RELACIONADOS:', col2X + 2, rightY);
   line(col2X + 52, rightY + 0.5, col2W - 54);
-  rightY += 5;
+  rightY += 4;
   
   // OBSERVACIONES
   rightY = sectionTitle('OBSERVACIONES', col2X, rightY, col2W);
@@ -922,13 +922,13 @@ export const generateFRAPPDF = async (frap) => {
   line(col2X + 30, rightY + 0.5, col2W - 35);
   doc.setFontSize(5);
   doc.text('NOMBRE Y FIRMA', col2X + col2W - 22, rightY + 3);
-  rightY += 5;
+  rightY += 4;
   
   label('MÉDICO QUE RECIBE:', col2X + 2, rightY);
   line(col2X + 32, rightY + 0.5, col2W - 37);
   doc.setFontSize(5);
   doc.text('NOMBRE Y FIRMA', col2X + col2W - 22, rightY + 3);
-  rightY += 6;
+  rightY += 5;
   
   // ESCALA DE GLASGOW
   rightY = sectionTitle('ESCALA DE GLASGOW', col2X, rightY, col2W);
@@ -976,7 +976,7 @@ export const generateFRAPPDF = async (frap) => {
   label('ESCALA DE GLASGOW:', col2X + 2, rightY);
   doc.rect(col2X + 32, rightY - 3, 10, 5, 'S');
   value(frap.glasgow_total, col2X + 34, rightY);
-  rightY += 6;
+  rightY += 5;
   
   // ESCALA PREHOSPITALARIA DE CINCINNATI
   rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY, col2W);
@@ -994,7 +994,7 @@ export const generateFRAPPDF = async (frap) => {
   label('ALTERACIÓN DEL LENGUAJE', col2X + 2, rightY);
   checkbox('SÍ', frap.alteracion_lenguaje === 'si', col2X + 40, rightY, 3);
   checkbox('NO', frap.alteracion_lenguaje === 'no', col2X + 52, rightY, 3);
-  rightY += 5;
+  rightY += 4;
   
   // ESCALA DE TRAUMA
   rightY = sectionTitle('ESCALA DE TRAUMA', col2X, rightY, col2W);
@@ -1027,7 +1027,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('Puntuación Total:', col2X + col2W - 28, rightY);
   label('A+B+C+D+E', col2X + col2W - 12, rightY);
-  rightY += 5;
+  rightY += 4;
   
   // DATOS RECIÉN NACIDO / DESTINO
   doc.setFillColor(...GREEN);
@@ -1038,7 +1038,7 @@ export const generateFRAPPDF = async (frap) => {
   doc.setTextColor(...WHITE);
   doc.text('DATOS RECIÉN NACIDO', col2X + 2, rightY + 4);
   doc.text('DESTINO', col2X + col2W / 2 + 4, rightY + 4);
-  rightY += 6;
+  rightY += 5;
   
   doc.setTextColor(...BLACK);
   doc.setFontSize(7);
@@ -1066,7 +1066,7 @@ export const generateFRAPPDF = async (frap) => {
   doc.text('1 MIN', col2X + 16, rightY + 4);
   doc.text('5 MIN', col2X + 28, rightY + 4);
   doc.text('10 MIN', col2X + 39, rightY + 4);
-  rightY += 6;
+  rightY += 5;
   
   label('PRODUCTO:', col2X + 2, rightY);
   doc.rect(col2X + 18, rightY - 3, 10, 5, 'S');
