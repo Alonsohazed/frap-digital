@@ -556,36 +556,47 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('INCONSCIENTE', frap.nivel_conciencia === 'inconsciente', col2X + 2, rightY);
   rightY += 5;
   
-  // VENTILACIÓN / AUSCULTACIÓN
+  // VENTILACIÓN
   doc.setFillColor(...GREEN);
-  doc.rect(col2X, rightY, colW / 2 - 1, 5, 'F');
-  doc.rect(col2X + colW / 2 + 1, rightY, colW / 2 - 1, 5, 'F');
+  doc.rect(col2X, rightY, colW, 5, 'F');
   doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
   doc.text('VENTILACIÓN', col2X + 2, rightY + 3.5);
-  doc.text('AUSCULTACIÓN', col2X + colW / 2 + 3, rightY + 3.5);
   rightY += 6;
   
   checkbox('AUTOMATISMO REGULAR', frap.ventilacion === 'automatismo_regular', col2X + 2, rightY);
-  checkbox('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + colW / 2 + 2, rightY);
-  rightY += 4;
-  checkbox('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X + 2, rightY);
-  checkbox('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + colW / 2 + 2, rightY);
+  checkbox('AUTOMATISMO IRREGULAR', frap.ventilacion === 'automatismo_irregular', col2X + colW / 2 + 2, rightY);
   rightY += 4;
   checkbox('VENTILACIÓN RÁPIDA', frap.ventilacion === 'rapida', col2X + 2, rightY);
-  checkbox('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + colW / 2 + 2, rightY);
-  rightY += 4;
-  checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + 2, rightY);
+  checkbox('VENTILACIÓN SUPERFICIAL', frap.ventilacion === 'superficial', col2X + colW / 2 + 2, rightY);
   rightY += 4;
   checkbox('APNEA', frap.ventilacion === 'apnea', col2X + 2, rightY);
+  rightY += 5;
   
-  label('NEUMOTÓRAX:', col2X + colW / 2 + 2, rightY);
-  checkbox('DERECHO', frap.neumotorax === 'derecho', col2X + colW - 22, rightY);
+  // AUSCULTACIÓN
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('AUSCULTACIÓN', col2X + 2, rightY + 3.5);
+  rightY += 6;
+  
+  checkbox('RUIDOS RESP. NORMALES', frap.auscultacion === 'normales', col2X + 2, rightY);
   rightY += 4;
-  label('SITIO:', col2X + colW / 2 + 2, rightY);
-  checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + colW / 2 + 14, rightY);
-  checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + colW - 12, rightY);
+  checkbox('RUIDOS RESP. DISMINUIDOS', frap.auscultacion === 'disminuidos', col2X + 2, rightY);
+  rightY += 4;
+  checkbox('RUIDOS RESP. AUSENTES', frap.auscultacion === 'ausentes', col2X + 2, rightY);
+  rightY += 5;
+  
+  // NEUMOTÓRAX
+  label('NEUMOTÓRAX:', col2X + 2, rightY);
+  checkbox('DERECHO', frap.neumotorax === 'derecho', col2X + 30, rightY);
+  rightY += 4;
+  label('SITIO:', col2X + 2, rightY);
+  checkbox('APICAL', frap.sitio_neumotorax === 'apical', col2X + 16, rightY);
+  checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + 35, rightY);
   rightY += 5;
   
   // CIRCULACIÓN - Dibujar todos los headers en la misma línea
