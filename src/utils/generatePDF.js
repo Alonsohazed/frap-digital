@@ -1092,7 +1092,7 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 2;
   
   // OBSERVACIONES
-  rightY = sectionTitle('OBSERVACIONES', col2X, rightY, colW);
+  rightY = sectionTitle('OBSERVACIONES', col2X, rightY + 2, colW);
   doc.setDrawColor(...GREEN);
   doc.setLineWidth(0.3);
   doc.rect(col2X, rightY, colW, 15, 'S');
