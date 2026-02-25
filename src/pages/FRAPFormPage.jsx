@@ -1284,27 +1284,84 @@ export default function FRAPFormPage() {
                 </CardContent>
               </Card>
 
-              {/* Control Hemorragias */}
+              {/* Control Hemorragias y Vías Venosas */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Control de Hemorragias</CardTitle>
+                  <CardTitle className="text-base">Control de Hemorragias y Vías Venosas</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-4">
-                    {[
-                      { value: "presion_directa", label: "Presión Directa" },
-                      { value: "torniquete", label: "Torniquete" },
-                      { value: "vendaje", label: "Vendaje Compresivo" },
-                    ].map(({ value, label }) => (
-                      <div key={value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`hem-${value}`}
-                          checked={(formData.control_hemorragias || []).includes(value)}
-                          onCheckedChange={(checked) => handleArrayChange("control_hemorragias", value, checked)}
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="mb-2 block">Control de Hemorragias</Label>
+                    <div className="flex flex-wrap gap-4">
+                      {[
+                        { value: "presion_directa", label: "Presión Directa" },
+                        { value: "torniquete", label: "Torniquete" },
+                        { value: "vendaje", label: "Vendaje Compresivo" },
+                      ].map(({ value, label }) => (
+                        <div key={value} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`hem-${value}`}
+                            checked={(formData.control_hemorragias || []).includes(value)}
+                            onCheckedChange={(checked) => handleArrayChange("control_hemorragias", value, checked)}
+                          />
+                          <Label htmlFor={`hem-${value}`}>{label}</Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <Label>Vía IV #</Label>
+                      <Input
+                        value={formData.via_iv_num}
+                        onChange={(e) => handleChange("via_iv_num", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>Catéter #</Label>
+                      <Input
+                        value={formData.cateter_num}
+                        onChange={(e) => handleChange("cateter_num", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>Sitio de Aplicación</Label>
+                      <Input
+                        value={formData.sitio_aplicacion}
+                        onChange={(e) => handleChange("sitio_aplicacion", e.target.value)}
+                        placeholder="Mano, Pliegue antecubital..."
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Tipo de Soluciones</Label>
+                    <div className="flex flex-wrap gap-4">
+                      {[
+                        { value: "hartmann", label: "Hartmann" },
+                        { value: "nacl", label: "NaCl 0.9%" },
+                        { value: "mixta", label: "Mixta" },
+                        { value: "glucosa", label: "Glucosa 5%" },
+                        { value: "otra", label: "Otra" },
+                      ].map(({ value, label }) => (
+                        <div key={value} className="flex items-center gap-2">
+                          <Checkbox
+                            id={`sol-${value}`}
+                            checked={(formData.tipo_soluciones || []).includes(value)}
+                            onCheckedChange={(checked) => handleArrayChange("tipo_soluciones", value, checked)}
+                          />
+                          <Label htmlFor={`sol-${value}`}>{label}</Label>
+                        </div>
+                      ))}
+                    </div>
+                    {(formData.tipo_soluciones || []).includes('otra') && (
+                      <div className="mt-2">
+                        <Label>Especificar otra solución</Label>
+                        <Input
+                          value={formData.tipo_soluciones_otra}
+                          onChange={(e) => handleChange("tipo_soluciones_otra", e.target.value)}
                         />
-                        <Label htmlFor={`hem-${value}`}>{label}</Label>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </CardContent>
               </Card>
