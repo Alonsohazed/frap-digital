@@ -1302,7 +1302,8 @@ export const generateFRAPPDF = async (frap) => {
   // SECCIÓN INFERIOR - FIRMAS Y CONSENTIMIENTOS
   // ════════════════════════════════════════════════════════════════
   // Usar la posición más baja entre las dos columnas + margen
-  let footerY = Math.max(leftY, rightY) + 8;
+  // Asegurar que no se salga de la página
+  let footerY = Math.min(Math.max(leftY, rightY) + 8, ph - 60);
   
   // NEGATIVA A RECIBIR ATENCIÓN
   doc.setFillColor(...GREEN);
