@@ -181,20 +181,11 @@ const Page2 = ({ data }) => {
 
         {/* OBSERVACIONES */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             OBSERVACIONES
           </div>
           <div style={{ 
-            padding: '8px', 
-            border: '2px solid #008000', 
-            borderTop: 'none', 
+            ...sectionBodyStyle,
             height: '55px', 
             fontSize: '8px',
             overflow: 'auto'
@@ -205,17 +196,10 @@ const Page2 = ({ data }) => {
 
         {/* AUTORIDADES QUE INTERVINIERON */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             AUTORIDADES QUE INTERVINIERON
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px' }}>
+          <div style={sectionBodyStyle}>
             <div style={{ marginBottom: '4px' }}>
               <Label>ENTREGA PACIENTE:</Label> <Underline width="220px" style={{ marginLeft: '5px' }}></Underline>
               <div style={{ fontSize: '5px', textAlign: 'right' }}>NOMBRE Y FIRMA</div>
@@ -229,17 +213,10 @@ const Page2 = ({ data }) => {
 
         {/* ESCALA DE GLASGOW */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             ESCALA DE GLASGOW
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '6px', lineHeight: '1.3' }}>
+          <div style={{ ...sectionBodyStyle, fontSize: '6px', lineHeight: '1.3' }}>
             <div style={{ fontWeight: 'bold', marginBottom: '2px' }}>APERTURA OCULAR</div>
             <Checkbox checked={data.glasgow_apertura === '4'} label="4. ESPONTÁNEA" />
             <div><Checkbox checked={data.glasgow_apertura === '3'} label="3. A LA VOZ" /></div>
@@ -281,17 +258,10 @@ const Page2 = ({ data }) => {
 
         {/* ESCALA PREHOSPITALARIA DE CINCINNATI */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             ESCALA PREHOSPITALARIA DE CINCINNATI
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px', lineHeight: '1.5' }}>
+          <div style={{ ...sectionBodyStyle, fontSize: '7px', lineHeight: '1.5' }}>
             <div>
               <Label>ASIMETRÍA FACIAL</Label>
               <Checkbox checked={data.asimetria_facial === 'si'} label="SÍ" style={{ marginLeft: '30px' }} />
