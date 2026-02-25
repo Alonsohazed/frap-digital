@@ -34,6 +34,7 @@ const INITIAL_FORM_STATE = {
   hora_llamada: "",
   hora_salida: "",
   hora_llegada_traslado: "",
+  hora_traslado: "",
   hora_llegada_hospital: "",
   hora_llegada_base: "",
   
@@ -64,6 +65,7 @@ const INITIAL_FORM_STATE = {
   ubicacion_delegacion: "",
   lugar_ocurrencia: "",
   lugar_ocurrencia_otro: "",
+  numero_ambulancia: "",
   
   // Operador y prestadores
   operador: "",
@@ -86,6 +88,8 @@ const INITIAL_FORM_STATE = {
   // Origen probable
   origen_probable: [],
   origen_probable_otro: "",
+  primera_vez: false,
+  subsecuente: false,
   
   // Exploracion fisica
   exploracion_fisica: [],
