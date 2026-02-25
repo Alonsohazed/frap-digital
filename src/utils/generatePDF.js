@@ -1145,7 +1145,53 @@ export const generateFRAPPDF = async (frap) => {
   rightY += fieldRow('EVENTOS PREVIOS RELACIONADOS:', frap.eventos_previos, col2X + 2, rightY, 48, colW - 52);
   rightY += 2;
   
-  // OBSERVACIONES - Movida aquí a la columna derecha página 2
+  // DATOS RECIÉN NACIDO y DESTINO - MOVIDO AQUÍ
+  doc.setFillColor(...GREEN);
+  doc.rect(col2X, rightY, colW / 2, 5, 'F');
+  doc.rect(col2X + colW / 2 + 2, rightY, colW / 2 - 2, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('DATOS RECIÉN NACIDO', col2X + 2, rightY + 3.5);
+  doc.text('DESTINO', col2X + colW / 2 + 4, rightY + 3.5);
+  rightY += 8;
+  
+  label('PRODUCTO:', col2X + 2, rightY);
+  checkbox('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 22, rightY);
+  checkbox('MUERTO', frap.recien_nacido_producto === 'muerto', col2X + 40, rightY);
+  checkbox('TRASLADADO', frap.recien_nacido_destino === 'trasladado', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  label('SEXO:', col2X + 2, rightY);
+  checkbox('MASC', frap.recien_nacido_sexo === 'masculino', col2X + 15, rightY);
+  checkbox('FEM', frap.recien_nacido_sexo === 'femenino', col2X + 32, rightY);
+  checkbox('NO TRASLADADO', frap.recien_nacido_destino === 'no_trasladado', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  label('APGAR:', col2X + 2, rightY);
+  checkbox('FUGA', frap.recien_nacido_destino === 'fuga', col2X + colW / 2 + 4, rightY);
+  rightY += 4;
+  
+  doc.setDrawColor(...GREEN);
+  doc.rect(col2X + 15, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 29, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 43, rightY - 3, 12, 5, 'S');
+  value(frap.recien_nacido_apgar_1 || '', col2X + 18, rightY);
+  value(frap.recien_nacido_apgar_5 || '', col2X + 32, rightY);
+  value(frap.recien_nacido_apgar_10 || '', col2X + 46, rightY);
+  doc.setFontSize(4.5);
+  doc.text('1 MIN', col2X + 17, rightY + 4);
+  doc.text('5 MIN', col2X + 31, rightY + 4);
+  doc.text('10 MIN', col2X + 44, rightY + 4);
+  rightY += 6;
+  
+  label('PRODUCTO:', col2X + 2, rightY);
+  doc.rect(col2X + 20, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 34, rightY - 3, 12, 5, 'S');
+  doc.rect(col2X + 48, rightY - 3, 12, 5, 'S');
+  rightY += 8;
+  
+  // OBSERVACIONES - Movida aquí después de Datos Recién Nacido
   rightY = sectionTitle('OBSERVACIONES', col2X, rightY + 2, colW);
   doc.setDrawColor(...GREEN);
   doc.setLineWidth(0.3);
@@ -1158,7 +1204,7 @@ export const generateFRAPPDF = async (frap) => {
   doc.text(obsLines, col2X + 2, rightY + 4);
   rightY += 17;
   
-  // AUTORIDADES QUE INTERVINIERON
+  // AUTORIDADES QUE INTERVINIERON - Movida aquí después de Observaciones
   rightY = sectionTitle('AUTORIDADES QUE INTERVINIERON', col2X, rightY, colW);
   label('ENTREGA PACIENTE:', col2X + 2, rightY);
   line(col2X + 30, rightY + 0.5, colW - 35);
