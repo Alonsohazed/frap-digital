@@ -384,7 +384,7 @@ async function generateCompletePDF() {
     origenes.forEach(({ value: val, label: lbl }, i) => {
       const row = Math.floor(i / 3);
       const col = i % 3;
-      checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 32), leftY + (row * 3.5), 3.5);
+      checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
     });
     leftY += 15;
     
@@ -483,7 +483,7 @@ async function generateCompletePDF() {
     agentes.forEach(({ value: val, label: lbl }, i) => {
       const row = Math.floor(i / 3);
       const col = i % 3;
-      checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 32), leftY + (row * 3.5), 3.5);
+      checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31.5), leftY + (row * 3.5), 3.5);
     });
     leftY += 17;
     
@@ -627,10 +627,10 @@ async function generateCompletePDF() {
     if (i >= 15) return; // Limitar a 15 items para evitar solapamiento
       const row = Math.floor(i / 2);
       const col = i % 2;
-      const x = col2X + 2 + (col * 43);
+      const x = col2X + 2 + (col * 42);
       const y = rightY + (row * 3.5);
       
-      checkbox(`${n}. ${lbl}`, expFisicaArray.includes(val), x, y, 2.5);
+      checkbox(`${n}. ${lbl}`, expFisicaArray.includes(val), x, y, 2.2);
     });
     rightY += 28;
     
