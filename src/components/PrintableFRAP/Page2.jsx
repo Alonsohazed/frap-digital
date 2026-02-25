@@ -385,27 +385,31 @@ const Page2 = ({ data }) => {
         {/* Títulos de secciones */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '5px' }}>
           <div style={{
-            backgroundColor: '#008000',
+            background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
             color: 'white',
             fontSize: '7px',
             fontWeight: 'bold',
-            padding: '4px 8px',
+            padding: '6px 8px',
             textAlign: 'center',
-            lineHeight: '1.2'
+            lineHeight: '1.3',
+            borderRadius: '4px',
+            boxShadow: '0 2px 4px rgba(0,128,0,0.2)'
           }}>
             <div>NEGATIVA A RECIBIR ATENCIÓN/</div>
             <div>SER TRASLADADO EXIMENTE DE RESPONSABILIDAD</div>
           </div>
           <div style={{
-            backgroundColor: '#008000',
+            background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
             color: 'white',
             fontSize: '7px',
             fontWeight: 'bold',
-            padding: '4px 8px',
+            padding: '6px 8px',
             textAlign: 'center',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            borderRadius: '4px',
+            boxShadow: '0 2px 4px rgba(0,128,0,0.2)'
           }}>
             CONSENTIMIENTO INFORMADO
           </div>
@@ -414,52 +418,64 @@ const Page2 = ({ data }) => {
         {/* Cajas de firma - Fila 1 */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '5px' }}>
           <div style={{ 
-            border: '1px solid #000', 
-            padding: '8px', 
-            height: '45px',
+            border: '2px solid rgba(0,128,0,0.3)', 
+            padding: '10px',
+            height: '50px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            backgroundColor: '#fafafa',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <Label>NOMBRE/FIRMA DEL PACIENTE</Label>
-            <div style={{ borderBottom: '1px solid #000', marginTop: '5px' }}></div>
+            <div style={{ borderBottom: '1px solid #666', marginTop: '8px' }}></div>
           </div>
           <div style={{ 
-            border: '1px solid #000', 
-            padding: '8px', 
-            height: '45px',
+            border: '2px solid rgba(0,128,0,0.3)', 
+            padding: '10px',
+            height: '50px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            backgroundColor: '#fafafa',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <Label>NOMBRE/FIRMA DEL PACIENTE</Label>
-            <div style={{ borderBottom: '1px solid #000', marginTop: '5px' }}></div>
+            <div style={{ borderBottom: '1px solid #666', marginTop: '8px' }}></div>
           </div>
         </div>
 
         {/* Cajas de firma - Fila 2 */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div style={{ 
-            border: '1px solid #000', 
-            padding: '8px', 
-            height: '45px',
+            border: '2px solid rgba(0,128,0,0.3)', 
+            padding: '10px',
+            height: '50px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            backgroundColor: '#fafafa',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <Label>NOMBRE/FIRMA DEL TESTIGO</Label>
-            <div style={{ borderBottom: '1px solid #000', marginTop: '5px' }}></div>
+            <div style={{ borderBottom: '1px solid #666', marginTop: '8px' }}></div>
           </div>
           <div style={{ 
-            border: '1px solid #000', 
-            padding: '8px', 
-            height: '45px',
+            border: '2px solid rgba(0,128,0,0.3)', 
+            padding: '10px',
+            height: '50px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            backgroundColor: '#fafafa',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <Label>NOMBRE/FIRMA DE FAMILIAR O TUTOR</Label>
-            <div style={{ borderBottom: '1px solid #000', marginTop: '5px' }}></div>
+            <div style={{ borderBottom: '1px solid #666', marginTop: '8px' }}></div>
           </div>
         </div>
       </div>
