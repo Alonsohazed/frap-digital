@@ -1176,7 +1176,7 @@ export default function FRAPFormPage() {
               {/* Manejo */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Manejo Vía Aérea y Oxigenoterapia</CardTitle>
+                  <CardTitle className="text-base">Manejo Vía Aérea, Control Cervical y Oxigenoterapia</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
@@ -1184,8 +1184,6 @@ export default function FRAPFormPage() {
                     <div className="flex flex-wrap gap-4">
                       {[
                         { value: "aspiracion", label: "Aspiración" },
-                        { value: "balon_valvula", label: "Balón-Válvula" },
-                        { value: "mascarilla", label: "Mascarilla" },
                         { value: "canula_oro", label: "Cánula Orofaríngea" },
                         { value: "canula_naso", label: "Cánula Nasofaríngea" },
                       ].map(({ value, label }) => (
@@ -1208,6 +1206,7 @@ export default function FRAPFormPage() {
                       className="flex flex-wrap gap-4"
                     >
                       {[
+                        { value: "manual", label: "Manual" },
                         { value: "rigido", label: "Collarín Rígido" },
                         { value: "blando", label: "Collarín Blando" },
                       ].map(({ value, label }) => (
@@ -1217,6 +1216,42 @@ export default function FRAPFormPage() {
                         </div>
                       ))}
                     </RadioGroup>
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Asistencia Ventilatoria</Label>
+                    <RadioGroup
+                      value={formData.asistencia_ventilatoria}
+                      onValueChange={(value) => handleChange("asistencia_ventilatoria", value)}
+                      className="flex flex-wrap gap-4"
+                    >
+                      {[
+                        { value: "balon_valvula", label: "Balón-Válvula Mascarilla" },
+                        { value: "ventilador", label: "Ventilador Automático" },
+                      ].map(({ value, label }) => (
+                        <div key={value} className="flex items-center gap-2">
+                          <RadioGroupItem value={value} id={`asist-${value}`} />
+                          <Label htmlFor={`asist-${value}`}>{label}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                    {formData.asistencia_ventilatoria === 'ventilador' && (
+                      <div className="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                          <Label>Frecuencia</Label>
+                          <Input
+                            value={formData.ventilador_frec}
+                            onChange={(e) => handleChange("ventilador_frec", e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label>Volumen</Label>
+                          <Input
+                            value={formData.ventilador_vol}
+                            onChange={(e) => handleChange("ventilador_vol", e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Label className="mb-2 block">Oxigenoterapia</Label>
