@@ -812,7 +812,7 @@ export const generateFRAPPDF = async (frap) => {
   manejoHeaders.forEach((h, i) => {
     doc.setFillColor(...GREEN);
     doc.rect(col2X + manejoW * i, rightY, manejoW - 0.5, 4.5, 'F');
-    doc.setFontSize(5);
+    doc.setFontSize(4.5);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...WHITE);
     doc.text(h, col2X + manejoW * i + 1, rightY + 3);
@@ -820,27 +820,28 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 5;
   
   const viaAereaManejo = frap.via_aerea_manejo || [];
-  checkbox('ASPIRACIÓN', viaAereaManejo.includes('aspiracion'), col2X + 1, rightY, 2.5);
-  checkbox('MANUAL', frap.control_cervical === 'manual', col2X + manejoW + 1, rightY, 2.5);
-  checkbox('BALÓN-VÁLVULA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + manejoW * 2 + 1, rightY, 2.5);
-  checkbox('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + manejoW * 3 + 1, rightY, 2.5);
+  doc.setFontSize(4);
+  checkbox('ASPIRACIÓN', viaAereaManejo.includes('aspiracion'), col2X + 1, rightY, 2);
+  checkbox('MANUAL', frap.control_cervical === 'manual', col2X + manejoW + 1, rightY, 2);
+  checkbox('BALÓN-VÁLVULA', frap.asistencia_ventilatoria === 'balon_valvula', col2X + manejoW * 2 + 1, rightY, 2);
+  checkbox('PUNTAS NASALES', frap.oxigenoterapia === 'puntas_nasales', col2X + manejoW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('CÁNULA OROFARÍNGEA', viaAereaManejo.includes('canula_oro'), col2X + 1, rightY, 2.5);
-  checkbox('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + manejoW + 1, rightY, 2.5);
-  checkbox('VENTILADOR AUTOMÁTICO', frap.asistencia_ventilatoria === 'ventilador', col2X + manejoW * 2 + 1, rightY, 2.5);
-  checkbox('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + manejoW * 3 + 1, rightY, 2.5);
+  checkbox('CÁNULA ORO', viaAereaManejo.includes('canula_oro'), col2X + 1, rightY, 2);
+  checkbox('COLLARÍN RÍGIDO', frap.control_cervical === 'rigido', col2X + manejoW + 1, rightY, 2);
+  checkbox('VENT. AUTOMÁTICO', frap.asistencia_ventilatoria === 'ventilador', col2X + manejoW * 2 + 1, rightY, 2);
+  checkbox('MASCARILLA SIMPLE', frap.oxigenoterapia === 'mascarilla_simple', col2X + manejoW * 3 + 1, rightY, 2);
   rightY += 4;
-  checkbox('CÁNULA NASOFARÍNGEA', viaAereaManejo.includes('canula_naso'), col2X + 1, rightY, 2.5);
-  checkbox('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + manejoW + 1, rightY, 2.5);
-  doc.setFontSize(5);
+  checkbox('CÁNULA NASO', viaAereaManejo.includes('canula_naso'), col2X + 1, rightY, 2);
+  checkbox('COLLARÍN BLANDO', frap.control_cervical === 'blando', col2X + manejoW + 1, rightY, 2);
+  doc.setFontSize(4.5);
   label('FREC.', col2X + manejoW * 2 + 1, rightY);
-  label('VOL.', col2X + manejoW * 2 + 15, rightY);
-  checkbox('MASCARILLA CON RESERVORIO', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + manejoW * 3 + 1, rightY, 2.5);
+  label('VOL.', col2X + manejoW * 2 + 13, rightY);
+  checkbox('MASCARILLA C/RESERV', frap.oxigenoterapia === 'mascarilla_reservorio', col2X + manejoW * 3 + 1, rightY, 2);
   rightY += 4;
   label('LTS X MIN:', col2X + manejoW * 3 + 1, rightY);
-  line(col2X + manejoW * 3 + 18, rightY + 0.5, 8);
-  value(frap.lts_x_min, col2X + manejoW * 3 + 19, rightY);
-  rightY += 4;
+  line(col2X + manejoW * 3 + 16, rightY + 0.5, 8);
+  value(frap.lts_x_min, col2X + manejoW * 3 + 17, rightY);
+  rightY += 5;
   
   // CONTROL DE HEMORRAGIAS, VÍAS VENOSAS, SITIO, TIPO SOLUCIONES
   const hemHeaders = ['CONTROL DE HEMORRAGIAS', 'VÍAS VENOSAS:', 'SITIO DE APLICACIÓN:', 'TIPO DE SOLUCIONES:'];
