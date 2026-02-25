@@ -67,7 +67,15 @@ Sistema digital para el Cuerpo de Rescate de Ensenada, A.C. que permite crear, e
 - [ ] Historial de versiones de FRAPs
 - [ ] Estadísticas y reportes
 
+## Estado Actual
+- ✅ Build exitoso (Feb 2026)
+- ✅ Todos los campos nuevos implementados
+- ✅ PDF con layout de 2 columnas idéntico al formato físico
+- ✅ Diagrama corporal incluido
+- ✅ Lint sin errores
+
 ## Próximos Pasos
-1. Desplegar a producción
-2. Probar con usuarios reales del Cuerpo de Rescate
-3. Iterar basado en feedback
+1. Desplegar a producción en Cloudflare Pages
+2. Probar generación de PDF con datos reales
+3. Validar con usuarios del Cuerpo de Rescate
+4. Iterar basado en feedback
