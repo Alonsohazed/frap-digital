@@ -716,10 +716,10 @@ export const generateFRAPPDF = async (frap) => {
   // Diagrama corporal con zonas de lesión marcadas - MÁS GRANDE para llenar la caja
   drawBodyDiagram(col2X + colW / 2, expStartY - 1, colW / 2, 50, frap.zonas_lesion || {});
   
-  // Pupilas
-  drawPupilas(col2X + colW / 2 + 5, expStartY + 42);
+  // Pupilas - Ajustar posición después del diagrama más grande
+  drawPupilas(col2X + colW / 2 + 5, expStartY + 50);
   
-  rightY = expStartY + 48;
+  rightY = expStartY + 58;
   
   // SIGNOS VITALES
   // SIGNOS VITALES
