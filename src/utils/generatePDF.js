@@ -1143,6 +1143,19 @@ export const generateFRAPPDF = async (frap) => {
   rightY += fieldRow('EVENTOS PREVIOS RELACIONADOS:', frap.eventos_previos, col2X + 2, rightY, 48, colW - 52);
   rightY += 2;
   
+  // OBSERVACIONES - Movida aquí a la columna derecha página 2
+  rightY = sectionTitle('OBSERVACIONES', col2X, rightY + 2, colW);
+  doc.setDrawColor(...GREEN);
+  doc.setLineWidth(0.3);
+  doc.rect(col2X, rightY, colW, 15, 'S');
+  
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
+  const obsLines = doc.splitTextToSize(frap.observaciones || '', colW - 4);
+  doc.text(obsLines, col2X + 2, rightY + 4);
+  rightY += 17;
+  
   // AUTORIDADES QUE INTERVINIERON
   rightY = sectionTitle('AUTORIDADES QUE INTERVINIERON', col2X, rightY, colW);
   label('ENTREGA PACIENTE:', col2X + 2, rightY);
