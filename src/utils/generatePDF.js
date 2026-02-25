@@ -299,7 +299,7 @@ export const generateFRAPPDF = async (frap) => {
   // ─────────────────────────────────────────────────────────────────
   
   // MOTIVO DE LA ATENCIÓN
-  leftY = sectionTitle('MOTIVO DE LA ATENCIÓN', col1X, leftY, colW);
+  leftY = sectionTitle('MOTIVO DE LA ATENCIÓN', col1X, leftY + 2, colW);
   let xPos = col1X + 2;
   xPos += checkbox('TRASLADO PROGRAMADO', frap.motivo_atencion === 'traslado_programado', xPos, leftY + 1);
   xPos += checkbox('ENFERMEDAD', frap.motivo_atencion === 'enfermedad', xPos, leftY + 1);
