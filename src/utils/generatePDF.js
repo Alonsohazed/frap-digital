@@ -591,38 +591,37 @@ export const generateFRAPPDF = async (frap) => {
   // CIRCULACIÓN - Dibujar todos los headers en la misma línea
   const circY = rightY + 2;
   doc.setFillColor(...GREEN);
-  doc.rect(col2X, circY, colW / 2 + 10, 5, 'F');  // CIRCULACIÓN: PRESENCIA DE PULSOS
-  doc.rect(col2X + colW / 2 + 12, circY, 18, 5, 'F');  // CALIDAD
-  doc.rect(col2X + colW / 2 + 32, circY, 12, 5, 'F');  // PIEL
-  doc.rect(col2X + colW - 14, circY, 14, 5, 'F');  // CARACT.
+  doc.rect(col2X, circY, colW / 2 + 5, 5, 'F');  // CIRCULACIÓN: PRESENCIA DE PULSOS
+  doc.rect(col2X + colW / 2 + 7, circY, 16, 5, 'F');  // CALIDAD
+  doc.rect(col2X + colW / 2 + 25, circY, 10, 5, 'F');  // PIEL
+  doc.rect(col2X + colW / 2 + 37, circY, 16, 5, 'F');  // CARACT.
   
-  doc.setFontSize(7);
+  doc.setFontSize(6);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
   doc.text('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X + 2, circY + 3.5);
-  doc.setFontSize(6);
-  doc.text('CALIDAD', col2X + colW / 2 + 14, circY + 3.5);
-  doc.text('PIEL', col2X + colW / 2 + 34, circY + 3.5);
-  doc.text('CARACT.', col2X + colW - 12, circY + 3.5);
+  doc.text('CALIDAD', col2X + colW / 2 + 9, circY + 3.5);
+  doc.text('PIEL', col2X + colW / 2 + 27, circY + 3.5);
+  doc.text('CARACT.', col2X + colW / 2 + 39, circY + 3.5);
   
   rightY = circY + 8;
   
   checkbox('CAROTÍDEO', frap.presencia_pulsos === 'carotideo', col2X + 2, rightY);
-  checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW / 2 + 12, rightY);
-  checkbox('NORMAL', frap.piel === 'normal', col2X + colW / 2 + 32, rightY);
-  checkbox('CALIENTE', frap.caracteristicas_piel === 'caliente', col2X + colW - 14, rightY);
+  checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW / 2 + 7, rightY);
+  checkbox('NORMAL', frap.piel === 'normal', col2X + colW / 2 + 25, rightY);
+  checkbox('CALIENTE', frap.caracteristicas_piel === 'caliente', col2X + colW / 2 + 37, rightY);
   rightY += 4;
   checkbox('RADIAL', frap.presencia_pulsos === 'radial', col2X + 2, rightY);
-  checkbox('LENTO', frap.calidad_pulso === 'lento', col2X + colW / 2 + 12, rightY);
-  checkbox('PÁLIDA', frap.piel === 'palida', col2X + colW / 2 + 32, rightY);
-  checkbox('FRÍA', frap.caracteristicas_piel === 'fria', col2X + colW - 14, rightY);
+  checkbox('LENTO', frap.calidad_pulso === 'lento', col2X + colW / 2 + 7, rightY);
+  checkbox('PÁLIDA', frap.piel === 'palida', col2X + colW / 2 + 25, rightY);
+  checkbox('FRÍA', frap.caracteristicas_piel === 'fria', col2X + colW / 2 + 37, rightY);
   rightY += 4;
   checkbox('PARO CARDIORESPIRATORIO', frap.presencia_pulsos === 'paro', col2X + 2, rightY);
-  checkbox('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + colW / 2 + 12, rightY);
-  checkbox('CIANÓTICA', frap.piel === 'cianotica', col2X + colW / 2 + 32, rightY);
-  checkbox('DIAFORESIS', frap.caracteristicas_piel === 'diaforesis', col2X + colW - 14, rightY);
+  checkbox('RÍTMICO', frap.calidad_pulso === 'ritmico', col2X + colW / 2 + 7, rightY);
+  checkbox('CIANÓTICA', frap.piel === 'cianotica', col2X + colW / 2 + 25, rightY);
+  checkbox('DIAFORESIS', frap.caracteristicas_piel === 'diaforesis', col2X + colW / 2 + 37, rightY);
   rightY += 4;
-  checkbox('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + colW / 2 + 12, rightY);
+  checkbox('ARRÍTMICO', frap.calidad_pulso === 'arritmico', col2X + colW / 2 + 7, rightY);
   rightY += 5;
   
   // EXPLORACIÓN FÍSICA y ZONAS DE LESIÓN
