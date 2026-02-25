@@ -1083,7 +1083,7 @@ export const generateFRAPPDF = async (frap) => {
   rightY = y;
   
   // INTERROGATORIO
-  rightY = sectionTitle('INTERROGATORIO', col2X, rightY, colW);
+  rightY = sectionTitle('INTERROGATORIO', col2X, rightY + 2, colW);
   rightY += fieldRow('ALERGIAS:', frap.alergias, col2X + 2, rightY, 16, colW - 20);
   rightY += fieldRow('MEDICAMENTOS QUE ESTÁ INGIRIENDO:', frap.medicamentos, col2X + 2, rightY, 55, colW - 59);
   rightY += fieldRow('ENFERMEDADES Y CIRUGÍAS PREVIAS:', frap.enfermedades_previas, col2X + 2, rightY, 52, colW - 56);
