@@ -1281,10 +1281,30 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 8;
 
   // ════════════════════════════════════════════════════════════════
-  // SECCIÓN INFERIOR - FIRMAS Y CONSENTIMIENTOS
+  // SECCIÓN INFERIOR - OBSERVACIONES, FIRMAS Y CONSENTIMIENTOS
   // ════════════════════════════════════════════════════════════════
   // Usar la posición más baja entre las dos columnas + margen
-  const footerY = Math.max(leftY, rightY) + 8;
+  let footerY = Math.max(leftY, rightY) + 8;
+  
+  // OBSERVACIONES - Sección completa antes de firmas
+  doc.setFillColor(...GREEN);
+  doc.rect(mx, footerY, cw, 5, 'F');
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text('OBSERVACIONES', mx + 2, footerY + 3.5);
+  footerY += 6;
+  
+  doc.setDrawColor(...GREEN);
+  doc.setLineWidth(0.3);
+  doc.rect(mx, footerY, cw, 12, 'S');
+  
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...BLACK);
+  const obsLines = doc.splitTextToSize(frap.observaciones || '', cw - 4);
+  doc.text(obsLines, mx + 2, footerY + 4);
+  footerY += 15;
   
   // NEGATIVA A RECIBIR ATENCIÓN
   doc.setFillColor(...GREEN);
