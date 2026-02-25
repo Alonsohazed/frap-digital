@@ -2,17 +2,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 /**
- * GENERACIÓN DE PDF FRAP - REPLICACIÓN EXACTA DEL DISEÑO ORIGINAL
- * Basado en el PDF de referencia del Cuerpo de Rescate de Ensenada, A.C.
- * 
- * Especificaciones:
- * - Color headers: #008000 (RGB: 0, 128, 0)
- * - Márgenes: 15mm todos los lados
- * - Tamaño página: Letter (215.9mm x 279.4mm)
- * - Headers: 11-12pt
- * - Labels: 8-9pt
- * - Texto normal: 7-8pt
- * - Checkboxes: 4mm x 4mm
+ * GENERACIÓN DE PDF FRAP - REPLICACIÓN PIXEL-PERFECT DEL DISEÑO ORIGINAL
+ * Basado en medidas exactas del PDF de referencia
  */
 
 export const generateFRAPPDF = async (frap) => {
