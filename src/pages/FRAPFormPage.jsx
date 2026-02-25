@@ -754,7 +754,7 @@ export default function FRAPFormPage() {
                 <CardHeader>
                   <CardTitle className="text-base">Vía Aérea y Ventilación</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   <div>
                     <Label className="mb-2 block">Vía Aérea</Label>
                     <RadioGroup
@@ -793,12 +793,12 @@ export default function FRAPFormPage() {
                       ))}
                     </RadioGroup>
                   </div>
-                  <div>
-                    <Label className="mb-2 block">Ventilación</Label>
+                  <div className="pt-2">
+                    <Label className="mb-3 block font-semibold">Ventilación</Label>
                     <RadioGroup
                       value={formData.ventilacion}
                       onValueChange={(value) => handleChange("ventilacion", value)}
-                      className="flex flex-wrap gap-4"
+                      className="grid grid-cols-2 md:grid-cols-3 gap-3"
                     >
                       {[
                         { value: "automatismo_regular", label: "Aut. Regular" },
@@ -814,12 +814,12 @@ export default function FRAPFormPage() {
                       ))}
                     </RadioGroup>
                   </div>
-                  <div>
-                    <Label className="mb-2 block">Auscultación</Label>
+                  <div className="pt-2">
+                    <Label className="mb-3 block font-semibold">Auscultación</Label>
                     <RadioGroup
                       value={formData.auscultacion}
                       onValueChange={(value) => handleChange("auscultacion", value)}
-                      className="flex flex-wrap gap-4"
+                      className="grid grid-cols-2 md:grid-cols-3 gap-3"
                     >
                       {[
                         { value: "normales", label: "Ruidos Normales" },
