@@ -589,7 +589,8 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 5;
   
   // CIRCULACIÓN
-  rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY, colW / 2 + 10);
+  // CIRCULACIÓN
+  rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY + 2, colW / 2 + 10);
   doc.setFillColor(...GREEN);
   doc.rect(col2X + colW / 2 + 12, rightY - 6, 18, 5, 'F');
   doc.rect(col2X + colW / 2 + 32, rightY - 6, 12, 5, 'F');
