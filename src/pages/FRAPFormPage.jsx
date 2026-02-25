@@ -1604,21 +1604,6 @@ export default function FRAPFormPage() {
                 </CardContent>
               </Card>
 
-              {/* Observaciones */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Observaciones</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    value={formData.observaciones}
-                    onChange={(e) => handleChange("observaciones", e.target.value)}
-                    rows={4}
-                    placeholder="Observaciones adicionales..."
-                  />
-                </CardContent>
-              </Card>
-
               {/* Escala Glasgow */}
               <Card>
                 <CardHeader>
