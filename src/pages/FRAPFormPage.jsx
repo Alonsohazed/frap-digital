@@ -1129,6 +1129,19 @@ export default function FRAPFormPage() {
                 </CardContent>
               </Card>
 
+              {/* Diagrama del Cuerpo - Zonas de Lesión */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Zonas de Lesión - Diagrama Corporal</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <BodyDiagram
+                    value={formData.zonas_lesion}
+                    onChange={handleZonasLesionChange}
+                  />
+                </CardContent>
+              </Card>
+
               {/* Pupilas */}
               <Card>
                 <CardHeader>
