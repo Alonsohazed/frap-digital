@@ -134,17 +134,10 @@ const Page2 = ({ data }) => {
 
         {/* DATOS POST-PARTO */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             DATOS POST-PARTO
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px' }}>
+          <div style={sectionBodyStyle}>
             <div style={{ marginBottom: '4px' }}>
               <Label>HORA DE NACIMIENTO:</Label> <Underline width="80px" style={{ marginLeft: '5px' }}></Underline>
               <span style={{ marginLeft: '10px' }}><Label>LUGAR:</Label></span>
@@ -164,17 +157,10 @@ const Page2 = ({ data }) => {
         
         {/* INTERROGATORIO */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             INTERROGATORIO
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px' }}>
+          <div style={sectionBodyStyle}>
             <div style={{ marginBottom: '4px' }}>
               <Label>ALERGIAS:</Label> <Underline width="300px" style={{ marginLeft: '5px' }}>{data.alergias}</Underline>
             </div>
