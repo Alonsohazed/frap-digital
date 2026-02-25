@@ -63,12 +63,14 @@ const Page2 = ({ data }) => {
   return (
     <div style={{
       width: '808px',
-      height: '1048px',
+      height: '1180px',
       position: 'relative',
       backgroundColor: 'white',
-      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       overflow: 'hidden',
-      border: '1px solid #ddd',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      borderRadius: '4px',
+      marginTop: '20px',
       pageBreakBefore: 'always'
     }}>
       
@@ -78,13 +80,14 @@ const Page2 = ({ data }) => {
         top: '0',
         left: '0',
         width: '808px',
-        height: '35px',
-        backgroundColor: '#008000',
+        height: '40px',
+        background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
         padding: '10px 15px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        boxShadow: '0 2px 8px rgba(0,128,0,0.2)'
       }}>
-        <div style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>
+        <div style={{ color: 'white', fontSize: '14px', fontWeight: '700', letterSpacing: '0.3px' }}>
           CUERPO DE RESCATE DE ENSENADA, A.C.
         </div>
       </div>
@@ -94,17 +97,10 @@ const Page2 = ({ data }) => {
         
         {/* DATOS DE LA MADRE */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
+          <div style={sectionHeaderStyle}>
             DATOS DE LA MADRE
           </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '7px' }}>
+          <div style={sectionBodyStyle}>
             <div style={{ marginBottom: '4px' }}>
               <Label>GESTA:</Label>
               <input type="text" readOnly style={{ width: '35px', border: '1px solid #000', textAlign: 'center', fontSize: '8px', marginLeft: '5px', marginRight: '15px' }} />
