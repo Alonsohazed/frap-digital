@@ -307,6 +307,10 @@ export default function FRAPFormPage() {
     }));
   };
 
+  const handleZonasLesionChange = (zonas) => {
+    setFormData(prev => ({ ...prev, zonas_lesion: zonas }));
+  };
+
   const calculateGlasgowTotal = () => {
     const ocular = parseInt(formData.glasgow_ocular) || 0;
     const verbal = parseInt(formData.glasgow_verbal) || 0;
