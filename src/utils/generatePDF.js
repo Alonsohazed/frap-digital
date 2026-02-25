@@ -103,8 +103,8 @@ export const generateFRAPPDF = async (frap) => {
     return size + 1 + doc.getTextWidth(text) + 2;
   };
 
-  // Dibujar cuerpo humano PROFESIONAL
-  const drawBodyDiagram = (x, y, w, h) => {
+  // Dibujar cuerpo humano PROFESIONAL con zonas de lesión
+  const drawBodyDiagram = (x, y, w, h, zonasLesion = {}) => {
     doc.setDrawColor(...BLACK);
     doc.setLineWidth(0.4);
     
@@ -116,55 +116,84 @@ export const generateFRAPPDF = async (frap) => {
     const scale = Math.min(w / 70, h / 100);
     const startY = y + 8;
     
+    // Función helper para dibujar zona marcada
+    const markZone = (zoneX, zoneY, radius) => {
+      doc.setFillColor(255, 0, 0); // Rojo
+      doc.circle(zoneX, zoneY, radius, 'F');
+      doc.setFillColor(139, 0, 0); // Rojo oscuro para el punto central
+      doc.circle(zoneX, zoneY, radius * 0.4, 'F');
+    };
+    
     doc.setLineWidth(0.5);
     
     // CABEZA - círculo más definido
     doc.circle(cx, startY + 7 * scale, 6 * scale, 'S');
+    if (zonasLesion.cabeza) markZone(cx, startY + 7 * scale, 3 * scale);
     
     // CUELLO
     doc.setLineWidth(0.4);
     doc.line(cx - 3 * scale, startY + 13 * scale, cx - 3 * scale, startY + 17 * scale);
     doc.line(cx + 3 * scale, startY + 13 * scale, cx + 3 * scale, startY + 17 * scale);
+    if (zonasLesion.cuello) markZone(cx, startY + 15 * scale, 2 * scale);
     
     // HOMBROS
     doc.line(cx - 3 * scale, startY + 17 * scale, cx - 14 * scale, startY + 20 * scale);
     doc.line(cx + 3 * scale, startY + 17 * scale, cx + 14 * scale, startY + 20 * scale);
+    if (zonasLesion.hombro_der) markZone(cx - 9 * scale, startY + 19 * scale, 2.5 * scale);
+    if (zonasLesion.hombro_izq) markZone(cx + 9 * scale, startY + 19 * scale, 2.5 * scale);
     
     // TORSO - rectángulo con lados curvados
     doc.line(cx - 14 * scale, startY + 20 * scale, cx - 12 * scale, startY + 45 * scale);
     doc.line(cx + 14 * scale, startY + 20 * scale, cx + 12 * scale, startY + 45 * scale);
+    if (zonasLesion.torax) markZone(cx, startY + 32 * scale, 4 * scale);
     
     // CINTURA
     doc.line(cx - 12 * scale, startY + 45 * scale, cx - 10 * scale, startY + 50 * scale);
     doc.line(cx + 12 * scale, startY + 45 * scale, cx + 10 * scale, startY + 50 * scale);
+    if (zonasLesion.abdomen) markZone(cx, startY + 47 * scale, 3 * scale);
     
     // CADERA
     doc.line(cx - 10 * scale, startY + 50 * scale, cx - 4 * scale, startY + 52 * scale);
     doc.line(cx + 10 * scale, startY + 50 * scale, cx + 4 * scale, startY + 52 * scale);
+    if (zonasLesion.pelvis) markZone(cx, startY + 51 * scale, 3 * scale);
     
     // BRAZOS IZQUIERDO
     doc.line(cx - 14 * scale, startY + 20 * scale, cx - 20 * scale, startY + 35 * scale); // brazo
     doc.line(cx - 20 * scale, startY + 35 * scale, cx - 22 * scale, startY + 50 * scale); // antebrazo
+    if (zonasLesion.brazo_der) markZone(cx - 17 * scale, startY + 27 * scale, 2 * scale);
+    if (zonasLesion.antebrazo_der) markZone(cx - 21 * scale, startY + 42 * scale, 2 * scale);
     // Mano izquierda
     doc.ellipse(cx - 23 * scale, startY + 53 * scale, 2.5 * scale, 3 * scale, 'S');
+    if (zonasLesion.mano_der) markZone(cx - 23 * scale, startY + 53 * scale, 1.5 * scale);
     
     // BRAZOS DERECHO
     doc.line(cx + 14 * scale, startY + 20 * scale, cx + 20 * scale, startY + 35 * scale); // brazo
     doc.line(cx + 20 * scale, startY + 35 * scale, cx + 22 * scale, startY + 50 * scale); // antebrazo
+    if (zonasLesion.brazo_izq) markZone(cx + 17 * scale, startY + 27 * scale, 2 * scale);
+    if (zonasLesion.antebrazo_izq) markZone(cx + 21 * scale, startY + 42 * scale, 2 * scale);
     // Mano derecha
     doc.ellipse(cx + 23 * scale, startY + 53 * scale, 2.5 * scale, 3 * scale, 'S');
+    if (zonasLesion.mano_izq) markZone(cx + 23 * scale, startY + 53 * scale, 1.5 * scale);
     
     // PIERNA IZQUIERDA
     doc.line(cx - 4 * scale, startY + 52 * scale, cx - 8 * scale, startY + 75 * scale); // muslo
     doc.line(cx - 8 * scale, startY + 75 * scale, cx - 7 * scale, startY + 90 * scale); // pierna
+    if (zonasLesion.muslo_der) markZone(cx - 6 * scale, startY + 63 * scale, 2 * scale);
+    if (zonasLesion.rodilla_der) markZone(cx - 7.5 * scale, startY + 75 * scale, 2 * scale);
+    if (zonasLesion.pierna_der) markZone(cx - 7.5 * scale, startY + 82 * scale, 2 * scale);
     // Pie izquierdo
     doc.ellipse(cx - 7 * scale, startY + 93 * scale, 4 * scale, 2 * scale, 'S');
+    if (zonasLesion.pie_der) markZone(cx - 7 * scale, startY + 93 * scale, 2 * scale);
     
     // PIERNA DERECHA
     doc.line(cx + 4 * scale, startY + 52 * scale, cx + 8 * scale, startY + 75 * scale); // muslo
     doc.line(cx + 8 * scale, startY + 75 * scale, cx + 7 * scale, startY + 90 * scale); // pierna
+    if (zonasLesion.muslo_izq) markZone(cx + 6 * scale, startY + 63 * scale, 2 * scale);
+    if (zonasLesion.rodilla_izq) markZone(cx + 7.5 * scale, startY + 75 * scale, 2 * scale);
+    if (zonasLesion.pierna_izq) markZone(cx + 7.5 * scale, startY + 82 * scale, 2 * scale);
     // Pie derecho
     doc.ellipse(cx + 7 * scale, startY + 93 * scale, 4 * scale, 2 * scale, 'S');
+    if (zonasLesion.pie_izq) markZone(cx + 7 * scale, startY + 93 * scale, 2 * scale);
     
     // Línea central del torso (división anatómica)
     doc.setLineWidth(0.2);
@@ -176,6 +205,15 @@ export const generateFRAPPDF = async (frap) => {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...BLACK);
     doc.text('ANTERIOR', cx, y + h - 2, { align: 'center' });
+    
+    // Leyenda de zonas marcadas
+    const zonasActivas = Object.keys(zonasLesion).filter(k => zonasLesion[k]);
+    if (zonasActivas.length > 0) {
+      doc.setFontSize(4.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(255, 0, 0);
+      doc.text('● Zonas marcadas', x + 2, y + h - 5);
+    }
   };
 
   // Dibujar pupilas profesionales
