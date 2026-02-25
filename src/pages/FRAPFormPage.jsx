@@ -188,6 +188,7 @@ const INITIAL_FORM_STATE = {
   madre_para: "",
   madre_cesareas: "",
   madre_abortos: "",
+  madre_fum: "",
   madre_semanas: "",
   madre_fecha_probable: "",
   madre_hora_contracciones: "",
