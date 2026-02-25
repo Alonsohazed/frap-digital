@@ -701,48 +701,6 @@ const Page1 = ({ data }) => {
 
         {/* EXPLORACIÓN FÍSICA */}
         <div style={{ marginBottom: '6px' }}>
-          <div style={{
-            backgroundColor: '#008000',
-            color: 'white',
-            fontSize: '8px',
-            fontWeight: 'bold',
-            padding: '5px 8px',
-            height: '18px'
-          }}>
-            EXPLORACIÓN FÍSICA
-          </div>
-          <div style={{ padding: '6px 8px', border: '1px solid #ccc', borderTop: 'none', fontSize: '6px', lineHeight: '1.4' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
-              {[
-                { n: '1', value: 'deformidades', label: 'Deformidades' },
-                { n: '2', value: 'contusiones', label: 'Contusiones' },
-                { n: '3', value: 'abrasiones', label: 'Abrasiones' },
-                { n: '4', value: 'penetraciones', label: 'Penetraciones' },
-                { n: '5', value: 'mov_paradojico', label: 'Mov. Paradójico' },
-                { n: '6', value: 'crepitacion', label: 'Crepitación' },
-                { n: '7', value: 'heridas', label: 'Heridas' },
-                { n: '8', value: 'fracturas', label: 'Fracturas' },
-                { n: '9', value: 'enfisema', label: 'Enfisema Subcutáneo' },
-                { n: '10', value: 'quemaduras', label: 'Quemaduras' },
-                { n: '11', value: 'laceraciones', label: 'Laceraciones' },
-                { n: '12', value: 'edema', label: 'Edema' },
-                { n: '13', value: 'alt_sensibilidad', label: 'Alt. Sensibilidad' },
-                { n: '14', value: 'alt_movilidad', label: 'Alt. Movilidad' },
-                { n: '15', value: 'dolor', label: 'Dolor' }
-              ].map(item => (
-                <Checkbox 
-                  key={item.n}
-                  checked={(data.exploracion_fisica || []).includes(item.value)} 
-                  label={`${item.n}. ${item.label}`}
-                  style={{ fontSize: '6px' }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* EXPLORACIÓN FÍSICA */}
-        <div style={{ marginBottom: '6px' }}>
           <div style={sectionHeaderStyle}>EXPLORACIÓN FÍSICA</div>
           <div style={{ ...sectionBodyStyle, fontSize: '6px', lineHeight: '1.4' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
