@@ -38,13 +38,31 @@ const Page1 = ({ data }) => {
 
   const Underline = ({ children, width = '100px', style = {} }) => (
     <span style={{ 
-      borderBottom: '0.5px solid #000', 
+      borderBottom: '0.5px solid #666', 
       display: 'inline-block', 
       minWidth: width,
       fontSize: '8px',
       ...style 
     }}>{children || ''}</span>
   );
+
+  const sectionHeaderStyle = {
+    background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
+    color: 'white',
+    fontSize: '8px',
+    fontWeight: 'bold',
+    padding: '5px 8px',
+    height: '18px',
+    borderRadius: '4px 4px 0 0'
+  };
+
+  const sectionBodyStyle = {
+    padding: '8px',
+    border: '1px solid #e0e0e0',
+    borderTop: 'none',
+    borderRadius: '0 0 4px 4px',
+    backgroundColor: '#fafafa'
+  };
 
   const sectionHeader = {
     background: 'linear-gradient(135deg, #006400 0%, #008000 100%)',
@@ -722,8 +740,206 @@ const Page1 = ({ data }) => {
           </div>
         </div>
 
-        {/* Resto de secciones se continúan en la página... */}
-        {/* Por espacio, continúo con las secciones críticas */}
+        {/* EXPLORACIÓN FÍSICA */}
+        <div style={{ marginBottom: '6px' }}>
+          <div style={sectionHeaderStyle}>EXPLORACIÓN FÍSICA</div>
+          <div style={{ ...sectionBodyStyle, fontSize: '6px', lineHeight: '1.4' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
+              {[
+                { n: '1', value: 'deformidades', label: 'Deformidades' },
+                { n: '2', value: 'contusiones', label: 'Contusiones' },
+                { n: '3', value: 'abrasiones', label: 'Abrasiones' },
+                { n: '4', value: 'penetraciones', label: 'Penetraciones' },
+                { n: '5', value: 'mov_paradojico', label: 'Mov. Paradójico' },
+                { n: '6', value: 'crepitacion', label: 'Crepitación' },
+                { n: '7', value: 'heridas', label: 'Heridas' },
+                { n: '8', value: 'fracturas', label: 'Fracturas' },
+                { n: '9', value: 'enfisema', label: 'Enfisema Subcutáneo' },
+                { n: '10', value: 'quemaduras', label: 'Quemaduras' },
+                { n: '11', value: 'laceraciones', label: 'Laceraciones' },
+                { n: '12', value: 'edema', label: 'Edema' },
+                { n: '13', value: 'alt_sensibilidad', label: 'Alt. Sensibilidad' },
+                { n: '14', value: 'alt_movilidad', label: 'Alt. Movilidad' },
+                { n: '15', value: 'dolor', label: 'Dolor' }
+              ].map(item => (
+                <Checkbox 
+                  key={item.n}
+                  checked={(data.exploracion_fisica || []).includes(item.value)} 
+                  label={`${item.n}. ${item.label}`}
+                  style={{ fontSize: '6px' }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ZONAS DE LESIÓN Y PUPILAS */}
+        <div style={{ marginBottom: '6px', display: 'flex', gap: '8px' }}>
+          {/* Zonas de Lesión */}
+          <div style={{ flex: 1 }}>
+            <div style={{ ...sectionHeaderStyle, fontSize: '7px' }}>ZONAS DE LESIÓN</div>
+            <div style={{ 
+              ...sectionBodyStyle, 
+              height: '120px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              {/* Diagrama simplificado del cuerpo humano */}
+              <svg width="80" height="110" viewBox="0 0 80 110" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }}>
+                {/* Cabeza */}
+                <circle cx="40" cy="12" r="10" fill="none" stroke="#333" strokeWidth="1.5" />
+                {data.zonas_lesion?.cabeza && <circle cx="40" cy="12" r="8" fill="#ff4444" opacity="0.6" />}
+                
+                {/* Cuello */}
+                <line x1="35" y1="20" x2="35" y2="28" stroke="#333" strokeWidth="1.5" />
+                <line x1="45" y1="20" x2="45" y2="28" stroke="#333" strokeWidth="1.5" />
+                
+                {/* Torso */}
+                <rect x="28" y="28" width="24" height="25" fill="none" stroke="#333" strokeWidth="1.5" rx="2" />
+                {data.zonas_lesion?.torax && <rect x="30" y="30" width="20" height="21" fill="#ff4444" opacity="0.6" rx="2" />}
+                
+                {/* Brazos */}
+                <line x1="28" y1="32" x2="18" y2="50" stroke="#333" strokeWidth="1.5" />
+                <line x1="18" y1="50" x2="15" y2="65" stroke="#333" strokeWidth="1.5" />
+                {data.zonas_lesion?.brazo_izq && <circle cx="16" cy="58" r="6" fill="#ff4444" opacity="0.6" />}
+                
+                <line x1="52" y1="32" x2="62" y2="50" stroke="#333" strokeWidth="1.5" />
+                <line x1="62" y1="50" x2="65" y2="65" stroke="#333" strokeWidth="1.5" />
+                {data.zonas_lesion?.brazo_der && <circle cx="64" cy="58" r="6" fill="#ff4444" opacity="0.6" />}
+                
+                {/* Abdomen */}
+                <rect x="30" y="53" width="20" height="18" fill="none" stroke="#333" strokeWidth="1.5" rx="2" />
+                {data.zonas_lesion?.abdomen && <rect x="32" y="55" width="16" height="14" fill="#ff4444" opacity="0.6" rx="2" />}
+                
+                {/* Piernas */}
+                <line x1="34" y1="71" x2="32" y2="95" stroke="#333" strokeWidth="1.5" />
+                <line x1="32" y1="95" x2="30" y2="108" stroke="#333" strokeWidth="1.5" />
+                {data.zonas_lesion?.pierna_izq && <circle cx="31" cy="102" r="5" fill="#ff4444" opacity="0.6" />}
+                
+                <line x1="46" y1="71" x2="48" y2="95" stroke="#333" strokeWidth="1.5" />
+                <line x1="48" y1="95" x2="50" y2="108" stroke="#333" strokeWidth="1.5" />
+                {data.zonas_lesion?.pierna_der && <circle cx="49" cy="102" r="5" fill="#ff4444" opacity="0.6" />}
+              </svg>
+              <div style={{ 
+                position: 'absolute', 
+                bottom: '4px', 
+                fontSize: '6px', 
+                color: '#666' 
+              }}>
+                ANTERIOR
+              </div>
+            </div>
+          </div>
+
+          {/* Pupilas */}
+          <div style={{ width: '100px' }}>
+            <div style={{ ...sectionHeaderStyle, fontSize: '7px' }}>PUPILAS</div>
+            <div style={{ ...sectionBodyStyle, paddingTop: '12px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                {/* Pupila Derecha */}
+                <div style={{ marginBottom: '6px' }}>
+                  <svg width="30" height="30">
+                    <circle cx="15" cy="15" r="12" fill="white" stroke="#333" strokeWidth="1.5" />
+                    <circle cx="15" cy="15" r="7" fill="#333" />
+                  </svg>
+                  <div style={{ fontSize: '6px', marginTop: '2px' }}>DERECHA</div>
+                </div>
+                
+                {/* Pupila Izquierda */}
+                <div>
+                  <svg width="30" height="30">
+                    <circle cx="15" cy="15" r="12" fill="white" stroke="#333" strokeWidth="1.5" />
+                    <circle cx="15" cy="15" r="7" fill="#333" />
+                  </svg>
+                  <div style={{ fontSize: '6px', marginTop: '2px' }}>IZQUIERDA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SIGNOS VITALES */}
+        <div style={{ marginBottom: '6px' }}>
+          <div style={sectionHeaderStyle}>SIGNOS VITALES</div>
+          <div style={{ ...sectionBodyStyle, padding: '4px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '6px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#e8f5e9' }}>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>HORA</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>FR</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>FC</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>TAS</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>TAD</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>SaO2</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>TEMP</th>
+                  <th style={{ border: '1px solid #ccc', padding: '3px', fontWeight: 'bold' }}>GLUC</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[0, 1, 2].map(i => {
+                  const vital = (data.vitales || [])[i] || {};
+                  return (
+                    <tr key={i}>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.hora || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.fr || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.fc || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.tas || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.tad || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.sao2 || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.temp || ''}</td>
+                      <td style={{ border: '1px solid #ccc', padding: '3px', textAlign: 'center' }}>{vital.glucosa || ''}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* CONDICIÓN DEL PACIENTE / PRIORIDAD */}
+        <div style={{ marginBottom: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+          <div>
+            <div style={sectionHeaderStyle}>CONDICIÓN DEL PACIENTE</div>
+            <div style={{ ...sectionBodyStyle, lineHeight: '1.6' }}>
+              <Checkbox checked={data.condicion_paciente === 'critico_inestable'} label="CRÍTICO INESTABLE" />
+              <div><Checkbox checked={data.condicion_paciente === 'no_critico'} label="NO CRÍTICO" /></div>
+              <div><Checkbox checked={data.condicion_paciente === 'critico_estable'} label="CRÍTICO ESTABLE" /></div>
+            </div>
+          </div>
+          <div>
+            <div style={sectionHeaderStyle}>PRIORIDAD</div>
+            <div style={{ ...sectionBodyStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              {[
+                { key: 'rojo', label: 'ROJO', color: '#dc3545' },
+                { key: 'amarillo', label: 'AMARILLO', color: '#ffc107' },
+                { key: 'verde', label: 'VERDE', color: '#28a745' },
+                { key: 'negro', label: 'NEGRO', color: '#212529' }
+              ].map(({ key, label, color }) => (
+                <div
+                  key={key}
+                  style={{
+                    backgroundColor: data.prioridad === key ? color : 'white',
+                    color: data.prioridad === key ? 'white' : color,
+                    border: `2px solid ${color}`,
+                    borderRadius: '4px',
+                    padding: '4px',
+                    textAlign: 'center',
+                    fontSize: '6px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Resto de secciones... */}
       </div>
     </div>
   );
