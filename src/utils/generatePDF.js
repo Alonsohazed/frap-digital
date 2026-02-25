@@ -1071,6 +1071,7 @@ export const generateFRAPPDF = async (frap) => {
   xPos = col1X + 38;
   xPos += checkbox('SÍ', frap.postparto_placenta === true, xPos, leftY);
   checkbox('NO', frap.postparto_placenta === false, xPos, leftY);
+  leftY += 5;  // Marcar fin de columna izquierda
 
   // ─────────────────────────────────────────────────────────────────
   // PÁGINA 2 - COLUMNA DERECHA
