@@ -1065,10 +1065,12 @@ export const generateFRAPPDF = async (frap) => {
   xPos += checkbox('PRODUCTO BIOLÓGICO', agentes.includes('sustancia_biologica'), xPos, leftY);
   xPos += checkbox('SUSTANCIA TÓXICA', agentes.includes('sustancia_toxica'), xPos, leftY);
   checkbox('OTRO', agentes.includes('otro'), xPos, leftY);
-  leftY += 4;
+  leftY += 5;
   
-  leftY += fieldRow('ESPECIFIQUE:', '', col1X + 2, leftY, 20, colW - 24);
+  leftY += fieldRow('ESPECIFIQUE:', frap.agente_causal_otro, col1X + 2, leftY, 20, colW - 24);
+  leftY += 2;
   leftY += fieldRow('LESIONES CAUSADAS POR:', frap.lesiones_causadas_por, col1X + 2, leftY, 38, colW - 42);
+  leftY += 3;  // Más espacio después de lesiones
   
   // DATOS DE LA MADRE
   leftY = sectionTitle('DATOS DE LA MADRE', col1X, leftY + 2, colW);
