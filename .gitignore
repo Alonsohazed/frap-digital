@@ -31,3 +31,7 @@ Thumbs.db
 # Wrangler
 .wrangler/
 .dev.vars
+-e 
+# Environment files
+*.env
+*.env.*
