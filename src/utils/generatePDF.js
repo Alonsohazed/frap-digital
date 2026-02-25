@@ -776,8 +776,8 @@ export const generateFRAPPDF = async (frap) => {
   // Botones de prioridad con colores
   const prioColors = {
     rojo: [220, 53, 69],
-    verde: [40, 167, 69],
     amarillo: [255, 193, 7],
+    verde: [40, 167, 69],
     negro: [33, 33, 33]
   };
   
@@ -802,9 +802,9 @@ export const generateFRAPPDF = async (frap) => {
   });
   doc.setTextColor(...BLACK);
   
-  rightY += 4;
+  rightY += 5;  // Más espacio antes de crítico estable
   checkbox('CRÍTICO ESTABLE', frap.condicion_paciente === 'critico_estable', col2X + 2, rightY);
-  rightY += 8;
+  rightY += 8;  // Más espacio antes de la siguiente sección
   
   // VÍA AÉREA, CONTROL CERVICAL, ASIST. VENTILATORIA, OXIGENOTERAPIA
   const manejoHeaders = ['VÍA AÉREA:', 'CONTROL CERVICAL', 'ASIST. VENTILATORIA', 'OXIGENOTERAPIA:'];
