@@ -121,7 +121,7 @@ async function generateCompletePDF() {
       doc.setFontSize(7);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(...BLACK);
-      doc.text(label, x + size + 1, y);
+      doc.text(label, x + size + 2.5, y);
     };
     
     const label = (text, x, y) => {
@@ -246,7 +246,7 @@ async function generateCompletePDF() {
     ];
     
     motivos.forEach(({ value, label: lbl }, i) => {
-      checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 47), leftY + Math.floor(i / 2) * 4.5, 3.5);
+      checkbox(lbl, frap.motivo_atencion === value, col1X + 2 + (i % 2 * 48), leftY + Math.floor(i / 2) * 4.5, 3.5);
     });
     leftY += 9;
     
@@ -384,7 +384,7 @@ async function generateCompletePDF() {
     origenes.forEach(({ value: val, label: lbl }, i) => {
       const row = Math.floor(i / 3);
       const col = i % 3;
-      checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 31), leftY + (row * 3.5), 3.5);
+      checkbox(lbl, (frap.origen_probable || []).includes(val), col1X + 2 + (col * 32), leftY + (row * 3.5), 3.5);
     });
     leftY += 15;
     
@@ -402,11 +402,11 @@ async function generateCompletePDF() {
     leftY = sectionTitle('ACCIDENTE AUTOMOVILÍSTICO', col1X, leftY, col1W);
     
     checkbox('COLISIÓN', frap.accidente_tipo === 'colision', col1X + 2, leftY, 3.5);
-    checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 30, leftY, 3.5);
+    checkbox('VOLCADURA', frap.accidente_tipo === 'volcadura', col1X + 32, leftY, 3.5);
     leftY += 4;
     
     checkbox('AUTOMOTOR', frap.automotor, col1X + 2, leftY, 3.5);
-    checkbox('MOTOCICLETA', frap.motocicleta, col1X + 30, leftY, 3.5);
+    checkbox('MOTOCICLETA', frap.motocicleta, col1X + 32, leftY, 3.5);
     checkbox('BICICLETA', frap.bicicleta, col1X + 60, leftY, 3.5);
     leftY += 4;
     
@@ -483,7 +483,7 @@ async function generateCompletePDF() {
     agentes.forEach(({ value: val, label: lbl }, i) => {
       const row = Math.floor(i / 3);
       const col = i % 3;
-      checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 31), leftY + (row * 3.5), 3.5);
+      checkbox(lbl, (frap.agente_causal || []).includes(val), col1X + 2 + (col * 32), leftY + (row * 3.5), 3.5);
     });
     leftY += 17;
     
@@ -624,9 +624,10 @@ async function generateCompletePDF() {
     
     const expFisicaArray = frap.exploracion_fisica || [];
     exploracion.forEach(({ n, value: val, label: lbl }, i) => {
+    if (i >= 15) return; // Limitar a 15 items para evitar solapamiento
       const row = Math.floor(i / 2);
       const col = i % 2;
-      const x = col2X + 2 + (col * (col2W / 2));
+      const x = col2X + 2 + (col * 43);
       const y = rightY + (row * 3.5);
       
       checkbox(`${n}. ${lbl}`, expFisicaArray.includes(val), x, y, 2.5);
