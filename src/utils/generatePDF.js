@@ -588,18 +588,24 @@ export const generateFRAPPDF = async (frap) => {
   checkbox('BASE', frap.sitio_neumotorax === 'base', col2X + colW - 12, rightY);
   rightY += 5;
   
-  // CIRCULACIÓN
-  rightY = sectionTitle('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X, rightY + 2, colW / 2 + 10);
+  // CIRCULACIÓN - Dibujar todos los headers en la misma línea
+  const circY = rightY + 2;
   doc.setFillColor(...GREEN);
-  doc.rect(col2X + colW / 2 + 12, rightY - 8, 18, 5, 'F');
-  doc.rect(col2X + colW / 2 + 32, rightY - 8, 12, 5, 'F');
-  doc.rect(col2X + colW - 14, rightY - 8, 14, 5, 'F');
-  doc.setFontSize(6);
+  doc.rect(col2X, circY, colW / 2 + 10, 5, 'F');  // CIRCULACIÓN: PRESENCIA DE PULSOS
+  doc.rect(col2X + colW / 2 + 12, circY, 18, 5, 'F');  // CALIDAD
+  doc.rect(col2X + colW / 2 + 32, circY, 12, 5, 'F');  // PIEL
+  doc.rect(col2X + colW - 14, circY, 14, 5, 'F');  // CARACT.
+  
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
-  doc.text('CALIDAD', col2X + colW / 2 + 14, rightY - 4.5);
-  doc.text('PIEL', col2X + colW / 2 + 34, rightY - 4.5);
-  doc.text('CARACT.', col2X + colW - 12, rightY - 4.5);
+  doc.text('CIRCULACIÓN: PRESENCIA DE PULSOS', col2X + 2, circY + 3.5);
+  doc.setFontSize(6);
+  doc.text('CALIDAD', col2X + colW / 2 + 14, circY + 3.5);
+  doc.text('PIEL', col2X + colW / 2 + 34, circY + 3.5);
+  doc.text('CARACT.', col2X + colW - 12, circY + 3.5);
+  
+  rightY = circY + 8;
   
   checkbox('CAROTÍDEO', frap.presencia_pulsos === 'carotideo', col2X + 2, rightY);
   checkbox('RÁPIDO', frap.calidad_pulso === 'rapido', col2X + colW / 2 + 12, rightY);
