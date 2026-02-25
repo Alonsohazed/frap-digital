@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import FRAPFormPage from "./pages/FRAPFormPage";
 import FRAPDetailPage from "./pages/FRAPDetailPage";
+import TestPDFPage from "./pages/TestPDFPage";
 
 const API = '/api';
 
