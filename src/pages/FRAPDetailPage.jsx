@@ -61,14 +61,25 @@ export default function FRAPDetailPage() {
     }
   };
 
-    const handleDownloadPDF = async () => {
+  const handleDownloadPDF = async () => {
     setGeneratingPDF(true);
     try {
-      await generateFRAPPDF(frap);
-      toast.success("PDF generado correctamente");
+      const pdfBlob = await generateFRAPPDF(frap);
+      
+      // Crear URL del blob y descargar
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `FRAP_${frap.folio || 'documento'}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast.success("PDF descargado correctamente");
     } catch (error) {
       console.error("Error generando PDF:", error);
-      toast.error("Error al generar el PDF");
+      toast.error("Error al generar el PDF: " + error.message);
     } finally {
       setGeneratingPDF(false);
     }
