@@ -85,7 +85,7 @@ const Page1 = ({ data }) => {
   return (
     <div style={{
       width: '808px',
-      height: '1048px',
+      height: '1180px',
       position: 'relative',
       backgroundColor: 'white',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
