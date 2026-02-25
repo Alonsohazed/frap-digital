@@ -1501,8 +1501,8 @@ export default function FRAPFormPage() {
                 <CardHeader>
                   <CardTitle className="text-base">Agente Causal</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     {[
                       { value: "arma", label: "Arma" },
                       { value: "juguete", label: "Juguete" },
@@ -1524,24 +1524,34 @@ export default function FRAPFormPage() {
                           checked={(formData.agente_causal || []).includes(value)}
                           onCheckedChange={(checked) => handleArrayChange("agente_causal", value, checked)}
                         />
-                        <Label htmlFor={`agente-${value}`}>{label}</Label>
+                        <Label htmlFor={`agente-${value}`} className="text-sm">{label}</Label>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4">
-                    <Label>Otro (Especificar)</Label>
+                  <div className="border-t pt-4">
+                    <Label>Otro Agente Causal (Especificar)</Label>
                     <Input
                       value={formData.agente_causal_otro}
                       onChange={(e) => handleChange("agente_causal_otro", e.target.value)}
+                      placeholder="Especifique otro agente causal"
                     />
                   </div>
-                  <div className="mt-4">
-                    <Label>Lesiones Causadas Por</Label>
-                    <Input
-                      value={formData.lesiones_causadas_por}
-                      onChange={(e) => handleChange("lesiones_causadas_por", e.target.value)}
-                    />
-                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Lesiones Causadas Por */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Lesiones Causadas Por</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Textarea
+                    value={formData.lesiones_causadas_por}
+                    onChange={(e) => handleChange("lesiones_causadas_por", e.target.value)}
+                    placeholder="Describa cómo se causaron las lesiones..."
+                    rows={3}
+                    className="w-full"
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
