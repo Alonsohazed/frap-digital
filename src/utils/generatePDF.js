@@ -1058,7 +1058,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // DATOS POST-PARTO
-  leftY = sectionTitle('DATOS POST-PARTO', col1X, leftY, colW);
+  // DATOS POST-PARTO
+  leftY = sectionTitle('DATOS POST-PARTO', col1X, leftY + 3, colW);
   label('HORA DE NACIMIENTO:', col1X + 2, leftY);
   line(col1X + 35, leftY + 0.5, 20);
   value(frap.postparto_hora_nacimiento, col1X + 36, leftY);
