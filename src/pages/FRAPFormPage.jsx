@@ -2059,6 +2059,25 @@ export default function FRAPFormPage() {
                 </CardContent>
               </Card>
 
+              {/* Observaciones */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Observaciones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Textarea
+                    value={formData.observaciones}
+                    onChange={(e) => handleChange("observaciones", e.target.value)}
+                    rows={4}
+                    placeholder="Observaciones adicionales del personal médico..."
+                    data-testid="textarea-observaciones"
+                  />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Incluya cualquier información adicional relevante sobre el paciente o el servicio prestado
+                  </p>
+                </CardContent>
+              </Card>
+
               {/* Firmas */}
               <Card>
                 <CardHeader>
