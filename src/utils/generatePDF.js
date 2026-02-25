@@ -1112,7 +1112,8 @@ export const generateFRAPPDF = async (frap) => {
   rightY += 6;
   
   // ESCALA PREHOSPITALARIA DE CINCINNATI
-  rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY, colW);
+  // ESCALA PREHOSPITALARIA DE CINCINNATI
+  rightY = sectionTitle('ESCALA PREHOSPITALARIA DE CINCINNATI', col2X, rightY + 2, colW);
   
   label('ASIMETRÍA FACIAL', col2X + 2, rightY);
   checkbox('SÍ', frap.asimetria_facial === 'si', col2X + colW - 22, rightY);
