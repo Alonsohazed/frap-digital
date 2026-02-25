@@ -669,7 +669,8 @@ export const generateFRAPPDF = async (frap) => {
   rightY = expStartY + 48;
   
   // SIGNOS VITALES
-  rightY = sectionTitle('SIGNOS VITALES', col2X, rightY, colW);
+  // SIGNOS VITALES
+  rightY = sectionTitle('SIGNOS VITALES', col2X, rightY + 2, colW);
   
   const vitalesHeaders = ['HORA', 'FR', 'FC', 'TAS', 'TAD', 'SaO2', 'TEMP', 'GLUC'];
   const vColW = colW / 8;
