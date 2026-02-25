@@ -308,7 +308,8 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // UBICACIÓN DEL SERVICIO
-  leftY = sectionTitle('UBICACIÓN DEL SERVICIO', col1X, leftY, colW);
+  // UBICACIÓN DEL SERVICIO
+  leftY = sectionTitle('UBICACIÓN DEL SERVICIO', col1X, leftY + 2, colW);
   leftY += fieldRow('CALLE:', frap.ubicacion_calle, col1X + 2, leftY, 12, colW - 16);
   leftY += fieldRow('ENTRE:', frap.ubicacion_entre, col1X + 2, leftY, 12, colW - 16);
   leftY += fieldRow('COLONIA/COMUNIDAD:', frap.ubicacion_colonia, col1X + 2, leftY, 32, colW - 36);
