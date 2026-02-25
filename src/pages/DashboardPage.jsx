@@ -96,8 +96,19 @@ export default function DashboardPage() {
       });
       if (response.ok) {
         const frapData = await response.json();
-        await generateFRAPPDF(frapData);
-        toast.success("PDF generado correctamente");
+        const pdfBlob = await generateFRAPPDF(frapData);
+        
+        // Crear URL del blob y descargar
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `FRAP_${frapData.folio || 'documento'}_${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        toast.success("PDF descargado correctamente");
       } else {
         toast.error("Error al obtener datos del FRAP");
       }
