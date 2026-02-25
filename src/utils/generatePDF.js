@@ -1072,6 +1072,9 @@ export const generateFRAPPDF = async (frap) => {
   // PÁGINA 2 - COLUMNA DERECHA
   // ─────────────────────────────────────────────────────────────────
   
+  // Reiniciar rightY para la página 2
+  rightY = y;
+  
   // INTERROGATORIO
   rightY = sectionTitle('INTERROGATORIO', col2X, rightY, colW);
   rightY += fieldRow('ALERGIAS:', frap.alergias, col2X + 2, rightY, 16, colW - 20);
