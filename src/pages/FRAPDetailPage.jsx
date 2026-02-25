@@ -23,13 +23,13 @@ import {
   ClipboardList,
   Loader2,
 } from "lucide-react";
-import { generateFRAPPDF } from "../utils/generatePDF";
+import { PrintableFRAP } from '../components/PrintableFRAP';
 
 export default function FRAPDetailPage() {
   const { id } = useParams();
   const [frap, setFrap] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [generatingPDF, setGeneratingPDF] = useState(false);
+  const [showPDF, setShowPDF] = useState(false);
   const { user, getAuthHeaders, API } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -61,28 +61,8 @@ export default function FRAPDetailPage() {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    setGeneratingPDF(true);
-    try {
-      const pdfBlob = await generateFRAPPDF(frap);
-      
-      // Crear URL del blob y descargar
-      const url = URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `FRAP_${frap.folio || 'documento'}_${new Date().toISOString().split('T')[0]}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      
-      toast.success("PDF descargado correctamente");
-    } catch (error) {
-      console.error("Error generando PDF:", error);
-      toast.error("Error al generar el PDF: " + error.message);
-    } finally {
-      setGeneratingPDF(false);
-    }
+  const handleDownloadPDF = () => {
+    setShowPDF(true);
   };
 
   const getPriorityBadge = (priority) => {
