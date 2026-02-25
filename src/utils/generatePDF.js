@@ -499,7 +499,7 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // AGENTE CAUSAL
-  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY, colW);
+  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY + 3, colW);
   const agentes = frap.agente_causal || [];
   xPos = col1X + 2;
   xPos += checkbox('ARMA', agentes.includes('arma'), xPos, leftY);
@@ -985,7 +985,7 @@ export const generateFRAPPDF = async (frap) => {
   leftY += 5;
   
   // AGENTE CAUSAL
-  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY, colW);
+  leftY = sectionTitle('AGENTE CAUSAL', col1X, leftY + 3, colW);
   xPos = col1X + 2;
   xPos += checkbox('ARMA', agentes.includes('arma'), xPos, leftY);
   xPos += checkbox('MAQUINARIA', agentes.includes('maquinaria'), xPos, leftY);
