@@ -155,26 +155,27 @@ const Page1 = ({ data }) => {
         {/* Fecha y Folio */}
         <div style={{
           position: 'absolute',
-          top: '12px',
+          top: '10px',
           right: '15px',
-          width: '190px',
+          width: '200px',
           height: '48px',
           backgroundColor: 'white',
           border: '2px solid rgba(0,128,0,0.3)',
           borderRadius: '6px',
           padding: '6px 10px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          zIndex: 10
         }}>
-          <div style={{ marginBottom: '4px' }}>
-            <Label>FECHA:</Label> <Value>{data.fecha}</Value>
+          <div style={{ marginBottom: '4px', fontSize: '7px' }}>
+            <Label>FECHA:</Label> <Value style={{ marginLeft: '4px' }}>{data.fecha}</Value>
           </div>
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <Label># FOLIO:</Label> 
             <span style={{ 
-              fontSize: '20px', 
+              fontSize: '18px', 
               fontWeight: 'bold', 
               color: '#008000', 
-              marginLeft: '8px'
+              marginLeft: '6px'
             }}>
               {data.folio}
             </span>
