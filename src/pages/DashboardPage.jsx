@@ -38,7 +38,7 @@ import {
   CheckCircle,
   Loader2,
 } from "lucide-react";
-import { generateFRAPPDF } from "../utils/generatePDF";
+import { PrintableFRAP } from "../components/PrintableFRAP";
 
 export default function DashboardPage() {
   const [fraps, setFraps] = useState([]);
