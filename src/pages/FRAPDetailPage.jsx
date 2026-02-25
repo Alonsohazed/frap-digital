@@ -120,6 +120,10 @@ export default function FRAPDetailPage() {
     );
   }
 
+  if (showPDF && frap) {
+    return <PrintableFRAP data={frap} onClose={() => setShowPDF(false)} />;
+  }
+
   if (!frap) {
     return null;
   }
@@ -165,14 +169,9 @@ export default function FRAPDetailPage() {
               onClick={handleDownloadPDF}
               className="bg-blue-600 hover:bg-blue-700"
               data-testid="download-pdf-btn"
-              disabled={generatingPDF}
             >
-              {generatingPDF ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <FileDown className="w-4 h-4 mr-2" />
-              )}
-              {generatingPDF ? "Generando..." : "PDF"}
+              <FileDown className="w-4 h-4 mr-2" />
+              PDF
             </Button>
           </div>
         </div>
