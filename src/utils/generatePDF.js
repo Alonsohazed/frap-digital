@@ -1178,7 +1178,7 @@ export const generateFRAPPDF = async (frap) => {
   
   label('Puntuación Total:', col2X + colW - 38, rightY + 2);
   label('A+B+C+D+E', col2X + colW - 18, rightY + 2);
-  rightY += 6;
+  rightY += 8;
   
   // DATOS RECIÉN NACIDO y DESTINO
   doc.setFillColor(...GREEN);
@@ -1189,7 +1189,7 @@ export const generateFRAPPDF = async (frap) => {
   doc.setTextColor(...WHITE);
   doc.text('DATOS RECIÉN NACIDO', col2X + 2, rightY + 3.5);
   doc.text('DESTINO', col2X + colW / 2 + 4, rightY + 3.5);
-  rightY += 6;
+  rightY += 8;
   
   label('PRODUCTO:', col2X + 2, rightY);
   checkbox('VIVO', frap.recien_nacido_producto === 'vivo', col2X + 22, rightY);
