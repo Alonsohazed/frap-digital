@@ -1,0 +1,4 @@
+# Local secrets for `wrangler pages dev`. Copy to .dev.vars (git-ignored).
+JWT_SECRET="change-me-to-a-long-random-string"
+# One entry per user. Generate hashes with: npm run hash-password -- <password>
+USERS='[{"id":"u-admin","username":"admin","name":"Administrador","role":"admin","password_hash":"<bcrypt-hash>"},{"id":"u-unit-1","username":"unidad1","name":"Unidad 1","role":"operador","password_hash":"<bcrypt-hash>"}]'
