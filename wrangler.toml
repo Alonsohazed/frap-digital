@@ -1,0 +1,13 @@
+name = "frap-digital"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "frap-database"
+database_id = "<your-d1-database-id>"
+
+# Secrets are not stored here. Set them with:
+#   wrangler pages secret put JWT_SECRET
+#   wrangler pages secret put USERS
+# For local dev, copy .dev.vars.example to .dev.vars.
