@@ -1,5 +1,7 @@
 # FRAP Digital
 
+> **Demo version.** This repository is a public demo with the client's branding, data and production configuration removed. For the deployable version (setup for your organization, data migration, hosting and support), contact me at **alonsohazed@gmail.com** or on [LinkedIn](https://www.linkedin.com/in/alexisalonsosalcido/).
+
 Web app that replaces the paper **FRAP** (*Formato de Registro de Atención Prehospitalaria*), the patient-care report that ambulance crews in Mexico fill out on every call.
 
 I built it for an ambulance service in Baja California. Crews fill the report during the call on a phone or tablet, collect signatures on screen, and the base can see it as soon as it's saved. When a printed copy is needed (hospital handoff, insurance, legal), the app generates a PDF laid out like the official paper form, so nothing downstream has to change.
